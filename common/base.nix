@@ -8,6 +8,7 @@ in
   imports = [
     ./sub/base-firewall.nix
     ./sub/base-dnsmasq.nix
+    ./sub/base-ntpd.nix
   ];
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
