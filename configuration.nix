@@ -1,0 +1,1 @@
+/conf/nixos-local/configuration.nix

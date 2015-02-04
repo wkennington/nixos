@@ -1,0 +1,1 @@
+/conf/nixos-local/hardware-configuration.nix
