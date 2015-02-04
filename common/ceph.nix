@@ -27,6 +27,13 @@ with lib;
       options = "defaults,bind";
     }
   ];
+  networking.firewall.extraCommands = ''
+    # Allow connections to ceph mons
+    iptables -A OUTPUT -d ${calculated.myInternalIp4Net} -p tcp --dport 6789 -j ACCEPT
+
+    # Allow connections to other ceph services
+    iptables -A OUTPUT -d ${calculated.myInternalIp4Net} -p tcp --dport 6800:6900 -j ACCEPT
+  '';
   systemd.automounts = [ {
     wantedBy = [ "remote-fs.target" ];
     where = "/ceph";

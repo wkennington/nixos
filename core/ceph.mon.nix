@@ -23,9 +23,11 @@ let
   '';
 in
 {
+  imports = [
+    ../common/ceph.nix
+  ];
   networking.firewall.extraCommands = ''
     iptables -A INPUT -p tcp --dport 6789 -s ${calculated.myInternalIp4Net} -j ACCEPT
-    ip46tables -A OUTPUT -o lo -p tcp --dport 6789 -j ACCEPT
   '';
 
   systemd.services.ceph-mon = {

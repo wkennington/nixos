@@ -7,7 +7,6 @@ in
 {
   networking.firewall.extraCommands = ''
     iptables -A INPUT -p tcp --dport 6800:6900 -s ${calculated.myInternalIp4Net} -j ACCEPT
-    ip46tables -A OUTPUT -o lo -p tcp --dport 6800:6900 -j ACCEPT
   '';
   systemd.services.ceph-mds = {
     wantedBy = [ "multi-user.target" ];
