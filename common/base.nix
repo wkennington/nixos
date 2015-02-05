@@ -67,6 +67,7 @@ in
     nscd.enable = false;
     cron.enable = false;
     journald.extraConfig = "SystemMaxUse=50M";
+    logind.extraConfig = "HandleLidSwitch=sleep";
   };
   users = {
     mutableUsers = false;
