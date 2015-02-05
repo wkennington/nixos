@@ -13,10 +13,16 @@ with lib;
     server=/${domain}/127.0.0.1#8600
   '';
   networking.firewall = {
-    allowedTCPPorts = [ 8300 8301 8302 ];
-    allowedUDPPorts = [ 8301 8302 ];
     extraCommands = ''
+      # Allow consul to communicate with other consuls
+      ip46tables -A INPUT -p tcp --dport 8300:8302 -j ACCEPT
+      ip46tables -A INPUT -p udp --dport 8301:8302 -j ACCEPT
+      ip46tables -A OUTPUT -m owner --uid-owner consul -p tcp --dport 8300:8302 -j ACCEPT
+      ip46tables -A OUTPUT -m owner --uid-owner consul -p udp --dport 8301:8302 -j ACCEPT
+
+      # Allow consul to interact with itself
       ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p udp --dport 8600 -j ACCEPT
+      ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 8600 -j ACCEPT
       ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 8400 -j ACCEPT
       
       # Allow dnsmasq to query consul
