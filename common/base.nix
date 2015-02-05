@@ -32,8 +32,10 @@ in
     iftop
     iotop
     iperf
+    ipset
     iptables
     mtr
+    nftables
     nmap
     config.programs.ssh.package
     openssl
