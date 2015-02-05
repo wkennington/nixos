@@ -24,7 +24,8 @@ with lib;
       allowedTCPPorts = [ 655 ];
       allowedUDPPorts = [ 655 ];
       extraCommands = ''
-        ip46tables -A OUTPUT -p tcp --dport 655 -o lo -j ACCEPT
+        ip46tables -A OUTPUT -m owner --uid-owner tinc.vpn -p udp --dport 655 -j ACCEPT
+        ip46tables -A OUTPUT -m owner --uid-owner tinc.vpn -p tcp --dport 655 -j ACCEPT
       '';
     };
   };
