@@ -1,14 +1,11 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 {
-  fileSystems = [
-    {
-      mountPoint = "/var/db/postgresql";
-      fsType = "zfs";
-      device = "root/state/postgresql";
-      neededForBoot = true;
-    }
-  ];
+  fileSystems."/var/db/postgresql" = mkIf (config.fileSystems."/".fsType == "zfs") {
+    fsType = "zfs";
+    device = "root/state/postgresql";
+    neededForBoot = true;
+  };
   services.postgresql = {
     enable = true;
     enableTCPIP = true;
