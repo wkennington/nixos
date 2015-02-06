@@ -5,10 +5,11 @@ let
   host = config.networking.hostName;
 in
 rec {
+  isRemote = name: any (n: n == name) vars.remotes;
   dc = name: let
     dcs = flip filterAttrs vars.netMaps (dc: { internalMachineMap, ... }:
-      any (n: n == config.networking.hostName) (attrNames internalMachineMap));
-  in head (attrNames dcs);
+      any (n: n == name) (attrNames internalMachineMap));
+  in if isRemote name then "remote" else head (attrNames dcs);
   vpnIp4 = name: "${vars.vpn.subnet}${toString vars.vpn.idMap.${name}}";
   internalIp4Net = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
@@ -16,13 +17,14 @@ rec {
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.${toString net.internalMachineMap.${name}}";
   domain = name: "${dc name}.${vars.domain}";
 
+  iAmRemote = isRemote host;
   myDc = dc host;
   myDomain = domain host;
   myVpnIp4 = vpnIp4 host;
   myInternalIp4 = internalIp4 host "slan";
   myInternalIp4Net = internalIp4Net host "slan";
   myNetMap = vars.netMaps.${myDc};
-  iAmGateway = any (n: config.networking.hostName == n) myNetMap.gateways;
+  iAmGateway = any (n: host == n) myNetMap.gateways;
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
 
   myCeph = {
