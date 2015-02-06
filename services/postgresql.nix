@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 {
-  fileSystems."/var/db/postgresql" = mkIf (config.fileSystems."/".fsType == "zfs") {
+  fileSystems."/var/db/postgresql" = {
     fsType = "zfs";
     device = "root/state/postgresql";
     neededForBoot = true;
