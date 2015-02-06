@@ -71,9 +71,21 @@ in
   };
   users = {
     mutableUsers = false;
-    extraUsers.root = {
-      hashedPassword = null;
-      passwordFile = "/conf/pw/root";
-    };
+    extraUsers = {
+      root = {
+        hashedPassword = null;
+        passwordFile = "/conf/pw/root";
+      };
+    } // flip mapAttrs vars.userInfo (user: { uid, description, canRoot, loginMachines }:
+      let
+        canLogin = any (n: n == config.networking.hostName) loginMachines;
+      in {
+        inherit uid description;
+        createHome = canLogin;
+        home = "/home/${user}";
+        extraGroups = optional canRoot "wheel";
+        useDefaultShell = canLogin;
+        passwordFile = if canLogin then "/conf/pw/${user}" else null;
+      });
   };
 }
