@@ -40,6 +40,35 @@ rec {
       description = "William A. Kennington III";
       canRoot = true;
       loginMachines = [ "exodus" "prodigy" ];
+      canShareData = true;
+    };
+    bill = {
+      uid = 1001;
+      description = "William A. Kennington Jr";
+      canRoot = false;
+      loginMachines = [ ];
+      canShareData = true;
+    };
+    linda = {
+      uid = 1002;
+      description = "Linda D. Kennington";
+      canRoot = false;
+      loginMachines = [ ];
+      canShareData = true;
+    };
+    ryan = {
+      uid = 1003;
+      description = "Ryan C. Kennington";
+      canRoot = false;
+      loginMachines = [ ];
+      canShareData = true;
+    };
+    sumit = {
+      uid = 1004;
+      description = "Sumit R. Punjabi";
+      canRoot = false;
+      loginMachines = [ ];
+      canShareData = true;
     };
   };
 
