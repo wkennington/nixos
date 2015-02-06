@@ -103,6 +103,9 @@ rec {
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
         mons = [ "alamo" "ferrari" "legend" ];
+        osds = {
+          "delta" = [ 4 5 6 7 8 9 10 11 12 13 ];
+        };
       };
       zookeeper = {
         # Numbering is important and should be consistent in
