@@ -76,16 +76,22 @@ in
         hashedPassword = null;
         passwordFile = "/conf/pw/root";
       };
-    } // flip mapAttrs vars.userInfo (user: { uid, description, canRoot, loginMachines }:
+    } // flip mapAttrs vars.userInfo (user:
+      { uid, description, canRoot, loginMachines, canShareData }:
       let
         canLogin = any (n: n == config.networking.hostName) loginMachines;
       in {
         inherit uid description;
         createHome = canLogin;
         home = "/home/${user}";
-        extraGroups = optional canRoot "wheel";
+        extraGroups = [ ]
+          ++ optional canRoot "wheel"
+          ++ optional canShareData "share";
         useDefaultShell = canLogin;
         passwordFile = if canLogin then "/conf/pw/${user}" else null;
       });
+    extraGroups = {
+      share.gid = 1001;
+    };
   };
 }
