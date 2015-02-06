@@ -5,9 +5,6 @@ let
   stateDir = "/var/lib/ceph/mds/ceph-${config.networking.hostName}";
 in
 {
-  networking.firewall.extraCommands = ''
-    iptables -A INPUT -p tcp --dport 6800:6900 -s ${calculated.myInternalIp4Net} -j ACCEPT
-  '';
   systemd.services.ceph-mds = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];

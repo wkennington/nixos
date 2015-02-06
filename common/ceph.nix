@@ -28,6 +28,10 @@ with lib;
     }
   ];
   networking.firewall.extraCommands = ''
+    # Allow inbound connections to ceph daemons
+    # TODO(wak): Only enable when osd or mds is enabled
+    iptables -A INPUT -p tcp --dport 6800:6900 -s ${calculated.myInternalIp4Net} -j ACCEPT
+
     # Allow connections to ceph mons
     iptables -A OUTPUT -d ${calculated.myInternalIp4Net} -p tcp --dport 6789 -j ACCEPT
 
