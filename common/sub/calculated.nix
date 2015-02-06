@@ -31,6 +31,7 @@ rec {
     mons = myNetMap.ceph.mons;
     monIps = map (s: internalIp4 s "slan") myNetMap.ceph.mons;
     fsId = myNetMap.ceph.fsId;
+    osds = myNetMap.ceph.osds.${host};
   };
   myConsul = {
     servers = myNetMap.consul.servers;
