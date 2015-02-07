@@ -8,6 +8,7 @@ in
   imports = [
     ./sub/base-firewall.nix
     ./sub/base-dnsmasq.nix
+    ./sub/base-minimal.nix
     ./sub/base-ntpd.nix
   ];
   boot = {
@@ -47,7 +48,6 @@ in
     vim
     wget
   ];
-  fonts.fontconfig.enable = false;
   networking.domain = calculated.myDomain;
   nix = {
     nrBuildUsers = config.nix.maxJobs * 10;
@@ -55,17 +55,11 @@ in
     useChroot = true;
     binaryCaches = [ "https://cache.nixos.org" "https://hydra.nixos.org" ];
   };
-  programs = {
-    bash = {
-      enableCompletion = true;
-      promptInit = "PS1=\"[\\u@\\h:\\w]\\\\$ \"\n";
-    };
-    ssh.startAgent = false;
+  programs.bash = {
+    enableCompletion = true;
+    promptInit = "PS1=\"[\\u@\\h:\\w]\\\\$ \"\n";
   };
-  security.sudo.enable = false;
   services = {
-    nscd.enable = false;
-    cron.enable = false;
     journald.extraConfig = "SystemMaxUse=50M";
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
