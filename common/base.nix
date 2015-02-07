@@ -12,7 +12,7 @@ in
     ./sub/base-ntpd.nix
   ];
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = mkDefault pkgs.linuxPackages_latest;
     extraModprobeConfig = ''
       options kvm-amd nested=1
       options kvm-intel nested=1
