@@ -26,6 +26,7 @@ rec {
   myNetMap = vars.netMaps.${myDc};
   iAmGateway = any (n: host == n) myNetMap.gateways;
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
+  myTimeZone = if iAmRemote then "UTC" else myNetMap.timeZone;
 
   myCeph = {
     mons = myNetMap.ceph.mons;

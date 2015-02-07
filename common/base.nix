@@ -88,4 +88,5 @@ in
       share.gid = 1001;
     };
   };
+  time.timeZone = mkDefault calculated.myTimeZone;
 }

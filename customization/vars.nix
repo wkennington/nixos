@@ -82,6 +82,8 @@ rec {
       pub6 = "2001:470:88fa:000";
       priv6 = "fda4:941a:81b5:000";
 
+      timeZone = "America/New_York";
+
       # Must start at 2 for multiple
       # Can be one for a single gateway
       gatewayMap = {
@@ -96,6 +98,8 @@ rec {
       priv4 = "10.1.";
       pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
+
+      timeZone = "America/Los_Angeles";
 
       consul = {
         servers = [ "alamo" "ferrari" "legend" ];
