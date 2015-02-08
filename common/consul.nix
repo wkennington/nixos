@@ -1,10 +1,15 @@
 { config, lib, ... }:
+
+with lib;
 let
   vars = (import ../customization/vars.nix { inherit lib; });
   calculated = (import ./sub/calculated.nix { inherit config lib; });
   domain = "consul.${vars.domain}";
+
+  isServer = flip any calculated.myConsul.serverIps
+    (ip: ip == calculated.myInternalIp4);
+  isAclMaster = vars.consulAclDc == calculated.myDc && isServer;
 in
-with lib;
 {
   imports = [
     ./sub/base-dnsmasq.nix
@@ -41,23 +46,22 @@ with lib;
       acl_default_token = "anonymous";
       advertise_addr = calculated.myInternalIp4;
       bind_addr = calculated.myInternalIp4;
-      bootstrap_expect = 3;
       ca_file = "/conf/consul/ca.crt";
       cert_file = "/conf/consul/me.crt";
       datacenter = calculated.myDc;
       disable_remote_exec = true;
       domain = "${domain}";
       key_file = "/conf/consul/me.key";
-      server = flip any calculated.myConsul.serverIps
-        (ip: ip == calculated.myInternalIp4);
+      server = isServer;
       verify_incoming = true;
       verify_outgoing = true;
-    };
+    } // (if ! isServer then { } else {
+      bootstrap_expect = length calculated.myConsul.serverIps;
+    });
     dropPrivileges = true;
     extraConfigFiles = [
       "/conf/consul/encrypt-1.json"
-      "/conf/consul/acl-master-1.json"
-    ];
+    ] ++ optional isAclMaster "/conf/consul/acl-master-1.json";
     forceIpv4 = true;
   };
 }
