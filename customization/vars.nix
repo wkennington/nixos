@@ -141,6 +141,7 @@ rec {
         #lithium = ;
         #marble = ;
         #hunter = ;
+        exodus = 90;
       };
 
     };
