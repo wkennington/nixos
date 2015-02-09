@@ -38,6 +38,10 @@ rec {
     servers = myNetMap.consul.servers;
     serverIps = map (s: internalIp4 s "slan") myNetMap.consul.servers;
   };
+  myMongodb = {
+    servers = myNetMap.mongodb.servers;
+    serverIps = map vpnIp4 myNetMap.mongodb.servers;
+  };
   myZookeeper = {
     servers = myNetMap.zookeeper.servers;
     serverIps = map vpnIp4 (attrNames myNetMap.zookeeper.servers);
