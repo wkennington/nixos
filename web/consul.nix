@@ -1,13 +1,21 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 let
-  vars = (import ../customization/vars.nix { inherit lib; });
+  calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   constants = (import ../common/sub/constants.nix { });
 
-  domain = "consul.${vars.domain}";
+  domain = "consul.${calculated.myDomain}";
 in
 with lib;
 {
-  imports = [ ../common/consul.nix ];
+  imports = [
+    ../common/consul.nix
+  ];
+
+  networking.firewall.extraCommands = ''
+    # Allow nginx to access consul http
+    ip46tables -A OUTPUT -o lo -m owner --uid-owner nginx -p tcp --dport 8500 -j ACCEPT
+  '';
+
   services = {
     consul.webUi = true;
     nginx.config = ''
@@ -40,9 +48,9 @@ with lib;
         ssl_ciphers EECDH+AESGCM:EDH+AESGCM;
         ssl_ecdh_curve secp521r1;
         ssl_prefer_server_ciphers on;
-        ssl_dhparam /etc/nixos/nginx/dhparam;
-        ssl_certificate /etc/nixos/nginx/${domain}.crt;
-        ssl_certificate_key /etc/nixos/nginx/${domain}.key;
+        ssl_dhparam /conf/ssl/nginx/dhparam;
+        ssl_certificate /conf/ssl/${domain}.crt;
+        ssl_certificate_key /conf/ssl/${domain}.key;
       }
 
       server {
