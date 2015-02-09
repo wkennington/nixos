@@ -34,7 +34,7 @@ with lib;
       '';
       legend = ''
         Address = legend.mtv-w.wak.io
-        Ed25519PublicKey = HuyBA/Ol/wH6y4tj4XR6IDI5FLIAcfcdnGXU974K9pD
+        Ed25519PublicKey = Yqo9IB/XzIA+1QumkTIasL8mFEdd+oc7L3TRLWkxHGH
       '';
       delta = ''
         Ed25519PublicKey = Amd0wHchaDaH25n+4/YEUpCvxDCxjD/vocevi1/wJWB
