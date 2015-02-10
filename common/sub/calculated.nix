@@ -15,6 +15,8 @@ rec {
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
   internalIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.${toString net.internalMachineMap.${name}}";
+  gatewayIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
+    "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
 
   iAmRemote = isRemote host;
@@ -22,6 +24,7 @@ rec {
   myDomain = domain host;
   myVpnIp4 = vpnIp4 host;
   myInternalIp4 = internalIp4 host "slan";
+  myGatewayIp4 = gatewayIp4 host "slan";
   myInternalIp4Net = internalIp4Net host "slan";
   myNetMap = vars.netMaps.${myDc};
   iAmGateway = any (n: host == n) myNetMap.gateways;

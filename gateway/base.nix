@@ -16,23 +16,18 @@ in
   networking = {
     interfaces = {
       wan.useDHCP = true;
-      lan = { };
     } // flip mapAttrs vars.internalVlanMap (_: vid: {
-      ip4 = [
+      ip4 = mkOverride 0 ([
         { address = "${net.priv4}${toString vid}.${toString networkId}"; prefixLength = 24; }
       ] ++ optional calculated.iAmOnlyGateway
-        { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; };
-      ip6 = [
+        { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; });
+      ip6 = mkOverride 0 [
         { address = "${net.pub6}${toString vid}::${toString networkId}"; prefixLength = 64; }
         { address = "${net.priv6}${toString vid}::${toString networkId}"; prefixLength = 64; }
       ];
     });
 
     vlans = flip mapAttrs vars.internalVlanMap (_: vid: { id = vid; interface = "lan"; });
-
-    useDHCP = false;
-
-    nameservers = [ "8.8.4.4" "8.8.8.8" ];
 
     firewall.extraCommands = mkOrder 2 ''
       # Forward Outbound Connections

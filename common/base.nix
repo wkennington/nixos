@@ -9,6 +9,7 @@ in
     ./sub/base-firewall.nix
     ./sub/base-dnsmasq.nix
     ./sub/base-minimal.nix
+    ./sub/base-networking.nix
     ./sub/base-ntpd.nix
   ];
   boot = {
