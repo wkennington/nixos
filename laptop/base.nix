@@ -5,6 +5,10 @@
     mode = "0600";
     source = "/etc/nixos/laptop/res/wpa_supplicant.conf";
   };
+  networking.wireless = {
+    enable = true;
+    interfaces = [ "wifi" ];
+  };
   services.xserver = {
     multitouch.enable = true;
     synaptics = {
