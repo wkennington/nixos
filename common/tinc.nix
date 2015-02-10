@@ -1,10 +1,17 @@
 { config, lib, pkgs, ... }:
+
+with lib;
 let
   vars = (import ../customization/vars.nix { inherit lib; });
   tincConfig = (import ../customization/tinc.nix { inherit lib; });
+  calculated = (import ./sub/calculated.nix { inherit config lib; });
   id = vars.vpn.idMap.${config.networking.hostName};
+
+  remoteNets = if calculated.iAmRemote then vars.netMaps else
+    flip filterAttrs vars.netMaps
+      (n: { priv4, ... }: priv4 == calculated.myNetMap.priv4);
+  extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 in
-with lib;
 {
   environment.systemPackages = [ pkgs.tinc_pre ];
   fileSystems = [
@@ -28,6 +35,10 @@ with lib;
         ip46tables -A OUTPUT -m owner --uid-owner tinc.vpn -p tcp --dport 655 -j ACCEPT
       '';
     };
+    localCommands = flip concatMapStrings extraRoutes (n: ''
+      ip route del "${n}" dev tinc.vpn >/dev/null 2>&1 || true
+      ip route add "${n}" dev tinc.vpn
+    '');
   };
   services.tinc.networks.vpn = {
     package = pkgs.tinc_pre;
