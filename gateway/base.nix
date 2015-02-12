@@ -27,7 +27,9 @@ in
       ];
     });
 
-    vlans = flip mapAttrs vars.internalVlanMap (_: vid: { id = vid; interface = "lan"; });
+    vlans = mkOverride 0 (
+      flip mapAttrs vars.internalVlanMap
+        (_: vid: { id = vid; interface = "lan"; }));
 
     firewall.extraCommands = mkOrder 2 ''
       # Forward Outbound Connections
