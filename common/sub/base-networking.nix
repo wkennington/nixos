@@ -4,7 +4,7 @@ let
   vars = (import ../../customization/vars.nix { inherit lib; });
   calculated = (import ./calculated.nix { inherit config lib; });
 
-  hasWanIf = config.networking ? "wan";
+  hasWanIf = config.networking.interfaces ? "wan";
 in
 {
   networking = mkIf (!calculated.iAmRemote) {
