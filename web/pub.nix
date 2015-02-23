@@ -25,6 +25,7 @@ in
       ssl_dhparam /conf/ssl/nginx/dhparam;
       ssl_certificate /conf/ssl/${domain}.crt;
       ssl_certificate_key /conf/ssl/${domain}.key;
+      add_header Strict-Transport-Security "max-age=31536000";
     }
 
     server {
