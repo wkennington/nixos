@@ -36,6 +36,7 @@ in
     iperf
     ipset
     iptables
+    lm_sensors
     mtr
     nftables
     nmap
