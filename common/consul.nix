@@ -43,7 +43,7 @@ in
       acl_datacenter = vars.consulAclDc;
       acl_default_policy = "deny";
       acl_down_policy = "deny";
-      acl_default_token = "anonymous";
+      acl_token = "anonymous";
       advertise_addr = calculated.myInternalIp4;
       bind_addr = calculated.myInternalIp4;
       ca_file = "/conf/consul/ca.crt";
