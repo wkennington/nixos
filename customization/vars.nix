@@ -141,9 +141,10 @@ rec {
         sw10g1 = 21;
         delta = 31;
         fuel = 32;
-        #lithium = ;
-        #marble = ;
-        #hunter = ;
+        eagle = 33;
+        lithium = 34;
+        marble = 35;
+        hunter = 36;
         exodus = 90;
       };
 
