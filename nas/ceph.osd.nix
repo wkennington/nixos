@@ -5,17 +5,24 @@ let
 in
 with lib;
 {
+  imports = [
+    ../common/ceph.nix
+  ];
+
   fileSystems = listToAttrs (flip map calculated.myCeph.osds (n:
     nameValuePair (stateDir n) {
       fsType = "zfs";
       device = "osd${toString n}";
       options = "nofail";
     }));
+
   systemd.services = listToAttrs (flip map calculated.myCeph.osds (n:
     nameValuePair "ceph-osd${toString n}" {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "${utils.escapeSystemdPath (stateDir n)}.mount" ];
+
       restartTriggers = [ config.environment.etc."ceph/ceph.conf".source ];
+
       serviceConfig = {
         Type = "simple";
         ExecStart = "@${pkgs.ceph}/bin/ceph-osd ceph-osd -i ${toString n} -d";
@@ -24,6 +31,7 @@ with lib;
         PermissionsStartOnly = true;
         Restart = "always";
       };
+
       preStart = ''
         chmod 0700 ${stateDir n}
         mkdir -p -m 0775 /var/run/ceph

@@ -5,10 +5,16 @@ let
   stateDir = "/var/lib/ceph/mds/ceph-${config.networking.hostName}";
 in
 {
+  imports = [
+    ../common/ceph.nix
+  ];
+
   systemd.services.ceph-mds = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
+
     restartTriggers = [ config.environment.etc."ceph/ceph.conf".source ];
+
     serviceConfig = {
       Type = "simple";
       ExecStart = "@${pkgs.ceph}/bin/ceph-mds ceph-mds -i ${config.networking.hostName} -f --hot-standby 0";
@@ -17,6 +23,7 @@ in
       PermissionsStartOnly = true;
       Restart = "always";
     };
+
     preStart = ''
       mkdir -p ${stateDir}
       chmod 0700 ${stateDir}
