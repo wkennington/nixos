@@ -4,7 +4,6 @@
   networking.firewall.allowedUDPPortRanges = [
     { from = 60000; to = 61000; }
   ];
-  programs.ssh.package = pkgs.openssh; #_hpn;
   services.openssh = {
     enable = true;
     hostKeys = [
