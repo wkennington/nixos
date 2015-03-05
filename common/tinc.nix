@@ -9,7 +9,7 @@ let
 
   remoteNets = if calculated.iAmRemote then vars.netMaps else
     flip filterAttrs vars.netMaps
-      (n: { priv4, ... }: priv4 == calculated.myNetMap.priv4);
+      (n: { priv4, ... }: priv4 != calculated.myNetMap.priv4);
   extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 in
 {
