@@ -62,12 +62,7 @@ in
       enableCompletion = true;
       promptInit = "PS1=\"[\\u@\\h:\\w]\\\\$ \"\n";
     };
-    ssh = {
-      package = pkgs.openssh; #_hpn;
-      extraConfig = ''
-        PKCS11Provider ${pkgs.opensc}/lib/opensc-pkcs11.so
-      '';
-    };
+    ssh.package = pkgs.openssh;
   };
   services = {
     journald.extraConfig = "SystemMaxUse=50M";
