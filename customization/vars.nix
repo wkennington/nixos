@@ -125,9 +125,18 @@ rec {
         };
       };
 
+      gatewayIds = [ 1 ];
+
       gateways = [
         "alamo"
         #"ferrari"
+      ];
+
+      nasIds = [ 9 ];
+
+      nases = [
+        "alamo"
+        "ferrari"
       ];
 
       # Cannot use 1 as this is reserved for the default gateway

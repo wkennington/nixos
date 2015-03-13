@@ -12,7 +12,9 @@ in
   imports = [
     ./sub/base-dhcpd.nix
     ./sub/base-dnsmasq.nix
+    ../core/ctdbd.nix
   ];
+
   networking = {
     interfaces = {
       wan.useDHCP = true;

@@ -25,6 +25,8 @@ rec {
   myVpnIp4 = vpnIp4 host;
   myInternalIp4 = internalIp4 host "slan";
   myGatewayIp4 = gatewayIp4 host "slan";
+  myNasIp4s = flip map myNetMap.nasIds
+    (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
   myInternalIp4Net = internalIp4Net host "slan";
   myNetMap = vars.netMaps.${myDc};
   iAmGateway = any (n: host == n) myNetMap.gateways;

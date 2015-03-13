@@ -1,17 +1,39 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
-
-  shareDir = "/ceph/share";
+  net = calculated.myNasIps;
 in
 {
-  networking.firewall.extraCommands = ''
-    ip46tables -A INPUT -i dlan -p tcp --dport 135 -j ACCEPT
-    ip46tables -A INPUT -i dlan -p tcp --dport 139 -j ACCEPT
-    ip46tables -A INPUT -i dlan -p tcp --dport 445 -j ACCEPT
-    ip46tables -A INPUT -i dlan -p udp --dport 137 -j ACCEPT
-    ip46tables -A INPUT -i dlan -p udp --dport 138 -j ACCEPT
-  '';
+  imports = [ ../core/ctdbd.nix ];
+
+  networking.firewall.extraCommands = mkMerge [
+    ''
+      # Samba ports
+      ip46tables -A INPUT -i dlan -p tcp --dport 135 -j ACCEPT
+      ip46tables -A INPUT -i dlan -p tcp --dport 139 -j ACCEPT
+      ip46tables -A INPUT -i dlan -p tcp --dport 445 -j ACCEPT
+      ip46tables -A INPUT -i dlan -p udp --dport 137 -j ACCEPT
+      ip46tables -A INPUT -i dlan -p udp --dport 138 -j ACCEPT
+    ''
+    (mkAfter (flip concatMapStrings calculated.myNetMap.nases (n: ''
+      ipset add ctdb "${calculated.vpnIp4 n}"
+    '')))
+  ];
+
+  environment.etc."ctdb/public_addresses".text =
+    flip concatMapStrings calculated.myNasIp4s (n: ''
+      ${n}/24 dlan
+    '');
+
+  environment.etc."ctdb/nodes".text =
+    flip concatMapStrings calculated.myNetMap.nases (n: ''
+      ${calculated.vpnIp4 n}
+    '');
+
+  environment.systemPackages = with pkgs; [ samba ];
+
   services.samba = {
     enable = true;
     syncPasswordsByPam = true;
@@ -39,15 +61,23 @@ in
       encrypt passwords = yes
       client plaintext auth = no
 
+      # Clustered storage setup
+      netbios name = ${calculated.myDomain}
+      clustering = yes
+      ctdb socket = /run/ctdb/ctdbd.socket
+
       # Performance
       socket options = TCP_NODELAY SO_SNDBUF=131072 SO_RCVBUF=131072
-      use sendfile = yes
+      #use sendfile = yes
       min receivefile size = 16384
       aio read size = 16384
       aio write size = 16384
 
       [Private]
-        path = ${shareDir}/private/%u
+        vfs objects = acl_xattr ceph
+        vfs objects = acl_xattr ceph fileid
+        fileid:algorithm = fsid
+        path = /share/private/%u
         guest ok = no
         public = no
         writable = yes
@@ -58,7 +88,10 @@ in
         force directory mode = 0700
         force group = share
       [Public]
-        path = ${shareDir}/public/
+        vfs objects = acl_xattr ceph
+        vfs objects = acl_xattr ceph fileid
+        fileid:algorithm = fsid
+        path = /share/public
         guest ok = no
         writable = yes
         printable = no
@@ -69,7 +102,10 @@ in
         force group = share
         force user = nobody
       [Read Only]
-        path = ${shareDir}/ro/
+        vfs objects = acl_xattr ceph
+        vfs objects = acl_xattr ceph fileid
+        fileid:algorithm = fsid
+        path = /share/ro
         guest ok = no
         writable = yes
         printable = no
@@ -80,4 +116,7 @@ in
         force group = share
     '';
   };
+
+  systemd.services.samba-smbd.after = [ "ctdbd.service" ];
+  systemd.services.samba-nmbd.after = [ "ctdbd.service" ];
 }
