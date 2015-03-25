@@ -64,7 +64,6 @@ in
       # Clustered storage setup
       netbios name = ${calculated.myDomain}
       clustering = yes
-      ctdb socket = /run/ctdb/ctdbd.socket
 
       # Performance
       socket options = TCP_NODELAY SO_SNDBUF=131072 SO_RCVBUF=131072
