@@ -50,6 +50,10 @@ in
     vim
     wget
   ];
+  hardware.cpu = {
+    intel.updateMicrocode = true;
+    amd.updateMicrocode = true;
+  };
   networking.domain = calculated.myDomain;
   nix = {
     nrBuildUsers = config.nix.maxJobs * 10;
