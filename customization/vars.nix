@@ -132,7 +132,7 @@ rec {
         #"ferrari"
       ];
 
-      nasIds = [ 9 ];
+      nasIds = [ 8 9 ];
 
       nases = [
         "alamo"
