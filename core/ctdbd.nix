@@ -6,7 +6,7 @@ let
     "functions"
     "events.d/00.ctdb"
     "events.d/01.reclock"
-    "events.d/10.interface"
+    #"events.d/10.interface"
     "events.d/11.routing"
     "events.d/99.timeout"
   ];
@@ -30,6 +30,7 @@ let
     '';
     "ctdb/nodes".text = ''
     '';
+    "ctdb/events.d/10.interface".source = ./ctdbd/10.interface;
   } // listToAttrs (flip map needed
     (n: nameValuePair "ctdb/${n}" { source = "${samba}/etc/ctdb/${n}"; }));
 
