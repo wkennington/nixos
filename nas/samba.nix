@@ -64,6 +64,8 @@ in
       # Clustered storage setup
       netbios name = ${calculated.myDomain}
       clustering = yes
+      idmap config * : backend = tdb2
+      fileid : algorithm = fsid
 
       # Performance
       socket options = TCP_NODELAY SO_SNDBUF=131072 SO_RCVBUF=131072
@@ -73,10 +75,8 @@ in
       aio write size = 16384
 
       [Private]
-        vfs objects = acl_xattr ceph
-        vfs objects = acl_xattr ceph fileid
-        fileid:algorithm = fsid
-        path = /share/private/%u
+        vfs objects = acl_xattr fileid
+        path = /ceph/share/private/%u
         guest ok = no
         public = no
         writable = yes
@@ -87,10 +87,8 @@ in
         force directory mode = 0700
         force group = share
       [Public]
-        vfs objects = acl_xattr ceph
-        vfs objects = acl_xattr ceph fileid
-        fileid:algorithm = fsid
-        path = /share/public
+        vfs objects = acl_xattr fileid
+        path = /ceph/share/public
         guest ok = no
         writable = yes
         printable = no
@@ -101,10 +99,8 @@ in
         force group = share
         force user = nobody
       [Read Only]
-        vfs objects = acl_xattr ceph
-        vfs objects = acl_xattr ceph fileid
-        fileid:algorithm = fsid
-        path = /share/ro
+        vfs objects = acl_xattr fileid
+        path = /ceph/share/ro
         guest ok = no
         writable = yes
         printable = no
