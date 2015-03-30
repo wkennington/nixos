@@ -84,6 +84,8 @@ in
     wantedBy = [ "multi-user.target" ];
     partOf = [ "firewall.service" ];
     bindsTo = [ "firewall.service" ];
+    requires = [ "ceph.mount" ];
+    after = [ "ceph.mount" ];
 
     path = [ ctdbPath ];
 
