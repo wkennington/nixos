@@ -14,6 +14,7 @@ with lib;
     enable = true;
     rejectPackets = true;
     allowPing = true;
+    logRefusedConnections = false;
     extraCommands = mkMerge [
       (mkOrder 1 ''
         # Default Policy
