@@ -3,6 +3,8 @@ with lib;
 let
   vars = (import ../customization/vars.nix { inherit lib; });
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
+  nixVersion = head (tail (splitString "-" pkgs.nix.name));
+  doesNixSupportSigning = versionAtLeast nixVersion "1.9";
 in
 {
   imports = [
@@ -56,10 +58,13 @@ in
   };
   networking.domain = calculated.myDomain;
   nix = {
+    package = if doesNixSupportSigning then pkgs.nix else pkgs.nixUnstable;
     nrBuildUsers = config.nix.maxJobs * 10;
     buildCores = config.nix.maxJobs;
     useChroot = true;
     binaryCaches = [ "https://cache.nixos.org" "https://hydra.nixos.org" ];
+    binaryCachePublicKeys = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+    requireSignedBinaryCaches = true;
   };
   programs = {
     bash = {
