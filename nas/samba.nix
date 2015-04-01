@@ -69,13 +69,13 @@ in
 
       # Performance
       socket options = TCP_NODELAY SO_SNDBUF=131072 SO_RCVBUF=131072
-      #use sendfile = yes
+      use sendfile = yes
       min receivefile size = 16384
       aio read size = 16384
       aio write size = 16384
 
       [Private]
-        vfs objects = acl_xattr fileid
+        vfs objects = acl_xattr fileid aio_linux
         path = /ceph/share/private/%u
         guest ok = no
         public = no
@@ -87,7 +87,7 @@ in
         force directory mode = 0700
         force group = share
       [Public]
-        vfs objects = acl_xattr fileid
+        vfs objects = acl_xattr fileid aio_linux
         path = /ceph/share/public
         guest ok = no
         writable = yes
@@ -99,7 +99,7 @@ in
         force group = share
         force user = nobody
       [Read Only]
-        vfs objects = acl_xattr fileid
+        vfs objects = acl_xattr fileid aio_linux
         path = /ceph/share/ro
         guest ok = no
         writable = yes
