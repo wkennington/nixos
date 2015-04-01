@@ -15,7 +15,8 @@ in
     ./sub/base-ntpd.nix
   ];
   boot = {
-    kernelPackages = mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = if lib.versionAtLeast (pkgs.linuxPackages_latest.kernel.version) "4.0"
+      then pkgs.linuxPackages_latest else pkgs.linuxPackages_testing;
     extraModprobeConfig = ''
       options kvm-amd nested=1
       options kvm-intel nested=1
