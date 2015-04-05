@@ -83,20 +83,22 @@ in
   systemd.services.ctdbd = {
     description = "CTDB Daemon";
     wantedBy = [ "multi-user.target" ];
-    partOf = [ "firewall.service" ];
-    bindsTo = [ "firewall.service" ];
-    requires = [ "ceph.mount" ];
-    after = [ "ceph.mount" ];
+    requires = [ "ceph.mount" "network.target" ];
+    after = [ "ceph.mount" "network.target" ];
 
     path = [ ctdbPath ];
 
     restartTriggers = flip mapAttrsToList files
       (name: data: config.environment.etc.${name}.source);
+
+    preStop = ''
+      ${samba}/bin/ctdb stop
+      ${samba}/bin/ctdb shutdown
+    '';
     
     serviceConfig = {
       Type = "forking";
       ExecStart = "@${samba}/bin/ctdbd_wrapper ctdbd /run/ctdb/ctdbd.pid start";
-      ExecStop = "${samba}/bin/ctdb shutdown";
       PIDFile = "/run/ctdb/ctdbd.pid";
     };
   };
