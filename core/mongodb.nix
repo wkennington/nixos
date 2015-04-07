@@ -40,7 +40,7 @@ with lib;
     bind_ip = "0.0.0.0";
     replSetName = calculated.myDomain;
     extraConfig = ''
-      keyFile = /conf/mongodb-keyfile
+      keyFile = /conf/mongodb/keyfile
     '';
   };
 }
