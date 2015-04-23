@@ -59,9 +59,7 @@ in
       bootstrap_expect = length calculated.myConsul.serverIps;
     });
     dropPrivileges = true;
-    extraConfigFiles = [
-      "/conf/consul/encrypt-1.json"
-    ] ++ optional isAclMaster "/conf/consul/acl-master-1.json";
+    extraConfigFiles = optional isAclMaster "/conf/consul/acl-master-1.json";
     forceIpv4 = true;
   };
 }
