@@ -110,6 +110,12 @@ rec {
         atomic = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
         elite = { id = 31; vlans = [ "slan" "dlan" ]; };
       };
+
+      nasIds = [ 8 9 ];
+
+      nases = [
+        "elite"
+      ];
     };
 
     "fmt-1" = {
