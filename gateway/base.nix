@@ -6,7 +6,7 @@ let
 
   net = calculated.myNetMap;
 
-  networkId = net.internalMachineMap.${config.networking.hostName};
+  networkId = net.internalMachineMap.${config.networking.hostName}.id;
 in
 {
   imports = [
@@ -18,20 +18,21 @@ in
   networking = {
     interfaces = {
       wan.useDHCP = true;
-    } // flip mapAttrs vars.internalVlanMap (_: vid: {
-      ip4 = mkOverride 0 ([
-        { address = "${net.priv4}${toString vid}.${toString networkId}"; prefixLength = 24; }
-      ] ++ optional calculated.iAmOnlyGateway
-        { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; });
-      ip6 = mkOverride 0 [
-        { address = "${net.pub6}${toString vid}::${toString networkId}"; prefixLength = 64; }
-        { address = "${net.priv6}${toString vid}::${toString networkId}"; prefixLength = 64; }
-      ];
-    });
-
-    vlans = mkOverride 0 (
-      flip mapAttrs vars.internalVlanMap
-        (_: vid: { id = vid; interface = "lan"; }));
+    } // listToAttrs (flip map calculated.myNetData.vlans (vlan:
+      let
+        vid = vars.internalVlanMap.${vlan};
+      in
+      nameValuePair vlan {
+        ip4 = mkOverride 0 ([
+          { address = "${net.priv4}${toString vid}.${toString networkId}"; prefixLength = 24; }
+        ] ++ optional calculated.iAmOnlyGateway
+          { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; });
+        ip6 = mkOverride 0 [
+          { address = "${net.pub6}${toString vid}::${toString networkId}"; prefixLength = 64; }
+          { address = "${net.priv6}${toString vid}::${toString networkId}"; prefixLength = 64; }
+        ];
+      }
+    ));
 
     firewall.extraCommands = mkOrder 2 ''
       # Forward Outbound Connections

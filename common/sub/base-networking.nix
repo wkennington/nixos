@@ -12,16 +12,21 @@ in
 
     interfaces = {
       lan = { };
-      slan = mkDefault {
-        ip4 = [ { address = calculated.myInternalIp4; prefixLength = 24; } ];
-      };
-    };
+    } // listToAttrs (flip map calculated.myNetData.vlans (vlan:
+      nameValuePair vlan {
+        ip4 = mkDefault [ { address = calculated.myInternalIp4; prefixLength = 24; } ];
+      }
+    ));
 
-    vlans.slan = { id = vars.internalVlanMap.slan; interface = "lan"; };
+    vlans = listToAttrs (flip map calculated.myNetData.vlans (vlan:
+      nameValuePair vlan {
+        id = vars.internalVlanMap.${vlan};
+        interface = "lan";
+      }
+    ));
 
     useDHCP = false;
 
-    nameservers = if hasWanIf then [ "8.8.4.4" "8.8.8.8" ] else
-      map (n: calculated.internalIp4 n "slan") calculated.myNetMap.gateways;
+    nameservers = if hasWanIf then [ "8.8.4.4" "8.8.8.8" ] else calculated.myGatewaysIp4;
   };
 }

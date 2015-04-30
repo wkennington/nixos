@@ -14,7 +14,7 @@ rec {
   internalIp4Net = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
   internalIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
-    "${net.priv4}${toString vars.internalVlanMap.${lan}}.${toString net.internalMachineMap.${name}}";
+    "${net.priv4}${toString vars.internalVlanMap.${lan}}.${toString net.internalMachineMap.${name}.id}";
   gatewayIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
@@ -23,12 +23,14 @@ rec {
   myDc = dc host;
   myDomain = domain host;
   myVpnIp4 = vpnIp4 host;
-  myInternalIp4 = internalIp4 host "slan";
-  myGatewayIp4 = gatewayIp4 host "slan";
+  myInternalIp4 = internalIp4 host (head myNetData.vlans);
+  myGatewaysIp4 = map (gatewayIp4 host) vlans;
+  myGatewayIp4 = head myGatewaysIp4;
   myNasIp4s = flip map myNetMap.nasIds
     (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
-  myInternalIp4Net = internalIp4Net host "slan";
+  myInternalIp4Net = internalIp4Net host (head myNetData.vlans);
   myNetMap = vars.netMaps.${myDc};
+  myNetData = myNetMap.internalMachineMap.${host};
   iAmGateway = any (n: host == n) myNetMap.gateways;
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
   myTimeZone = if iAmRemote then "UTC" else myNetMap.timeZone;

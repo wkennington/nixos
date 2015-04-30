@@ -141,20 +141,20 @@ rec {
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
-        alamo = 2;
-        ferrari = 3;
-        legend = 4;
-        kvm = 9;
-        sw1g1 = 11;
-        sw1g2 = 12;
-        sw10g1 = 21;
-        delta = 31;
-        fuel = 32;
-        eagle = 33;
-        lithium = 34;
-        marble = 35;
-        hunter = 36;
-        exodus = 90;
+        alamo = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
+        ferrari = { id = 3; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
+        legend = { id = 4; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
+        kvm = { id = 9; vlans = [ "mlan" ]; };
+        sw1g1 = { id = 11; vlans = [ "mlan" ]; };
+        sw1g2 = { id = 12; vlans = [ "mlan" ]; };
+        sw10g1 = { id = 21; vlans = [ "mlan" ]; };
+        delta = { id = 31; vlans = [ "slan" ]; };
+        fuel = { id = 32; vlans = [ "slan" ]; };
+        eagle = { id = 33; vlans = [ "slan" ]; };
+        lithium = { id = 34; vlans = [ "slan" ]; };
+        marble = { id = 35; vlans = [ "slan" ]; };
+        hunter = { id = 36; vlans = [ "slan" ]; };
+        exodus = { id = 90; vlans = [ "slan" ]; };
       };
 
     };
