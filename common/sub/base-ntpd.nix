@@ -12,12 +12,30 @@
     ip46tables -A OUTPUT -m owner --uid-owner ntp -p udp --dport ntp -j ACCEPT
   '';
 
-  systemd.targets.time-syncd = {};
+  systemd.targets.time-syncd = {
+    requires = [ "time-syncd.service" ];
+    after = [ "time-syncd.service" ];
+  };
+
+  systemd.services.time-syncd = {
+    serviceConfig = {
+      Type = "oneshot";
+      TimeoutStartSec = "0";
+    };
+
+    path = with pkgs; [ gnugrep openntpd ];
+
+    script = ''
+      while true; do
+        if ntpctl -s status | grep -q 'clock synced'; then
+          exit 0
+        fi
+        sleep 30
+      done
+    '';
+  };
 
   systemd.services.openntpd.postStart = ''
-    if ntpctl -s status | grep -q 'clock synced'; then
-      systemctl start time-syncd.target
-    fi
   '';
 
   systemd.timers.check-ntpd = {
@@ -42,9 +60,6 @@
     path = with pkgs; [ gnugrep openntpd systemd ];
 
     script = ''
-      if ntpctl -s status | grep -q 'clock synced'; then
-        systemctl start time-syncd.target
-      fi
       if ntpctl -s all | grep -q 'not resolved'; then
         systemctl restart openntpd
       fi
