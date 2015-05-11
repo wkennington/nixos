@@ -37,8 +37,6 @@ in
   };
   services.consul = {
     enable = true;
-    joinNodes = flip filter calculated.myConsul.serverIps
-      (ip: ip != calculated.myInternalIp4);
     extraConfig = {
       acl_datacenter = vars.consulAclDc;
       acl_default_policy = "deny";
@@ -53,6 +51,8 @@ in
       domain = "${domain}";
       key_file = "/conf/consul/me.key";
       server = isServer;
+      retry_join = flip filter calculated.myConsul.serverIps
+        (ip: ip != calculated.myInternalIp4);
       verify_incoming = true;
       verify_outgoing = true;
     } // (if ! isServer then { } else {
