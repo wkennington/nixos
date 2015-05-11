@@ -25,7 +25,7 @@
     after = [ "openntpd.service" ];
 
     serviceConfig = {
-      type = "oneshot";
+      Type = "oneshot";
     };
 
     path = with pkgs; [ gnugrep openntpd systemd ];
