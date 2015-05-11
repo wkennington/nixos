@@ -15,6 +15,7 @@
     bindsTo = [ "openntpd.service" ];
 
     timerConfig = {
+      OnActiveSec = 120;
       OnUnitActiveSec = 120;
     };
   };
