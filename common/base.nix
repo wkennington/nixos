@@ -33,6 +33,7 @@ in
     fish
     git
     gptfdisk
+    hdparm
     htop
     iftop
     iotop
