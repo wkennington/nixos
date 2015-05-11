@@ -32,7 +32,8 @@ in
 
   systemd.services.ceph-mon = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    after = [ "network.target" "time-syncd.target" ];
+    requires = [ "time-syncd.target" ];
 
     serviceConfig = {
       Type = "simple";
