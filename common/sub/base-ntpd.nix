@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   services = {
     ntp.enable = false;
@@ -35,17 +35,14 @@
     '';
   };
 
-  systemd.services.openntpd.postStart = ''
-  '';
-
   systemd.timers.check-ntpd = {
     wantedBy = [ "timers.target" ];
     requires = [ "openntpd.service" ];
     bindsTo = [ "openntpd.service" ];
 
     timerConfig = {
-      OnActiveSec = 120;
-      OnUnitActiveSec = 120;
+      OnActiveSec = 60;
+      OnUnitActiveSec = 60;
     };
   };
 
@@ -65,4 +62,20 @@
       fi
     '';
   };
+
+  environment.etc."consul.d/openntpd.json".text = builtins.toJSON {
+    check = {
+      id = "openntpd";
+      name = "Openntpd Clock Sync";
+      script = ''
+        ${pkgs.openntpd}/bin/ntpctl -s all
+        ${pkgs.openntpd}/bin/ntpctl -s status | ${pkgs.gnugrep}/bin/grep -q 'clock synced'
+      '';
+      interval = "60s";
+    };
+  };
+
+  systemd.services.openntpd.postStart = lib.optionalString config.services.consul.enable ''
+    ${pkgs.acl}/bin/setfacl -m u:consul:rw /run/ntpd.sock
+  '';
 }
