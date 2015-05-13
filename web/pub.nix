@@ -11,6 +11,7 @@ in
     server {
       listen 443;
       server_name ${domain};
+
       location / {
         root ${path};
         autoindex on;
@@ -31,7 +32,13 @@ in
     server {
       listen 80;
       server_name ${domain};
-      rewrite ^(.*) https://${domain}$1 permanent;
+
+      location / {
+        root ${path};
+        autoindex on;
+      }
+
+      error_page 500 502 503 504 /50x.html;
     }
   '';
 }
