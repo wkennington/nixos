@@ -23,11 +23,6 @@ with lib;
         listen 443;
         server_name ${domain};
         location / {
-          ${flip concatMapStrings constants.privateIp4 (ip: ''
-            allow ${ip};
-          '')}
-          deny all;
-
           proxy_set_header Accept-Encoding "";
           proxy_set_header Host $http_host;
           proxy_set_header X-Real-IP $remote_addr;
