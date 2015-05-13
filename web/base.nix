@@ -2,7 +2,15 @@
 
 with lib;
 {
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall = {
+    allowedTCPPorts = [ 80 443 ];
+    extraCommands = ''
+      # Allow consul checks to happen
+      ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 80 -j ACCEPT
+      ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 443 -j ACCEPT
+    '';
+  };
+
   services.nginx = {
     enable = true;
     config = mkMerge [
@@ -54,5 +62,19 @@ with lib;
   systemd.services.nginx = {
     wants = [ "ceph.mount" ];
     after = [ "ceph.mount" ];
+  };
+
+  environment.etc."consul.d/web-base.json".text = builtins.toJSON {
+    check = {
+      id = "web-base";
+      name = "Nginx Serving Default";
+      script = ''
+        if ${pkgs.curl}/bin/curl http://localhost; then
+          exit 0
+        fi
+        exit 2
+      '';
+      interval = "60s";
+    };
   };
 }
