@@ -56,32 +56,4 @@ with lib;
       }
     '';
   };
-  systemd.services.consul-dash = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "nginx.service" "consul-client-rpc.socket" ];
-    bindsTo = [ "nginx.service" "consul.service" ];
-    path = [ pkgs.curl ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      User = "nobody";
-    };
-
-    script = ''
-      COUNT=10
-      while [ "$COUNT" -gt "0" ]; do
-        if curl -X PUT http://127.0.0.1:8500/v1/agent/service/register \
-          -d '{ "ID": "consul-dash", "Name": "consul-dash", "Port": 80 }'; then
-          break
-        fi
-        sleep 1
-        COUNT="$(($COUNT - 1))"
-      done
-    '';
-
-    postStop = ''
-      curl -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/consul-dash
-    '';
-  };
 }
