@@ -68,8 +68,12 @@
       id = "openntpd";
       name = "Openntpd Clock Sync";
       script = ''
-        ${pkgs.openntpd}/bin/ntpctl -s all
-        ${pkgs.openntpd}/bin/ntpctl -s status | ${pkgs.gnugrep}/bin/grep -q 'clock synced'
+        OUT="$(${pkgs.openntpd}/bin/ntpctl -s all)"
+        echo "$OUT"
+        if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q 'clock synced'; then
+          exit 0
+        fi
+        exit 1 # Warning
       '';
       interval = "60s";
     };

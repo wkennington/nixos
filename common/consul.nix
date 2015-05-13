@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -17,6 +17,43 @@ in
   services.dnsmasq.extraConfig = ''
     server=/${domain}/127.0.0.1#8600
   '';
+
+  environment.etc."consul.d/systemd-failed.json".text = builtins.toJSON {
+    check = {
+      id = "systemd-failed";
+      name = "Systemd Failed Units";
+      script = ''
+        OUT="$(${pkgs.systemd}/bin/systemctl --failed)"
+        echo "$OUT"
+        if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q '0 loaded units listed'; then
+          exit 0
+        fi
+        exit 2 # Critical Error
+      '';
+      interval = "60s";
+    };
+  };
+  environment.etc."consul.d/systemd-starting.json".text = builtins.toJSON {
+    check = {
+      id = "systemd-starting";
+      name = "Systemd Starting Units";
+      script = ''
+        touch /dev/shm/systemd-starting-jobs
+        PREVIOUS="$(cat /dev/shm/systemd-starting-jobs)"
+
+        OUT="$(${pkgs.systemd}/bin/systemctl list-jobs)"
+        PARSED="$(echo "$OUT" | tail -n +2 | head -n -2)"
+        echo "$PARSED" | tee /dev/shm/systemd-starting-jobs
+
+        if [ -z "$PARSED" ] || [ "$PARSED" != "$PREVIOUS" ]; then
+          exit 0
+        fi
+        exit 2 # Critical Error
+      '';
+      interval = "120s";
+    };
+  };
+
   networking.firewall = {
     extraCommands = ''
       # Allow consul to communicate with other consuls
