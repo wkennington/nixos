@@ -4,7 +4,7 @@ let
   constants = (import ../common/sub/constants.nix { });
 
   domain = "consul.${calculated.myDomain}";
-  consulDomain = "consul-ui.service.consul.${calculated.myDomain}";
+  consulDomain = "consul-web.service.consul.${calculated.myDomain}";
   checkDomain = "consul.${config.networking.hostName}.${calculated.myDomain}";
 in
 with lib;
@@ -68,8 +68,7 @@ with lib;
 
   environment.etc."consul.d/consul-ui.json".text = builtins.toJSON {
     service = {
-      id = "consul-ui";
-      name = "Consul Web Portal";
+      name = "consul-web";
       port = 443;
       checks = [
         {
