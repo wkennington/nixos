@@ -72,7 +72,7 @@ with lib;
         if ${pkgs.curl}/bin/curl http://localhost; then
           exit 0
         fi
-        exit 2 # Critical
+        exit 1 # Warning
       '';
       interval = "60s";
     };
