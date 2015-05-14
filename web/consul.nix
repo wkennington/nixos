@@ -4,6 +4,8 @@ let
   constants = (import ../common/sub/constants.nix { });
 
   domain = "consul.${calculated.myDomain}";
+  consulDomain = "consul-ui.service.consul.${calculated.myDomain}";
+  checkDomain = "consul.${config.networking.hostName}.${calculated.myDomain}";
 in
 with lib;
 {
@@ -16,12 +18,19 @@ with lib;
     ip46tables -A OUTPUT -o lo -m owner --uid-owner nginx -p tcp --dport 8500 -j ACCEPT
   '';
 
+  networking.extraHosts = ''
+    ${calculated.myInternalIp4} ${checkDomain}
+  '';
+
   services = {
     consul.webUi = true;
     nginx.config = ''
       server {
         listen 443;
         server_name ${domain};
+        server_name ${consulDomain};
+        server_name ${checkDomain};
+
         location / {
           proxy_set_header Accept-Encoding "";
           proxy_set_header Host $http_host;
@@ -55,5 +64,26 @@ with lib;
         rewrite ^(.*) https://${domain}$1 permanent;
       }
     '';
+  };
+
+  environment.etc."consul.d/consul-ui.json".text = builtins.toJSON {
+    service = {
+      id = "consul-ui";
+      name = "Consul Web Portal";
+      port = 443;
+      checks = [
+        {
+          script = ''
+            export SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
+            # TODO: Get a new cert and remove -k
+            if ${pkgs.curl}/bin/curl -k https://${checkDomain}/ui/; then
+              exit 0
+            fi
+            exit 2 # Critical
+          '';
+          interval = "60s";
+        }
+      ];
+    };
   };
 }
