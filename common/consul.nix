@@ -97,7 +97,8 @@ in
       bootstrap_expect = length calculated.myConsul.serverIps;
     });
     dropPrivileges = true;
-    extraConfigFiles = optional isAclMaster "/conf/consul/acl-master-1.json";
+    extraConfigFiles =  [ "/conf/consul/acl-default-1.json" ]
+      ++ optional isAclMaster "/conf/consul/acl-master-1.json";
     forceIpv4 = true;
   };
 }
