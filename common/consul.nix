@@ -28,11 +28,12 @@ in
         if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q '0 loaded units listed'; then
           exit 0
         fi
-        exit 2 # Critical Error
+        exit 1 # Warning (We don't want services to fail because of this)
       '';
       interval = "60s";
     };
   };
+
   environment.etc."consul.d/systemd-starting.json".text = builtins.toJSON {
     check = {
       id = "systemd-starting";
@@ -48,7 +49,7 @@ in
         if [ -z "$PARSED" ] || [ "$PARSED" != "$PREVIOUS" ]; then
           exit 0
         fi
-        exit 2 # Critical Error
+        exit 1 # Warning (We don't want services to fail because of this)
       '';
       interval = "120s";
     };

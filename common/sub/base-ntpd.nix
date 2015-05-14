@@ -73,7 +73,7 @@
         if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q 'clock synced'; then
           exit 0
         fi
-        exit 1 # Warning
+        exit 2 # Critical Error
       '';
       interval = "60s";
     };
