@@ -2,10 +2,12 @@
 let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   constants = (import ../common/sub/constants.nix { });
+  vars = (import ../customization/vars.nix { inherit lib; });
 
   domain = "consul.${calculated.myDomain}";
-  consulDomain = "consul-web.service.consul.${calculated.myDomain}";
-  checkDomain = "consul.${config.networking.hostName}.${calculated.myDomain}";
+  consulService = "consul-web";
+  consulDomain = "${consulService}.service.consul.${vars.domain}";
+  checkDomain = "consul.${config.networking.hostName}.${vars.domain}";
 in
 with lib;
 {
@@ -63,12 +65,18 @@ with lib;
         server_name ${domain};
         rewrite ^(.*) https://${domain}$1 permanent;
       }
+
+      server {
+        listen 80;
+        server_name ${consulDomain};
+        rewrite ^(.*) https://${consulDomain}$1 permanent;
+      }
     '';
   };
 
   environment.etc."consul.d/consul-ui.json".text = builtins.toJSON {
     service = {
-      name = "consul-web";
+      name = consulService;
       port = 443;
       checks = [
         {
