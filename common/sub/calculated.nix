@@ -24,7 +24,7 @@ rec {
   myDomain = domain host;
   myVpnIp4 = vpnIp4 host;
   myInternalIp4 = internalIp4 host (head myNetData.vlans);
-  myGatewaysIp4 = map (gatewayIp4 host) vlans;
+  myGatewaysIp4 = map (gatewayIp4 host) myNetData.vlans;
   myGatewayIp4 = head myGatewaysIp4;
   myNasIp4s = flip map myNetMap.nasIds
     (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
