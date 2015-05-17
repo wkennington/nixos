@@ -105,8 +105,9 @@ rec {
       timeZone = "America/Los_Angeles";
 
       consul = {
-        servers = [ "newton "page" "quest" ];
+        servers = [ "newton" "page" "quest" ];
       };
+
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
         mons = [ "newton" "page" "quest" ];
@@ -116,9 +117,11 @@ rec {
           "alamo" = [ ];
         };
       };
+
       mongodb = {
         servers = [ "alamo" "ferrari" "legend" ];
       };
+
       zookeeper = {
         # Numbering is important and should be consistent in
         # the cluster. Therefore it is recommended never to reuse
@@ -137,7 +140,7 @@ rec {
         #"ferrari"
       ];
 
-      nasIds = [ 8 9 ];
+      nasIds = [ 7 8 ];
 
       nases = [
         "alamo"
