@@ -154,6 +154,9 @@ rec {
         lithium = { id = 34; vlans = [ "slan" ]; };
         marble = { id = 35; vlans = [ "slan" ]; };
         hunter = { id = 36; vlans = [ "slan" ]; };
+        newton = { id = 37; vlans = [ "slan" ]; };
+        page = { id = 38; vlans = [ "slan" ]; };
+        quest = { id = 39; vlans = [ "slan" ]; };
         exodus = { id = 90; vlans = [ "slan" ]; };
       };
 
