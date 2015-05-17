@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 with lib;
 {
   imports = [ ./fs-root.nix ];
@@ -8,7 +8,7 @@ with lib;
       {
         mountPoint = "/";
         fsType = "btrfs";
-        label = "root";
+        device = "${config.boot.loader.grub.device}-part3";
         options = "defaults,noatime,space_cache,compress=lzo";
         neededForBoot = true;
       }

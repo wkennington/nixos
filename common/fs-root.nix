@@ -1,4 +1,5 @@
-{ config, ... }:
+{ config, lib, ... }:
+with lib;
 {
   boot = {
     initrd.kernelModules = [ "fbcon" ];
