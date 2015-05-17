@@ -102,13 +102,15 @@ rec {
       timeZone = "America/Los_Angeles";
 
       consul = {
-        servers = [ "alamo" "ferrari" "legend" ];
+        servers = [ "newton "page" "quest" ];
       };
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
-        mons = [ "alamo" "ferrari" "legend" ];
+        mons = [ "newton" "page" "quest" ];
         osds = {
           "delta" = [ 4 5 6 7 8 9 10 11 12 13 ];
+          "ferrari" = [ ];
+          "alamo" = [ ];
         };
       };
       mongodb = {
