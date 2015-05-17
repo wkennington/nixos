@@ -7,7 +7,7 @@ let
   domain = "consul.${calculated.myDomain}";
   consulService = "consul-web";
   consulDomain = "${consulService}.service.consul.${vars.domain}";
-  checkDomain = "consul.${config.networking.hostName}.${vars.domain}";
+  checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
 in
 with lib;
 {
@@ -74,7 +74,7 @@ with lib;
     '';
   };
 
-  environment.etc."consul.d/consul-ui.json".text = builtins.toJSON {
+  environment.etc."consul.d/${consulService}.json".text = builtins.toJSON {
     service = {
       name = consulService;
       port = 443;
