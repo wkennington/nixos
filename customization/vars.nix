@@ -27,6 +27,9 @@ rec {
       ferrari = 5;
       delta = 6;
       legend = 7;
+      newton = 8;
+      page = 9;
+      quest = 10;
     };
   };
 
