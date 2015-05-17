@@ -38,6 +38,7 @@ in
     iftop
     iotop
     iperf
+    ipmitool
     ipset
     iptables
     lm_sensors
