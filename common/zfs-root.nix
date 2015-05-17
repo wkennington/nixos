@@ -1,6 +1,7 @@
 { lib, ... }:
 with lib;
 {
+  imports = [ ./fs-root.nix ];
   boot = {
     initrd.supportedFilesystems = [ "zfs" ];
     zfs = {
