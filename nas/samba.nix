@@ -9,14 +9,14 @@ in
   imports = [ ../core/ctdbd.nix ];
 
   networking.firewall.extraCommands = mkMerge [
-    ''
+    (flip concatMapStrings [ "mlan" "dlan" ] (n: ''
       # Samba ports
-      ip46tables -A INPUT -i dlan -p tcp --dport 135 -j ACCEPT
-      ip46tables -A INPUT -i dlan -p tcp --dport 139 -j ACCEPT
-      ip46tables -A INPUT -i dlan -p tcp --dport 445 -j ACCEPT
-      ip46tables -A INPUT -i dlan -p udp --dport 137 -j ACCEPT
-      ip46tables -A INPUT -i dlan -p udp --dport 138 -j ACCEPT
-    ''
+      ip46tables -A INPUT -i ${n} -p tcp --dport 135 -j ACCEPT
+      ip46tables -A INPUT -i ${n} -p tcp --dport 139 -j ACCEPT
+      ip46tables -A INPUT -i ${n} -p tcp --dport 445 -j ACCEPT
+      ip46tables -A INPUT -i ${n} -p udp --dport 137 -j ACCEPT
+      ip46tables -A INPUT -i ${n} -p udp --dport 138 -j ACCEPT
+    ''))
     (mkAfter (flip concatMapStrings calculated.myNetMap.nases (n: ''
       ipset add ctdb "${calculated.vpnIp4 n}"
     '')))
