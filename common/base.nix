@@ -30,6 +30,7 @@ in
     acpi
     atop
     dnstop
+    edac-utils
     fish
     git
     gptfdisk
