@@ -3,7 +3,7 @@
   environment.etc."wpa_supplicant.conf" = {
     enable = true;
     mode = "0600";
-    source = "/etc/nixos/laptop/res/wpa_supplicant.conf";
+    source = "/conf/wpa_supplicant.conf";
   };
   networking.wireless = {
     enable = true;
