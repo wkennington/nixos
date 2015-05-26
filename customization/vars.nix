@@ -75,7 +75,7 @@ rec {
     };
   };
 
-  remotes = [ "nixos" "prodigy" ];
+  remotes = [ "nixos" "prodigy" "jester" ];
 
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
   # ip processing in nix is hard :/
