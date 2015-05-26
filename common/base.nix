@@ -14,6 +14,9 @@ in
     ./sub/base-networking.nix
     ./sub/base-ntpd.nix
   ];
+  require = [
+    ./sub/base-fs-module.nix
+  ];
   boot = {
     kernelPackages = if lib.versionAtLeast (pkgs.linuxPackages_latest.kernel.version) "4.0"
       then pkgs.linuxPackages_latest else pkgs.linuxPackages_testing;

@@ -8,7 +8,7 @@ with lib;
       {
         mountPoint = "/";
         fsType = "btrfs";
-        device = "${head (head config.boot.loader.grub.mirroredBoots).devices}-part3";
+        device = "/dev/disk/by-uuid/${config.rootUUID}";
         options = "defaults,noatime,space_cache,compress=lzo";
         neededForBoot = true;
       }
