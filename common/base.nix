@@ -30,6 +30,7 @@ in
     acpi
     atop
     dnstop
+    dnsutils
     edac-utils
     fish
     git
