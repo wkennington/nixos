@@ -9,6 +9,7 @@ with lib;
         efiSysMountPoint = "/boot";
       };
       grub.efiSupport = true;
+      timeout = 1;
     };
   };
 
