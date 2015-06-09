@@ -70,8 +70,8 @@ in
     nrBuildUsers = config.nix.maxJobs * 10;
     buildCores = config.nix.maxJobs;
     useChroot = true;
-    binaryCaches = [ "https://cache.nixos.org" "https://hydra.nixos.org" ];
-    binaryCachePublicKeys = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+    binaryCaches = [ "https://cache.nixos.org" "https://cache.nixos.wak.io" ];
+    binaryCachePublicKeys = [ "nixos.wak.io-1:v+MxN2fDnbMTOL86aeczPWmxBmX57MlfyYwOAin/Qxo=" ];
     requireSignedBinaryCaches = true;
   };
   programs = {
