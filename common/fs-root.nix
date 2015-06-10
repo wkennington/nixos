@@ -1,16 +1,13 @@
 { config, lib, ... }:
 with lib;
 {
-  boot = {
-    initrd.kernelModules = [ "fbcon" ];
-    loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-      grub.efiSupport = true;
-      timeout = 1;
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
     };
+    grub.efiSupport = true;
+    timeout = 1;
   };
 
   fileSystems = mkOrder 1 (flip map config.boot.loader.grub.mirroredBoots
