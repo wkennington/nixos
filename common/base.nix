@@ -35,6 +35,7 @@ in
     dnstop
     dnsutils
     edac-utils
+    efibootmgr
     fish
     git
     gptfdisk
