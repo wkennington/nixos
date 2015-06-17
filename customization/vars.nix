@@ -14,6 +14,7 @@ rec {
     slan = 2; # Must Exist
     dlan = 3;
     ulan = 4;
+    tlan = 5;
   };
 
   vpn = {
@@ -35,7 +36,7 @@ rec {
 
   domain = "wak.io";
 
-  consulAclDc = "mtv-w";
+  consulAclDc = "fmt-1";
 
   userInfo = {
     william = {
@@ -97,29 +98,33 @@ rec {
         atomic = 2;
       };
     };
-    "mtv-w" = {
-      priv4 = "10.1.";
+
+    "fmt-1" = {
+      pub4 = "65.19.134.";
+      pub4Gateway = "65.19.134.241";
+      pub4PrefixLength = 28;
+
+      priv4 = "10.2.";
       pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
 
       timeZone = "America/Los_Angeles";
 
-      consul = {
-        servers = [ "newton" "page" "quest" ];
-      };
-
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
         mons = [ "newton" "page" "quest" ];
         osds = {
-          "delta" = [ 4 5 6 7 8 9 10 11 12 13 ];
+          "delta" = [ ];
           "ferrari" = [ ];
-          "alamo" = [ ];
         };
       };
 
+      consul = {
+        servers = [ "newton" "page" "quest" ];
+      };
+
       mongodb = {
-        servers = [ "alamo" "ferrari" "legend" ];
+        servers = [ "delta" "ferrari" ];
       };
 
       zookeeper = {
@@ -127,44 +132,60 @@ rec {
         # the cluster. Therefore it is recommended never to reuse
         # or reorganize the numeric values for nodes.
         servers = {
-          alamo = 0;
-          ferrari = 1;
-          legend = 2;
+          newton = 0;
+          page = 1;
+          quest = 2;
         };
       };
+
+      pub4MachineMap = {
+        newton = 242;
+        page = 243;
+        quest = 244;
+        lb1 = 245;
+        lb2 = 246;
+        lb3 = 247;
+      };
+
+      internalMachineMap = {
+        sw1g1 = { id = 11; vlans = [ "mlan" ]; };
+        sw10g1 = { id = 21; vlans = [ "mlan" ]; };
+        newton = { id = 31; vlans = [ "mlan" "slan" ]; };
+        page = { id = 32; vlans = [ "mlan" "slan" ]; };
+        quest = { id = 33; vlans = [ "mlan" "slan" ]; };
+        fuel = { id = 32; vlans = [ "slan" ]; };
+        delta = { id = 31; vlans = [ "slan" ]; };
+        ferrari = { id = 31; vlans = [ "slan" ]; };
+        eagle = { id = 33; vlans = [ "slan" ]; };
+        lithium = { id = 34; vlans = [ "slan" ]; };
+        marble = { id = 35; vlans = [ "slan" ]; };
+        hunter = { id = 36; vlans = [ "slan" ]; };
+      };
+    };
+
+    "mtv-w" = {
+      priv4 = "10.1.";
+      pub6 = "2001:470:810a:000";
+      priv6 = "fda4:941a:81b5:100";
+
+      timeZone = "America/Los_Angeles";
 
       gatewayIds = [ 1 ];
 
       gateways = [
         "alamo"
-        #"ferrari"
       ];
 
       nasIds = [ 7 8 ];
 
       nases = [
         "alamo"
-        "ferrari"
       ];
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
         alamo = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
-        ferrari = { id = 3; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
-        legend = { id = 4; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
         kvm = { id = 9; vlans = [ "mlan" ]; };
-        sw1g1 = { id = 11; vlans = [ "mlan" ]; };
-        sw1g2 = { id = 12; vlans = [ "mlan" ]; };
-        sw10g1 = { id = 21; vlans = [ "mlan" ]; };
-        delta = { id = 31; vlans = [ "slan" ]; };
-        fuel = { id = 32; vlans = [ "slan" ]; };
-        eagle = { id = 33; vlans = [ "slan" ]; };
-        lithium = { id = 34; vlans = [ "slan" ]; };
-        marble = { id = 35; vlans = [ "slan" ]; };
-        hunter = { id = 36; vlans = [ "slan" ]; };
-        newton = { id = 37; vlans = [ "slan" ]; };
-        page = { id = 38; vlans = [ "slan" ]; };
-        quest = { id = 39; vlans = [ "slan" ]; };
         exodus = { id = 90; vlans = [ "slan" ]; };
       };
 
