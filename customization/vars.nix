@@ -110,6 +110,25 @@ rec {
 
       timeZone = "America/Los_Angeles";
 
+      gatewayIds = [ 1 ];
+
+      gateways = [
+        "newton"
+        "page"
+        "quest"
+      ];
+
+      dhcpServers = [
+        "page"
+        "quest"
+      ];
+
+      dnsServers = [
+        "newton"
+        "page"
+        "quest"
+      ];
+
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
         mons = [ "newton" "page" "quest" ];

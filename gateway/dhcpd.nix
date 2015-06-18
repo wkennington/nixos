@@ -1,27 +1,31 @@
 { config, lib, utils, ... }:
 with lib;
 let
-  vars = (import ../../customization/vars.nix { inherit lib; });
-  calculated = (import ../../common/sub/calculated.nix { inherit config lib; });
+  vars = (import ../customization/vars.nix { inherit lib; });
+  calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
-  systemdDevices = flip map (attrNames vars.internalVlanMap)
+  internalVlanMap = listToAttrs (flip map calculated.myNetData.vlans (v:
+    nameValuePair v vars.internalVlanMap.${v}
+  ));
+  systemdDevices = flip map (attrNames internalVlanMap)
     (n: "sys-subsystem-net-devices-${utils.escapeSystemdPath n}.device");
 
   net = calculated.myNetMap;
 in
 {
   networking.firewall.extraCommands =
-    flip concatMapStrings (attrNames vars.internalVlanMap) (n: ''
+    flip concatMapStrings (attrNames internalVlanMap) (n: ''
       iptables -w -A INPUT -i ${n} -p udp --dport 67 -j ACCEPT
     '');
+
   services.dhcpd = {
     enable = true;
-    interfaces = (attrNames vars.internalVlanMap);
+    interfaces = (attrNames internalVlanMap);
     extraConfig = ''
       max-lease-time 86400;
       default-lease-time 86400;
       option subnet-mask 255.255.255.0;
-    '' + concatStrings (flip mapAttrsToList vars.internalVlanMap (vlan: vid:
+    '' + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
       let
         subnet = "${net.priv4}${toString vid}";
         nameservers = concatStringsSep ", "
@@ -40,10 +44,9 @@ in
       ''
     ));
   };
+
   systemd.services.dhcpd = {
     after = systemdDevices;
     bindsTo = systemdDevices;
-  } // (if calculated.iAmOnlyGateway then { } else {
-    wantedBy = mkOverride 0 [ ];
-  });
+  };
 }

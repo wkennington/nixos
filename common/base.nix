@@ -16,6 +16,7 @@ in
   ];
   require = [
     ./sub/base-fs-module.nix
+    ./sub/base-if-module.nix
   ];
   boot = {
     kernelPackages = if lib.versionAtLeast (pkgs.linuxPackages_latest.kernel.version) "4.0"
@@ -72,7 +73,7 @@ in
     buildCores = config.nix.maxJobs;
     useChroot = true;
     binaryCaches = [ "https://cache.nixos.org" "https://cache.nixos.wak.io" ];
-    binaryCachePublicKeys = [ "nixos.wak.io-1:v+MxN2fDnbMTOL86aeczPWmxBmX57MlfyYwOAin/Qxo=" ];
+    binaryCachePublicKeys = [ "cache.nixos.wak.io-1:GQXw9k3nK8N1dIsAq9K8EgS59pl4j1aQTJZc0kVnXRo=" ];
     requireSignedBinaryCaches = true;
   };
   programs = {

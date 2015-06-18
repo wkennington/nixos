@@ -4,9 +4,13 @@ let
   vars = (import ../../customization/vars.nix { inherit lib; });
   calculated = (import ./calculated.nix { inherit config lib; });
 
+  net = calculated.myNetMap;
+  networkId = net.internalMachineMap.${config.networking.hostName}.id;
   hasWanIf = config.networking.interfaces ? "wan";
 in
 {
+  myNatIfs = calculated.myNetData.vlans;
+
   networking = mkMerge [
     {
       dhcpcd.extraConfig = ''
@@ -14,15 +18,31 @@ in
       '';
     }
     (mkIf (!calculated.iAmRemote) {
-      defaultGateway = mkDefault (if hasWanIf then null else calculated.myGatewayIp4);
+      defaultGateway = mkDefault (if !hasWanIf then calculated.myGatewayIp4
+        else if calculated.myPublicIp4 != null then net.pub4Gateway else null);
 
-      interfaces = {
-        lan = { };
-      } // listToAttrs (flip map calculated.myNetData.vlans (vlan:
-        nameValuePair vlan {
-          ip4 = mkDefault [ { address = calculated.myInternalIp4; prefixLength = 24; } ];
-        }
-      ));
+      interfaces = mkMerge [
+        { lan = { }; }
+        (listToAttrs (flip map calculated.myNetData.vlans (vlan:
+          let
+            vid = vars.internalVlanMap.${vlan};
+          in
+          nameValuePair vlan {
+            ip4 = mkOverride 0 ([
+              { address = "${net.priv4}${toString vid}.${toString networkId}"; prefixLength = 24; }
+            ] ++ optional calculated.iAmOnlyGateway
+              { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; });
+            ip6 = mkOverride 0 [
+              { address = "${net.pub6}${toString vid}::${toString networkId}"; prefixLength = 64; }
+              { address = "${net.priv6}${toString vid}::${toString networkId}"; prefixLength = 64; }
+            ];
+          }
+        )))
+        (mkIf (calculated.myPublicIp4 != null) ({ wan.ip4 = [ {
+          address = calculated.myPublicIp4;
+          prefixLength = net.pub4PrefixLength;
+        } ]; }))
+      ];
 
       vlans = listToAttrs (flip map calculated.myNetData.vlans (vlan:
         nameValuePair vlan {
