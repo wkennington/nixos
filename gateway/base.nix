@@ -8,7 +8,7 @@ with lib;
       ip46tables -w -A FORWARD -i ${n} -o gwan -j ACCEPT
       ip6tables -w -A FORWARD -i ${n} -o hurricane -j ACCEPT
       ip46tables -A FORWARD -i ${n} -o tinc.vpn -j ACCEPT
-    '') config.myNatIfs)}
+    '') (filter (n: n != "tinc.vpn") config.myNatIfs))}
 
     # Masquerade all private connections
     iptables -t mangle -A PREROUTING -m set --match-set private src -j MARK --set-mark 0x10

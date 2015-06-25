@@ -6,7 +6,6 @@ rec {
       lower = 100;
       upper = 254;
     };
-    natIfs = (attrNames internalVlanMap) ++ [ "tinc.vpn" ];
   };
 
   internalVlanMap = {

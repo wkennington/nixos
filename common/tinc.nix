@@ -13,6 +13,7 @@ let
   extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 in
 {
+  myNatIfs = [ "tinc.vpn" ];
   environment.systemPackages = [ pkgs.tinc_pre ];
   fileSystems = [
     {
