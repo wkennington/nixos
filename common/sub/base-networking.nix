@@ -15,6 +15,7 @@ in
     {
       dhcpcd.extraConfig = ''
         noipv4ll
+        nohook mtu  # Break Cable modem negotiation
       '';
     }
     (mkIf (!calculated.iAmRemote) {
