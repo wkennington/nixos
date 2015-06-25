@@ -12,6 +12,7 @@ with lib;
   services.postgresql = {
     enable = true;
     enableTCPIP = true;
-    package = pkgs.postgresql93;
+    package = pkgs.postgresql94;
   };
+  users.extraUsers.postgres.useDefaultShell = true;
 }
