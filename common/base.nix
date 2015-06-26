@@ -75,6 +75,7 @@ in
     binaryCaches = [ "https://cache.nixos.org" "https://cache.nixos.wak.io" ];
     binaryCachePublicKeys = [ "cache.nixos.wak.io-1:GQXw9k3nK8N1dIsAq9K8EgS59pl4j1aQTJZc0kVnXRo=" ];
     requireSignedBinaryCaches = true;
+    allowedUsers = [ "@wheel" ];
   };
   programs = {
     bash = {
