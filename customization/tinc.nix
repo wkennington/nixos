@@ -8,8 +8,7 @@ with lib;
     "jester"
     "atomic"
     "alamo"
-    "ferrari"
-    "legend"
+    "page"
   ];
   hosts = mkMerge [
     {
@@ -41,6 +40,11 @@ with lib;
       '';
       prodigy = ''
         Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2wJp8PzhAnGtezI
+      '';
+      page = ''
+        Address = page.wak.io
+        Ed25519PublicKey = sGpVBKdBn9ALe7Z6gldb7j2d4v/lAxDfhYpvOn8dFLJ
+        Subnet = 10.2.0.0/16
       '';
     }
     (flip mapAttrs vars.vpn.idMap (_: id: ''
