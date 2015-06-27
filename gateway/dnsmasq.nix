@@ -1,9 +1,5 @@
-{ config, lib, utils, ... }:
+{ config, lib, ... }:
 with lib;
-let
-  devices = flip map config.myNatIfs
-    (n: "sys-subsystem-net-devices-${utils.escapeSystemdPath n}.device");
-in
 {
   imports = [
     ../common/sub/base-dnsmasq.nix
@@ -22,10 +18,5 @@ in
       interface=${n}
       no-dhcp-interface=${n}
     '');
-  };
-
-  systemd.services.dnsmasq = {
-    after = devices;
-    bindsTo = devices;
   };
 }

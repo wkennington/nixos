@@ -9,6 +9,7 @@
     ip46tables -A OUTPUT -o lo -p udp --dport domain -j ACCEPT
     ip46tables -A OUTPUT -o lo -p tcp --dport domain -j ACCEPT
   '';
+
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = true;
@@ -24,7 +25,7 @@
       interface=lo
       no-dhcp-interface=lo
 
-      bind-interfaces
+      bind-dynamic
 
       expand-hosts
     '';
