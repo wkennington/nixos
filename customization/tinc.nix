@@ -9,6 +9,7 @@ with lib;
     "atomic"
     "alamo"
     "page"
+    "quest"
   ];
   hosts = mkMerge [
     {
@@ -44,6 +45,11 @@ with lib;
       page = ''
         Address = page.wak.io
         Ed25519PublicKey = sGpVBKdBn9ALe7Z6gldb7j2d4v/lAxDfhYpvOn8dFLJ
+        Subnet = 10.2.0.0/16
+      '';
+      quest = ''
+        Address = quest.wak.io
+        Ed25519PublicKey = nXRjIs3FLanILhsDF36XGq39lnojdL0VJJsvI52cAEA
         Subnet = 10.2.0.0/16
       '';
     }
