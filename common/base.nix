@@ -26,6 +26,7 @@ in
       options kvm-intel nested=1
     '';
     kernel.sysctl = {
+      "net.ipv4.ip_nonlocal_bind" = 1;
       "net.ipv6.conf.all.use_tempaddr" = 2;
       "net.ipv6.conf.default.use_tempaddr" = 2;
     };
