@@ -9,6 +9,7 @@ rec {
   };
 
   internalVlanMap = {
+    lan = 0; # Must Exist For Compatability
     mlan = 1; # Must Exist
     slan = 2; # Must Exist
     dlan = 3;
@@ -188,23 +189,15 @@ rec {
 
       timeZone = "America/Los_Angeles";
 
-      gatewayIds = [ 1 ];
-
       gateways = [
-        "alamo"
-      ];
-
-      nasIds = [ 7 8 ];
-
-      nases = [
         "alamo"
       ];
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
-        alamo = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
         kvm = { id = 9; vlans = [ "mlan" ]; };
-        exodus = { id = 90; vlans = [ "slan" ]; };
+        alamo = { id = 31; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
+        exodus = { id = 32; vlans = [ "slan" ]; };
       };
 
     };

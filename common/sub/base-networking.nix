@@ -24,7 +24,7 @@ in
 
       interfaces = mkMerge [
         { lan = { }; }
-        (listToAttrs (flip map calculated.myNetData.vlans (vlan:
+        (listToAttrs (flip map (calculated.myNetData.vlans ++ [ "lan" ]) (vlan:
           let
             vid = vars.internalVlanMap.${vlan};
           in

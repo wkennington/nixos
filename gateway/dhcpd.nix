@@ -4,7 +4,7 @@ let
   vars = (import ../customization/vars.nix { inherit lib; });
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
-  internalVlanMap = listToAttrs (flip map calculated.myNetData.vlans (v:
+  internalVlanMap = listToAttrs (flip map (calculated.myNetData.vlans ++ [ "lan" ]) (v:
     nameValuePair v vars.internalVlanMap.${v}
   ));
   systemdDevices = flip map (attrNames internalVlanMap)
@@ -20,7 +20,7 @@ in
 
   services.dhcpd = {
     enable = true;
-    interfaces = (attrNames internalVlanMap);
+    interfaces = attrNames internalVlanMap;
     extraConfig = ''
       max-lease-time 86400;
       default-lease-time 86400;
