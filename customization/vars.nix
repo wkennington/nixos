@@ -110,8 +110,6 @@ rec {
 
       timeZone = "America/Los_Angeles";
 
-      gatewayIds = [ 1 ];
-
       gateways = [
         "newton"
         "page"
@@ -140,10 +138,6 @@ rec {
 
       consul = {
         servers = [ "newton" "page" "quest" ];
-      };
-
-      mongodb = {
-        servers = [ "delta" "ferrari" ];
       };
 
       zookeeper = {
@@ -192,6 +186,18 @@ rec {
       gateways = [
         "alamo"
       ];
+
+      dhcpServers = [
+        "alamo"
+      ];
+
+      dnsServers = [
+        "alamo"
+      ];
+
+      consul = {
+        servers = [ "alamo" ];
+      };
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
