@@ -158,6 +158,7 @@ rec {
         lb1 = 245;
         lb2 = 246;
         lb3 = 247;
+        outbound = 254;
       };
 
       internalMachineMap = {

@@ -17,10 +17,31 @@ let
 
     vrrp_sync_group GATEWAY {
       group {
+        WAN
     ${concatStringsSep "\n" (flip mapAttrsToList internalVlanMap (vlan: _: "    ${toUpper vlan}"))}
       }
     }
     
+    vrrp_instance WAN {
+      state BACKUP
+      nopreempt
+      preempt_delay 5
+      interface tlan
+      track_interface {
+        WAN
+      }
+      virtual_router_id 254
+      priority ${toString calculated.myNetData.id}
+      advert_int 1
+      authentication {
+        auth_type PASS
+        auth_pass doesntmatter
+      }
+      virtual_ipaddress {
+        ${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound} dev wan
+      }
+    }
+
     ${concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid: ''
       vrrp_instance ${toUpper vlan} {
         state BACKUP
@@ -56,6 +77,6 @@ in
     after = [ "network.target" "sys-subsystem-net-devices-tlan.device" ];
     bindsTo = [ "sys-subsystem-net-devices-tlan.device" ];
     partOf = [ "sys-subsystem-net-devices-tlan.device" ];
-    serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -PDnf ${configFile}";
+    serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -PXDnf ${configFile}";
   };
 }
