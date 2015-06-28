@@ -12,7 +12,11 @@ with lib;
 
     # Masquerade all private connections
     iptables -t mangle -A PREROUTING -m set --match-set private src -j MARK --set-mark 0x10
-    iptables -t nat -A POSTROUTING -m mark --mark 0x10 -j MASQUERADE
+    #iptables -t nat -A POSTROUTING -m mark --mark 0x10 -j MASQUERADE
+
+    # Masquerade all public connections
+    iptables -t nat -A POSTROUTING -o wan -m mark --mark 0x10 -j MASQUERADE
+    iptables -t nat -A POSTROUTING -o gwan -m mark --mark 0x10 -j MASQUERADE
 
     # Allow access to servers
     ${concatStrings (map (n: ''
