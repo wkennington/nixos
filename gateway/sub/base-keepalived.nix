@@ -77,6 +77,6 @@ in
     after = [ "network.target" "sys-subsystem-net-devices-tlan.device" ];
     bindsTo = [ "sys-subsystem-net-devices-tlan.device" ];
     partOf = [ "sys-subsystem-net-devices-tlan.device" ];
-    serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -PXDnf ${configFile}";
+    serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -P --release-vips -D -n -f ${configFile}";
   };
 }
