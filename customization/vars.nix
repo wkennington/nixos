@@ -163,9 +163,9 @@ rec {
       internalMachineMap = {
         sw1g1 = { id = 11; vlans = [ "mlan" ]; };
         sw10g1 = { id = 21; vlans = [ "mlan" ]; };
-        newton = { id = 31; vlans = [ "mlan" "slan" ]; };
-        page = { id = 32; vlans = [ "mlan" "slan" ]; };
-        quest = { id = 33; vlans = [ "mlan" "slan" ]; };
+        newton = { id = 31; vlans = [ "mlan" "slan" "tlan" ]; };
+        page = { id = 32; vlans = [ "mlan" "slan" "tlan" ]; };
+        quest = { id = 33; vlans = [ "mlan" "slan" "tlan" ]; };
         fuel = { id = 32; vlans = [ "slan" ]; };
         delta = { id = 31; vlans = [ "slan" ]; };
         ferrari = { id = 31; vlans = [ "slan" ]; };
