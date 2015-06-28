@@ -28,7 +28,7 @@ in
     '' + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
       let
         subnet = "${net.priv4}${toString vid}";
-        nameservers = concatStringsSep ", " (dnsIp4 vlan);
+        nameservers = concatStringsSep ", " (calculated.dnsIp4 vlan);
         dhcpLower = "${subnet}.${toString vars.gateway.dhcpRange.lower}";
         dhcpUpper = "${subnet}.${toString vars.gateway.dhcpRange.upper}";
       in ''
