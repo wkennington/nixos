@@ -10,6 +10,28 @@ let
 
   net = calculated.myNetMap;
 
+  vrrpInstance = ip: i: id: ''
+    vrrp_instance ${toUpper i} {
+      state MASTER
+      #nopreempt
+      #preempt_delay 5
+      interface tlan
+      track_interface {
+        ${i}
+      }
+      virtual_router_id ${toString id}
+      priority ${toString calculated.myNetData.id}
+      advert_int 1
+      authentication {
+        auth_type PASS
+        auth_pass none
+      }
+      virtual_ipaddress {
+        ${ip} dev ${i}
+      }
+    }
+  '';
+
   configFile = pkgs.writeText "keepalived.conf" ''
     global_defs {
       router_id ${config.networking.hostName}
@@ -21,48 +43,11 @@ let
     ${concatStringsSep "\n" (flip mapAttrsToList internalVlanMap (vlan: _: "    ${toUpper vlan}"))}
       }
     }
-    
-    vrrp_instance WAN {
-      state BACKUP
-      nopreempt
-      preempt_delay 5
-      interface tlan
-      track_interface {
-        WAN
-      }
-      virtual_router_id 254
-      priority ${toString calculated.myNetData.id}
-      advert_int 1
-      authentication {
-        auth_type PASS
-        auth_pass doesntmatter
-      }
-      virtual_ipaddress {
-        ${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound} dev wan
-      }
-    }
 
-    ${concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid: ''
-      vrrp_instance ${toUpper vlan} {
-        state BACKUP
-        nopreempt
-        preempt_delay 5
-        interface tlan
-        track_interface {
-          ${vlan}
-        }
-        virtual_router_id ${toString (vid + 1)}
-        priority ${toString calculated.myNetData.id}
-        advert_int 1
-        authentication {
-          auth_type PASS
-          auth_pass doesntmatter
-        }
-        virtual_ipaddress {
-          ${calculated.gatewayIp4 config.networking.hostName vlan} dev ${vlan}
-        }
-      }
-    ''))}
+    ${vrrpInstance "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound}" "wan" 254}
+
+    ${concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
+      vrrpInstance (calculated.gatewayIp4 config.networking.hostName vlan) vlan (vid + 1)))}
   '';
 in
 {
