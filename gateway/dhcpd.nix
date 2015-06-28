@@ -46,5 +46,6 @@ in
   systemd.services.dhcpd = {
     after = systemdDevices;
     bindsTo = systemdDevices;
+    partOf = systemdDevices;
   };
 }

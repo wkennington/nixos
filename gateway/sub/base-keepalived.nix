@@ -45,9 +45,17 @@ let
   '';
 in
 {
+  networking.firewall.extraCommands = ''
+    # Allow other keepalived's to talk to this one
+    iptables -I INPUT -i tlan -d 224.0.0.0/8 -j ACCEPT
+    ip46tables -I INPUT -i tlan -p vrrp -j ACCEPT
+  '';
+
   systemd.services.keepalived = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    after = [ "network.target" "sys-subsystem-net-devices-tlan.device" ];
+    bindsTo = [ "sys-subsystem-net-devices-tlan.device" ];
+    partOf = [ "sys-subsystem-net-devices-tlan.device" ];
     serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -PDnf ${configFile}";
   };
 }
