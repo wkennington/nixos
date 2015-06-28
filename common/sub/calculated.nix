@@ -21,6 +21,7 @@ rec {
   gatewayIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
+  dnsIp4 = lan: map (flip internalIp4 lan) myNetMap.dnsServers;
 
   iAmRemote = isRemote host;
   myDc = dc host;
@@ -29,6 +30,7 @@ rec {
   myInternalIp4 = internalIp4 host (head myNetData.vlans);
   myPublicIp4 = publicIp4 host;
   myGatewaysIp4 = map (gatewayIp4 host) myNetData.vlans;
+  myDnsIp4 = dnsIp4 (head myNetData.vlan);
   myGatewayIp4 = head myGatewaysIp4;
   myNasIp4s = flip map myNetMap.nasIds
     (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
