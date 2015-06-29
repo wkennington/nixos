@@ -17,6 +17,7 @@ in
   require = [
     ./sub/base-fs-module.nix
     ./sub/base-if-module.nix
+    ./sub/base-keepalived-module.nix
   ];
   boot = {
     kernelPackages = if lib.versionAtLeast (pkgs.linuxPackages_latest.kernel.version) "4.0"
