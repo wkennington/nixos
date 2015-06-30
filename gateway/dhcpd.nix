@@ -1,4 +1,4 @@
-{ config, lib, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   vars = (import ../customization/vars.nix { inherit lib; });
@@ -13,19 +13,48 @@ let
   net = calculated.myNetMap;
 in
 {
-  networking.firewall.extraCommands =
-    flip concatMapStrings (attrNames internalVlanMap) (n: ''
+  assertions = [ {
+    assertion = length net.dhcpServers < 3;
+    message = "You must not have more than 2 dhcp servers.";
+  } ];
+
+  networking.firewall.extraCommands = ''
+    ip46tables -A INPUT -i tlan -p tcp --dport 647 -j ACCEPT
+    ip46tables -A OUTPUT -o tlan -m owner --uid-owner dhcpd -p tcp --dport 647 -j ACCEPT
+  '' + flip concatMapStrings (attrNames internalVlanMap) (n: ''
       iptables -w -A INPUT -i ${n} -p udp --dport 67 -j ACCEPT
     '');
 
   services.dhcpd = {
     enable = true;
     interfaces = attrNames internalVlanMap;
-    extraConfig = ''
+    configFile = pkgs.writeText "dhcpd.conf" ''
+      authoritative;
+      ddns-updates off;
+      log-facility local1; # see dhcpd.nix
+
       max-lease-time 86400;
       default-lease-time 86400;
+
       option subnet-mask 255.255.255.0;
-    '' + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
+    '' + optionalString (length net.dhcpServers == 2) (
+      let
+        primary = config.networking.hostName == head net.dhcpServers;
+        peer = if primary then head (tail net.dhcpServers) else head net.dhcpServers;
+      in ''
+      failover peer ${peer} {
+        ${if primary then "primary" else "secondary"};
+        address ${calculated.internalIp4 config.networking.hostName "tlan"};
+        port 647;
+        peer address ${calculated.internalIp4 peer "tlan"};
+        peer port 647;
+        max-response-delay 30;
+        max-unacked-updates 20;
+        mclt 3600;
+        ${optionalString primary "split 128;"}
+        load balance max seconds 3;
+      }
+    '') + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
       let
         subnet = "${net.priv4}${toString vid}";
         nameservers = concatStringsSep ", " (calculated.dnsIp4 vlan);
