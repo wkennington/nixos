@@ -81,7 +81,7 @@ in
 
       syncGroups = mkOption {
         type = types.attrsOf types.optionSet;
-        default = [ ];
+        default = { };
         description = ''
           Defines a vrrp_sync_group block.
         '';
