@@ -161,11 +161,11 @@ rec {
         outbound = 254;
       };
 
-      loadBalancerMap = [
-        newton = "lb1";
-        page = "lb2";
-        quest = "lb3";
-      ];
+      loadBalancerMap = {
+        lb1 = "newton";
+        lb2 = "page";
+        lb3 = "quest";
+      };
 
       internalMachineMap = {
         sw1g1 = { id = 11; vlans = [ "mlan" ]; };
