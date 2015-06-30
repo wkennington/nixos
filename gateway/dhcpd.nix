@@ -11,6 +11,9 @@ let
     (n: "sys-subsystem-net-devices-${utils.escapeSystemdPath n}.device");
 
   net = calculated.myNetMap;
+
+  primary = config.networking.hostName == head net.dhcpServers;
+  peer = if primary then head (tail net.dhcpServers) else head net.dhcpServers;
 in
 {
   assertions = [ {
@@ -37,11 +40,7 @@ in
       default-lease-time 86400;
 
       option subnet-mask 255.255.255.0;
-    '' + optionalString (length net.dhcpServers == 2) (
-      let
-        primary = config.networking.hostName == head net.dhcpServers;
-        peer = if primary then head (tail net.dhcpServers) else head net.dhcpServers;
-      in ''
+    '' + optionalString (peer != null) ''
       failover peer ${peer} {
         ${if primary then "primary" else "secondary"};
         address ${calculated.internalIp4 config.networking.hostName "tlan"};
@@ -54,7 +53,7 @@ in
         ${optionalString primary "split 128;"}
         load balance max seconds 3;
       }
-    '') + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
+    '' + concatStrings (flip mapAttrsToList internalVlanMap (vlan: vid:
       let
         subnet = "${net.priv4}${toString vid}";
         nameservers = concatStringsSep ", " (calculated.dnsIp4 vlan);
@@ -66,7 +65,10 @@ in
           option routers ${subnet}.1;
           option domain-name-servers ${nameservers};
           option domain-name "${calculated.myDomain}";
-          range ${dhcpLower} ${dhcpUpper};
+          pool {
+            ${optionalString (peer != null) "failover peer \"${peer}\";"}
+            range ${dhcpLower} ${dhcpUpper};
+          }
         }
       ''
     )));
