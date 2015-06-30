@@ -161,6 +161,12 @@ rec {
         outbound = 254;
       };
 
+      loadBalancerMap = [
+        newton = "lb1";
+        page = "lb2";
+        quest = "lb3";
+      ];
+
       internalMachineMap = {
         sw1g1 = { id = 11; vlans = [ "mlan" ]; };
         sw10g1 = { id = 21; vlans = [ "mlan" ]; };
