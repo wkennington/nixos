@@ -28,7 +28,7 @@ in
   services.dhcpd = {
     enable = true;
     interfaces = attrNames internalVlanMap;
-    configFile = pkgs.writeText "dhcpd.conf" ''
+    configFile = pkgs.writeText "dhcpd.conf" (''
       authoritative;
       ddns-updates off;
       log-facility local1; # see dhcpd.nix
@@ -69,7 +69,7 @@ in
           range ${dhcpLower} ${dhcpUpper};
         }
       ''
-    ));
+    )));
   };
 
   systemd.services.dhcpd = {
