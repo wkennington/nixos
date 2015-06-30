@@ -268,6 +268,7 @@ in
 
     systemd.services.keepalived = {
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       path = [ pkgs.iproute ];
 
@@ -280,7 +281,7 @@ in
         fi
       '');
 
-      serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -P -d --release-vips -D -n -f ${configFile}";
+      serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -P --release-vips -D -n -f ${configFile}";
     };
 
   };
