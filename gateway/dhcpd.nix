@@ -41,7 +41,7 @@ in
 
       option subnet-mask 255.255.255.0;
     '' + optionalString (peer != null) ''
-      failover peer ${peer} {
+      failover peer failover {
         ${if primary then "primary" else "secondary"};
         address ${calculated.internalIp4 config.networking.hostName "tlan"};
         port 647;
@@ -66,7 +66,7 @@ in
           option domain-name-servers ${nameservers};
           option domain-name "${calculated.myDomain}";
           pool {
-            ${optionalString (peer != null) "failover peer \"${peer}\";"}
+            ${optionalString (peer != null) "failover peer \"failover\";"}
             range ${dhcpLower} ${dhcpUpper};
           }
         }
