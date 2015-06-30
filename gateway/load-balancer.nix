@@ -21,6 +21,7 @@ in
 {
   services.keepalived = {
     enable = true;
+    syncGroups = flip mapAttrs lbPrioMap (lb: _: { group = [ lb ]; });
     instances = flip mapAttrs lbPrioMap (lb: priorities: {
       interface = "tlan";
       trackInterfaces = [ "wan" ];

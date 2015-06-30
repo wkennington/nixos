@@ -269,6 +269,8 @@ in
     systemd.services.keepalived = {
       wantedBy = [ "multi-user.target" ];
 
+      path = [ pkgs.iproute ];
+
       postStop = flip concatMapStrings ips ({ ip, device }: ''
         if ip addr show dev "${device}" | grep -q "${ip}"; then
           echo "Have to remove an extra ip from ${device}: ${ip}"
@@ -278,7 +280,7 @@ in
         fi
       '');
 
-      serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -P --release-vips -D -n -f ${configFile}";
+      serviceConfig.ExecStart = "${pkgs.keepalived}/bin/keepalived -P -d --release-vips -D -n -f ${configFile}";
     };
 
   };
