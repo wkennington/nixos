@@ -173,13 +173,13 @@ rec {
         newton = { id = 31; vlans = [ "slan" "mlan" "tlan" ]; };
         page = { id = 32; vlans = [ "slan" "mlan" "tlan" ]; };
         quest = { id = 33; vlans = [ "slan" "mlan" "tlan" ]; };
-        fuel = { id = 32; vlans = [ "slan" ]; };
-        delta = { id = 31; vlans = [ "slan" ]; };
-        ferrari = { id = 31; vlans = [ "slan" ]; };
-        eagle = { id = 33; vlans = [ "slan" ]; };
-        lithium = { id = 34; vlans = [ "slan" ]; };
-        marble = { id = 35; vlans = [ "slan" ]; };
+        delta = { id = 34; vlans = [ "slan" ]; };
+        ferrari = { id = 35; vlans = [ "slan" ]; };
         hunter = { id = 36; vlans = [ "slan" ]; };
+        fuel = { id = 37; vlans = [ "slan" ]; };
+        eagle = { id = 38; vlans = [ "slan" ]; };
+        lithium = { id = 39; vlans = [ "slan" ]; };
+        marble = { id = 40; vlans = [ "slan" ]; };
       };
     };
 
