@@ -48,7 +48,7 @@ in
       vlans = listToAttrs (flip map calculated.myNetData.vlans (vlan:
         nameValuePair vlan {
           id = vars.internalVlanMap.${vlan};
-          interface = "lan";
+          interface = if config.networking.interfaces ? "10glan" && vlan == "slan" then "10glan" else "lan";
         }
       ));
 
