@@ -1,0 +1,20 @@
+{ ... }:
+{
+  imports = [
+    ./ceph.nix
+  ];
+  systemd.automounts = [ {
+    wantedBy = [ "remote-fs.target" ];
+    where = "/ceph";
+  } ];
+  systemd.mounts = [ {
+    wants = [ "ip-up.target" ];
+    wantedBy = [ "remote-fs.target" ];
+    after = [ "network.target" "network-interfaces.target" "ip-up.target" "ceph-mds.service" "ceph-mon.service" ];
+    type = "ceph";
+    what = "${concatStringsSep "," calculated.myCeph.monIps}:/";
+    where = "/ceph";
+    options = "name=admin,secretfile=/etc/ceph/ceph.client.admin.key";
+    #options = "name=admin,secretfile=/etc/ceph/ceph.client.admin.key,fsc,dcache";
+  } ];
+}

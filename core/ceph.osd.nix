@@ -9,13 +9,6 @@ with lib;
     ../common/ceph.nix
   ];
 
-  fileSystems = listToAttrs (flip map calculated.myCeph.osds (n:
-    nameValuePair (stateDir n) {
-      fsType = "zfs";
-      device = "osd${toString n}";
-      options = "nofail";
-    }));
-
   systemd.services = listToAttrs (flip map calculated.myCeph.osds (n:
     nameValuePair "ceph-osd${toString n}" {
       wantedBy = [ "multi-user.target" ];
