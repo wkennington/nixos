@@ -175,8 +175,8 @@ rec {
         quest = { id = 33; vlans = [ "slan" "mlan" "tlan" ]; };
         delta = { id = 34; vlans = [ "slan" ]; };
         ferrari = { id = 35; vlans = [ "slan" ]; };
-        hunter = { id = 36; vlans = [ "slan" ]; };
-        fuel = { id = 37; vlans = [ "slan" ]; };
+        fuel = { id = 36; vlans = [ "slan" ]; };
+        hunter = { id = 37; vlans = [ "slan" ]; };
         eagle = { id = 38; vlans = [ "slan" ]; };
         lithium = { id = 39; vlans = [ "slan" ]; };
         marble = { id = 40; vlans = [ "slan" ]; };
