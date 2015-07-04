@@ -9,7 +9,13 @@ with lib;
     ../common/ceph.nix
   ];
 
-  systemd.services = listToAttrs (flip map calculated.myCeph.osds (n:
+  boot.supportedFilesystems = [ "btrfs" "zfs" ];
+
+  #services.udev.extraRules = ''
+  #  ACTION=="add", KERNEL=="sd*[!0-9]", ENV_
+  #'';
+
+  /*systemd.services = listToAttrs (flip map calculated.myCeph.osds (n:
     nameValuePair "ceph-osd${toString n}" {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "${utils.escapeSystemdPath (stateDir n)}.mount" ];
@@ -32,5 +38,5 @@ with lib;
         mkdir -p -m 0770 /var/log/ceph
         chown ceph-mon:ceph /var/log/ceph
       '';
-    }));
+    }));*/
 }
