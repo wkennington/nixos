@@ -74,11 +74,11 @@ with lib;
         if [ "$ID_FS_TYPE" = "zfs_member" ]; then
           umount "$DIR" || true
           zpool export "$ID_FS_LABEL" || true
-          zpool import -f "$ID_FS_UUID"
-          mount -t zfs "$ID_FS_LABEL" "$DIR"
+          zpool import -f "$ID_FS_UUID" || return 0
+          mount -t zfs "$ID_FS_LABEL" "$DIR" || return 0
         elif [ "$ID_FS_TYPE" = "btrfs" ]; then
           umount "$DIR" || true
-          mount -t btrfs -o defaults,noatime,compress=lzo,space_cache "UUID=$ID_FS_UUID" "$DIR"
+          mount -t btrfs -o defaults,noatime,compress=lzo,space_cache "UUID=$ID_FS_UUID" "$DIR" || return 0
         else
           echo "Failed to determine the partition type on $DEVNAME" >&2
           return 0
@@ -102,7 +102,7 @@ with lib;
         lock
         if [ -f /var/lib/ceph/osds ]; then
           cat /var/lib/ceph/osds | while read -d ''$'\0' E; do
-            (eval "$E"; process_event)
+            (eval "$E"; process_event) &
           done
           truncate -s 0 /var/lib/ceph/osds
         fi
