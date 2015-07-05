@@ -143,5 +143,9 @@ with lib;
       #ln -s "/var/lib/ceph/osd/by-user/$USER" "/var/lib/ceph/osd/ceph-osd$ID"
       exec ceph-osd -i "$ID" --osd-data="/var/lib/ceph/osd/by-user/$USER" --osd-journal="/var/lib/ceph/osd/by-user/$USER/journal" -d
     '';
+
+    postStart = ''
+      ceph osd crush set "osd.$(cat "/var/lib/ceph/osd/by-user/$USER/whoami")" 1.0 host="${config.networking.hostName}"
+    '';
   };
 }
