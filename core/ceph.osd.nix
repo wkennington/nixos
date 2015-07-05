@@ -141,7 +141,7 @@ with lib;
       ID="$(cat "/var/lib/ceph/osd/by-user/$USER/whoami")"
       #rm -f "/var/lib/ceph/osd/ceph-osd$ID"
       #ln -s "/var/lib/ceph/osd/by-user/$USER" "/var/lib/ceph/osd/ceph-osd$ID"
-      exec ceph-osd -i "$ID" --osd-data="/var/lib/ceph/osd/by-user/$USER" -d
+      exec ceph-osd -i "$ID" --osd-data="/var/lib/ceph/osd/by-user/$USER" --osd-journal="/var/lib/ceph/osd/by-user/$USER/journal" -d
     '';
   };
 }
