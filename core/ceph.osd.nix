@@ -60,8 +60,8 @@ with lib;
 
         # Find a free user / mountpoint
         ALL="$(seq 0 47 | awk '{print "ceph-osd"$0}')"
-        ALLOC="$(cat /proc/mounts | awk '{print $2}' | grep '^/var/lib/ceph/osd/by-user' | xargs basename 2>/dev/null)" || true
-        UNUSED="$(echo -e "$ALL\n$ALLOC" | sed '/^$/d' | sort | uniq -u)"
+        ALLOC="$(cat /proc/mounts | awk '{print $2}' | grep '^/var/lib/ceph/osd/by-user' | xargs basename -a 2>/dev/null)" || true
+        UNUSED="$(echo -e "$ALL\n$ALLOC" | sed '/^$/d' | sort -V | uniq -u)"
 
         SELECTED="$(echo "$UNUSED" | head -n 1)"
         DIR="/var/lib/ceph/osd/by-user/$SELECTED"
