@@ -1,4 +1,8 @@
-{ ... }:
+{ config, lib, ... }:
+with lib;
+let
+  calculated = (import ./sub/calculated.nix { inherit config lib; });
+in
 {
   imports = [
     ./ceph.nix
