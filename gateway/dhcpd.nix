@@ -13,7 +13,8 @@ let
   net = calculated.myNetMap;
 
   primary = config.networking.hostName == head net.dhcpServers;
-  peer = if primary then head (tail net.dhcpServers) else head net.dhcpServers;
+  peer = if length net.dhcpServers < 2 then null
+    else if primary then head (tail net.dhcpServers) else head net.dhcpServers;
 in
 {
   assertions = [ {
