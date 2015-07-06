@@ -93,6 +93,7 @@ in
         (ip: ip != calculated.myInternalIp4);
       verify_incoming = true;
       verify_outgoing = true;
+      verify_server_hostname = true;
     } // (if ! isServer then { } else {
       bootstrap_expect = length calculated.myConsul.serverIps;
     });
