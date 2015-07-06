@@ -9,6 +9,8 @@ let
   isServer = flip any calculated.myConsul.serverIps
     (ip: ip == calculated.myInternalIp4);
   isAclMaster = vars.consulAclDc == calculated.myDc && isServer;
+
+  certName = "${config.networking.hostName}.${calculated.myDc}.${domain}";
 in
 {
   imports = [
@@ -83,11 +85,11 @@ in
       advertise_addr = calculated.myInternalIp4;
       bind_addr = calculated.myInternalIp4;
       ca_file = "/conf/consul/ca.crt";
-      cert_file = "/conf/consul/me.crt";
+      cert_file = "/conf/consul/${certName}.crt";
       datacenter = calculated.myDc;
       disable_remote_exec = true;
       domain = "${domain}";
-      key_file = "/conf/consul/me.key";
+      key_file = "/conf/consul/${certName}.key";
       server = isServer;
       retry_join = flip filter calculated.myConsul.serverIps
         (ip: ip != calculated.myInternalIp4);
