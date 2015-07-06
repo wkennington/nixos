@@ -104,4 +104,13 @@ in
       ++ optional isAclMaster "/conf/consul/acl-master-1.json";
     forceIpv4 = true;
   };
+
+  systemd.services.consul = {
+    path = [ pkgs.acl ];
+    preStart = ''
+      setfacl -m u:consul:r /conf/consul/${certName}.key
+    '' + optionalString isAclMaster ''
+      setfacl -m u:consul:r /conf/consul/acl-master-1.json
+    '';
+  };
 }
