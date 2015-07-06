@@ -1,7 +1,13 @@
 { config, lib, pkgs, ... }:
+let
+  calculated = (import ./calculated.nix { inherit config lib; });
+in
 {
   services = {
-    ntp.enable = false;
+    ntp = {
+      enable = false;
+      servers = calculated.myNtpServers;
+    };
     openntpd = {
       enable = true;
       extraOptions = "-s";

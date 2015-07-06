@@ -78,6 +78,13 @@ rec {
 
   remotes = [ "nixos" "prodigy" "jester" ];
 
+  ntpServers = [
+    "0.pool.ntp.org"
+    "1.pool.ntp.org"
+    "2.pool.ntp.org"
+    "3.pool.ntp.org"
+   ];
+
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
   # ip processing in nix is hard :/
   netMaps = {
@@ -87,6 +94,13 @@ rec {
       priv6 = "fda4:941a:81b5:000";
 
       timeZone = "America/New_York";
+
+      ntpServers = [
+        "clock.nyc.he.net"
+        "0.us.pool.ntp.org"
+        "1.us.pool.ntp.org"
+        "2.us.pool.ntp.org"
+      ];
 
       # Must start at 2 for multiple
       # Can be one for a single gateway
@@ -125,6 +139,13 @@ rec {
         "newton"
         "page"
         "quest"
+      ];
+
+      ntpServers = [
+        "clock.fmt.he.net"
+        "clock.sjc.he.net"
+        "0.us.pool.ntp.org"
+        "1.us.pool.ntp.org"
       ];
 
       ceph = {
@@ -200,6 +221,13 @@ rec {
 
       dnsServers = [
         "alamo"
+      ];
+
+      ntpServers = [
+        "clock.fmt.he.net"
+        "clock.sjc.he.net"
+        "0.us.pool.ntp.org"
+        "1.us.pool.ntp.org"
       ];
 
       consul = {

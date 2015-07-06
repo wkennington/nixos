@@ -41,6 +41,8 @@ rec {
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
   myTimeZone = if iAmRemote then "UTC" else myNetMap.timeZone;
 
+  myNtpServers = if iAmRemote then vars.ntpServers else myNetMap.ntpServers;
+
   myCeph = {
     mons = myNetMap.ceph.mons;
     monIps = map (s: internalIp4 s "slan") myNetMap.ceph.mons;
