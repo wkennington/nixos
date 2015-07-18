@@ -90,6 +90,7 @@ in
     journald.extraConfig = "SystemMaxUse=50M";
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
+  system.extraDependencies = [ pkgs.stdenv ];
   users = {
     mutableUsers = false;
     extraUsers = {
