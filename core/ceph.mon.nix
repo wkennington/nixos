@@ -37,7 +37,7 @@ in
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "@${pkgs.ceph}/bin/ceph-mon ceph-mon -i ${config.networking.hostName} -c ${monCfg} -f";
+      ExecStart = "@${config.cephPackage}/bin/ceph-mon ceph-mon -i ${config.networking.hostName} -c ${monCfg} -f";
       User = "ceph-mon";
       Group = "ceph";
       PermissionsStartOnly = true;

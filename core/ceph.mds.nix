@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
@@ -17,7 +17,7 @@ in
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "@${pkgs.ceph}/bin/ceph-mds ceph-mds -i ${config.networking.hostName} -f --hot-standby 0";
+      ExecStart = "@${config.cephPackage}/bin/ceph-mds ceph-mds -i ${config.networking.hostName} -f --hot-standby 0";
       User = "ceph-mds";
       Group = "ceph";
       PermissionsStartOnly = true;

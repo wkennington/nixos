@@ -5,7 +5,8 @@ let
 in
 with lib;
 {
-  environment.systemPackages = [ pkgs.ceph ];
+  require = [ ./sub/ceph-module.nix ];
+  environment.systemPackages = [ config.cephPackage ];
   environment.etc."ceph/ceph.conf".text = ''
     [global]
       fsid = ${calculated.myCeph.fsId};

@@ -116,7 +116,7 @@ with lib;
 
     restartTriggers = [ config.environment.etc."ceph/ceph.conf".source ];
 
-    path = [ pkgs.ceph ];
+    path = [ config.cephPackage ];
 
     serviceConfig = {
       Type = "simple";
