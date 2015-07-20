@@ -145,7 +145,7 @@ with lib;
     '';
 
     postStart = ''
-      ceph osd crush set "osd.$(cat "/var/lib/ceph/osd/by-user/$USER/whoami")" 1.0 host="${config.networking.hostName}"
+      ceph osd crush move "osd.$(cat "/var/lib/ceph/osd/by-user/$USER/whoami")" host="${config.networking.hostName}"
     '';
   };
 }
