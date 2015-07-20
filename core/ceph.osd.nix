@@ -78,7 +78,7 @@ with lib;
           mount -t zfs "$ID_FS_LABEL" "$DIR" || return 0
         elif [ "$ID_FS_TYPE" = "btrfs" ]; then
           umount "$DIR" || true
-          mount -t btrfs -o defaults,noatime,compress=lzo,space_cache "UUID=$ID_FS_UUID" "$DIR" || return 0
+          mount -t btrfs -o defaults,noatime,user_subvol_rm_allowed,compress=lzo,space_cache "UUID=$ID_FS_UUID" "$DIR" || return 0
         else
           echo "Failed to determine the partition type on $DEVNAME" >&2
           return 0
