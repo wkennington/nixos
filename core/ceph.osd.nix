@@ -102,7 +102,7 @@ with lib;
         lock
         if [ -f /var/lib/ceph/osds ]; then
           cat /var/lib/ceph/osds | while read -d ''$'\0' E; do
-            (eval "$E"; process_event) &
+            (eval "$E"; process_event)
           done
           truncate -s 0 /var/lib/ceph/osds
         fi
