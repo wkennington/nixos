@@ -35,6 +35,9 @@ in
     after = [ "network.target" "time-syncd.target" ];
     requires = [ "time-syncd.target" ];
 
+    # Updating crush maps requires crushtool in the path
+    path = [ config.cephPackage ];
+
     serviceConfig = {
       Type = "simple";
       ExecStart = "@${config.cephPackage}/bin/ceph-mon ceph-mon -i ${config.networking.hostName} -c ${monCfg} -f";
