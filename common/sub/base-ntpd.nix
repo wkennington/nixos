@@ -86,6 +86,9 @@ in
   };
 
   systemd.services.openntpd.postStart = lib.optionalString config.services.consul.enable ''
+    while [ ! -f "/run/ntpd.sock" ]; do
+      sleep 1
+    done
     ${pkgs.acl}/bin/setfacl -m u:consul:rw /run/ntpd.sock
   '';
 }
