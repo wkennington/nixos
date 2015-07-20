@@ -85,7 +85,7 @@ with lib;
         fi
 
         # Correctly own the osd
-        chown "$SELECTED:ceph" "$DIR"
+        chown "$SELECTED:ceph" "$DIR" "$DIR"/*
         chmod 0700 "$DIR"
 
         # Start the daemon
