@@ -90,7 +90,8 @@ in
     journald.extraConfig = "SystemMaxUse=50M";
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
-  system.extraDependencies = [ pkgs.stdenv ];
+  # Make sure we never need the bootstrap
+  system.extraDependencies = with pkgs; [ curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib ];
   users = {
     mutableUsers = false;
     extraUsers = {
