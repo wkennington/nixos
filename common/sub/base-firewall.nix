@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 let
   constants = (import ./constants.nix { inherit lib; });
 in
@@ -15,6 +15,7 @@ with lib;
     rejectPackets = true;
     allowPing = true;
     logRefusedConnections = false;
+    extraPackages = [ pkgs.ipset ];
     extraCommands = mkMerge [
       (mkOrder 1 ''
         # Default Policy
