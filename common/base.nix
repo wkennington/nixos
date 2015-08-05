@@ -34,8 +34,6 @@ in
   };
   environment.systemPackages = with pkgs; [
     acpi
-    atop
-    dnstop
     dnsutils
     edac-utils
     efibootmgr
@@ -62,7 +60,6 @@ in
     tcpdump
     tmux
     vim
-    wget
   ];
   hardware.cpu = {
     intel.updateMicrocode = true;
