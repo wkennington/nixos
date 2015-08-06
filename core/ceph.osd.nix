@@ -58,6 +58,12 @@ with lib;
           return 0
         fi
 
+        # Check for already existing
+        if cat /proc/mounts | awk '{print $1}' | grep -q "\($DEVNAME\|$ID_FS_LABEL\)"; then
+          echo "$DEVNAME is already mounted"
+          return 0
+        fi
+
         # Find a free user / mountpoint
         ALL="$(seq 0 47 | awk '{print "ceph-osd"$0}')"
         ALLOC="$(cat /proc/mounts | awk '{print $2}' | grep '^/var/lib/ceph/osd/by-user' | xargs basename -a 2>/dev/null)" || true
