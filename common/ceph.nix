@@ -14,8 +14,6 @@ with lib;
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
     [osd]
       filestore zfs_snap = 1
-      journal_aio = 0
-      journal_dio = 0
     [mds]
       keyring = /etc/ceph/ceph.mds.keyring
   '';
