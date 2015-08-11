@@ -48,7 +48,7 @@ with lib;
         group = "ceph";
       };
     } // listToAttrs (flip map (range 0 (numCephUsers - 1)) (n:
-      nameValuePair "ceph-osd${toString n}" { uid = 100100 + n; group = "ceph"; }));
+      nameValuePair "ceph-osd${toString n}" { uid = 100100 + n; group = "ceph"; useDefaultShell = true; }));
     extraGroups.ceph.gid = 100000;
   };
 }
