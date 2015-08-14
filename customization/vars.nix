@@ -102,14 +102,12 @@ rec {
         "2.us.pool.ntp.org"
       ];
 
-      # Must start at 2 for multiple
-      # Can be one for a single gateway
-      gatewayMap = {
-        atomic = 2;
-      };
+      gateways = [
+        "atomic"
+      ];
 
       internalMachineMap = {
-        atomic = 2;
+        atomic = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
       };
     };
 
@@ -237,8 +235,9 @@ rec {
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
         kvm = { id = 9; vlans = [ "mlan" ]; };
-        alamo = { id = 31; vlans = [ "slan" "mlan" "dlan" "ulan" ]; };
+        alamo = { id = 31; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
         exodus = { id = 32; vlans = [ "slan" ]; };
+        legend = { id = 33; vlans = [ "slan" ]; };
       };
 
     };
