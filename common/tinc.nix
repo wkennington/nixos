@@ -48,9 +48,28 @@ in
       StrictSubnets yes
       TunnelServer yes
       DirectOnly yes
+      AutoConnect yes
     '' + flip concatMapStrings tincConfig.dedicated (n: ''
       ConnectTo ${n}
     '');
-    hosts = tincConfig.hosts;
+    hosts = mkMerge [
+      tincConfig.hosts
+      (flip mapAttrs tincConfig.hosts (host: _:
+        let
+          remote = calculated.isRemote host;
+          netMap = vars.netMaps.${calculated.dc host};
+          hostMap = netMap.internalMachineMap.${host};
+          gateway = any (n: n == host) netMap.gateways;
+        in ''
+          Subnet = ${vars.vpn.subnet}${toString vars.vpn.idMap.${host}}/32
+        '' + optionalString (!remote) (
+          flip concatMapStrings (hostMap.vlans) (vlan: ''
+            Subnet = ${calculated.internalIp4 host vlan}/32
+          '') + optionalString gateway ''
+            Subnet = ${netMap.priv4}0.0/16
+          ''
+        )
+      ))
+    ];
   };
 }
