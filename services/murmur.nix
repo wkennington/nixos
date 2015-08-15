@@ -1,5 +1,7 @@
-{ config, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
+  vars = (import ../customization/vars.nix { inherit lib; });
+
   varDir = "/var/lib/murmur";
 
   murmurUser = "murmur";
@@ -58,7 +60,7 @@ in
     };
   };
 
-  users.extraUsers = pkgs.lib.singleton {
+  users.extraUsers = lib.singleton {
     name = murmurUser;
     uid = murmurUid;
     description = "Murmur daemon user";
