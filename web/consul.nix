@@ -5,6 +5,7 @@ let
   vars = (import ../customization/vars.nix { inherit lib; });
 
   domain = "consul.${calculated.myDomain}";
+  topDomain = "consul.${vars.domain}";
   consulService = "consul-web";
   consulDomain = "${consulService}.service.consul.${vars.domain}";
   checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
@@ -30,6 +31,7 @@ with lib;
       server {
         listen 443;
         server_name ${domain};
+        server_name ${topDomain};
         server_name ${consulDomain};
         server_name ${checkDomain};
 
