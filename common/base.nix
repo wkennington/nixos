@@ -88,7 +88,9 @@ in
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
   # Make sure we never need the bootstrap
-  system.extraDependencies = with pkgs; [ curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib ];
+  system.extraDependencies = with pkgs; [
+    curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib cacert
+  ];
   users = {
     mutableUsers = false;
     extraUsers = {
