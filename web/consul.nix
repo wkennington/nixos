@@ -73,6 +73,12 @@ with lib;
         server_name ${consulDomain};
         rewrite ^(.*) https://${consulDomain}$1 permanent;
       }
+
+      server {
+        listen 80;
+        server_name ${topDomain};
+        rewrite ^(.*) https://${topDomain}$1 permanent;
+      }
     '';
   };
 
