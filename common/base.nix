@@ -84,7 +84,7 @@ in
     ssh.package = pkgs.openssh;
   };
   services = {
-    journald.extraConfig = "SystemMaxUse=50M";
+    journald.extraConfig = "SystemMaxUse=1G";
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
   # Make sure we never need the bootstrap
