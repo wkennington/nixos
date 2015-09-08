@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 {
   boot.loader = {
@@ -21,4 +21,8 @@ with lib;
       options = "defaults,noatime";
       neededForBoot = true;
     }));
+
+  system.extraDependencies = with pkgs; [
+    grub2 grub2_efi
+  ];
 }
