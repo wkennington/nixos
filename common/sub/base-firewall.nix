@@ -58,6 +58,8 @@ with lib;
 
         # Allow ssh
         ip46tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+        # Allow mosh
+        ip46tables -A OUTPUT -p udp --dport 60000:61000 -j ACCEPT
       '')
       (mkAfter ''
         # Allow everything to make external connections
