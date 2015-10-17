@@ -4,6 +4,8 @@ let
 
   varDir = "/var/lib/murmur";
 
+  murmur = pkgs.murmur_git;
+
   murmurUser = "murmur";
   murmurUid = 200000;
 
@@ -37,7 +39,7 @@ let
   '';
 in
 {
-  environment.systemPackages = [ pkgs.murmur ];
+  environment.systemPackages = [ murmur ];
 
   networking.firewall = {
     allowedTCPPorts = [ 64738 ];
@@ -48,7 +50,7 @@ in
     description = "Murmur daemon";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.murmur ];
+    path = [ murmur ];
     preStart = ''
       mkdir -p ${varDir}
       chown murmur ${varDir}
@@ -56,7 +58,7 @@ in
     '';
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile} -fg";
+      ExecStart = "${murmur}/bin/murmurd -ini ${configFile} -fg";
     };
   };
 
