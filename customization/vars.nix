@@ -106,6 +106,14 @@ rec {
         "atomic"
       ];
 
+      dhcpServers = [
+        "atomic"
+      ];
+
+      dnsServers = [
+        "atomic"
+      ];
+
       internalMachineMap = {
         atomic = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
         elite = { id = 31; vlans = [ "slan" "dlan" ]; };
