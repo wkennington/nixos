@@ -3,7 +3,7 @@ with lib;
 {
   options = {
     cephPackage = mkOption {
-      default = pkgs.ceph-git;
+      default = pkgs.ceph;
     };
   };
 }
