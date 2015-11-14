@@ -2,14 +2,7 @@
 
 with lib;
 {
-  networking.firewall = {
-    allowedTCPPorts = [ 80 443 ];
-    extraCommands =  optionalString config.services.consul.enable ''
-      # Allow consul checks to happen
-      ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 80 -j ACCEPT
-      ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 443 -j ACCEPT
-    '';
-  };
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   services.nginx = {
     enable = true;

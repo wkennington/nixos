@@ -60,6 +60,9 @@ with lib;
         ip46tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
         # Allow mosh
         ip46tables -A OUTPUT -p udp --dport 60000:61000 -j ACCEPT
+        # Allow http
+        ip46tables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+        ip46tables -A OUTPUT -p tcp --dport 443 -j ACCEPT
       '')
       (mkAfter ''
         # Allow everything to make external connections
