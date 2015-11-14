@@ -1,13 +1,19 @@
 { config, lib, ... }:
 let
+  vars = (import ../customization/vars.nix { inherit lib; });
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   constants = (import ../common/sub/constants.nix { });
 
   domain = "unifi.${calculated.myDomain}";
+  host = if calculated.iAmRemote then calculated.myVpnIp4 else calculated.internalIp4 vars.host "slan";
 in
 with lib;
 {
   imports = [ ./base.nix ];
+
+  networking.extraHosts = ''
+    ${host} ${domain}
+  '';
 
   networking.firewall.extraCommands = ''
     # Allow access points to attach to the controller
@@ -61,6 +67,7 @@ with lib;
         rewrite ^(.*) https://${domain}$1 permanent;
       }
     '';
+
     unifi.enable = true;
   };
 }
