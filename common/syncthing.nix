@@ -6,7 +6,7 @@
     ip46tables -A INPUT -p udp --dport 21027 -j ACCEPT
 
     # Allow privileged users to access syncthing's webui
-    ip46tables -A OUTPUT -o lo --dport 8384 -j ACCEPT
+    ip46tables -A OUTPUT -o lo -p tcp --dport 8384 -j ACCEPT
   '';
   services.syncthing.enable = true;
   users.extraUsers.syncthing = {
