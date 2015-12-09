@@ -9,15 +9,4 @@
     enable = true;
     interfaces = [ "wifi" ];
   };
-  services.xserver = {
-    multitouch.enable = true;
-    synaptics = {
-      enable = true;
-      tapButtons = false;
-      twoFingerScroll = true;
-      additionalOptions = ''
-        Option "RTCornerButton" "2"
-      '';
-    };
-  };
 }
