@@ -39,6 +39,7 @@ in
     efibootmgr
     fish
     git
+    go
     gptfdisk
     hdparm
     htop
@@ -55,6 +56,7 @@ in
     config.programs.ssh.package
     openssl
     psmisc
+    rustc
     smartmontools
     sysstat
     tcpdump
