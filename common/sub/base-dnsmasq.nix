@@ -14,7 +14,7 @@ let
       END {
         print domain "," id "," algorithm "," hashtype "," hash;
       }
-      ' "${pkgs.dnssec-root}/share/dnssec/icann-root.txt" > $out
+      ' "${pkgs.dnssec-root}/share/dnssec/iana-root.txt" > $out
     '';
   });
 in
