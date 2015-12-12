@@ -39,7 +39,6 @@ in
     efibootmgr
     fish
     git
-    go
     gptfdisk
     hdparm
     htop
@@ -49,6 +48,7 @@ in
     ipmitool
     ipset
     iptables
+    ldns
     lm_sensors
     mtr
     nftables
@@ -56,7 +56,6 @@ in
     config.programs.ssh.package
     openssl
     psmisc
-    rustc
     smartmontools
     sysstat
     tcpdump
@@ -91,7 +90,7 @@ in
   };
   # Make sure we never need the bootstrap
   system.extraDependencies = with pkgs; [
-    curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib cacert libarchive
+    curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib cacert libarchive go rustc dnssec-root
   ];
   users = {
     mutableUsers = false;
