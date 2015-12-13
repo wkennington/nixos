@@ -31,6 +31,7 @@ rec {
       newton = 8;
       page = 9;
       quest = 10;
+      elite = 11;
     };
   };
 
