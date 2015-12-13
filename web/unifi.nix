@@ -5,7 +5,7 @@ let
   constants = (import ../common/sub/constants.nix { });
 
   domain = "unifi.${calculated.myDomain}";
-  host = if calculated.iAmRemote then calculated.myVpnIp4 else calculated.internalIp4 vars.host "slan";
+  host = if calculated.iAmRemote then calculated.myVpnIp4 else calculated.myInternalIp4;
 in
 with lib;
 {
