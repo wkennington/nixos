@@ -63,6 +63,9 @@ with lib;
         # Allow http
         ip46tables -A OUTPUT -p tcp --dport 80 -j ACCEPT
         ip46tables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+        # Allow upnp
+        ip46tables -A OUTPUT -p udp --dport 1900 -j ACCEPT
+        ip46tables -A OUTPUT -p tcp --dport 1901 -j ACCEPT
       '')
       (mkAfter ''
         # Allow everything to make external connections
