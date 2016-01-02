@@ -88,10 +88,13 @@ in
     journald.extraConfig = "SystemMaxUse=1G";
     logind.extraConfig = "HandleLidSwitch=sleep";
   };
-  # Make sure we never need the bootstrap
   system.extraDependencies = with pkgs; [
-    curl stdenv pkgconfig openssl perl c-ares libnghttp2 zlib cacert libarchive go rustc dnssec-root
-  ];
+    # Extra compilers take a long time to compile so keep them always
+    go rustc
+
+    # We always want to keep small trust roots
+    cacert dnssec-root
+  ] ++ stdenv.bootstrappedPackages; # Make sure we never need the bootstrap
   users = {
     mutableUsers = false;
     extraUsers = {
