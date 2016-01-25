@@ -54,7 +54,7 @@ in
     nftables
     nmap
     config.programs.ssh.package
-    #openssl
+    openssl
     psmisc
     smartmontools
     sysstat
