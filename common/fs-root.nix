@@ -1,13 +1,23 @@
 { config, lib, pkgs, ... }:
 with lib;
 {
-  boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot";
+  boot = {
+    kernelParams = [ "console=tty0 console=ttyS1,115200n8" ];
+    loader = {
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+      grub = {
+        efiSupport = true;
+        extraConfig = ''
+          serial --unit=1 --speed=115200
+          terminal_input --append serial
+          terminal_output --append serial
+        '';
+      };
+      timeout = 1;
     };
-    grub.efiSupport = true;
-    timeout = 1;
   };
 
   fileSystems = mkOrder 1 (flip map config.boot.loader.grub.mirroredBoots
