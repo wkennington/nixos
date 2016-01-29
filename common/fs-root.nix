@@ -1,8 +1,14 @@
 { config, lib, pkgs, ... }:
 with lib;
 {
+  require = [
+    ./sub/fs-root-module.nix
+  ];
   boot = {
-    kernelParams = [ "console=tty0 console=ttyS1,115200n8" ];
+    kernelParams = optionals (config.serialConsole != null) [
+      "console=tty0"
+      "console=ttyS${toString config.serialConsole},115200n8"
+    ];
     loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -10,8 +16,8 @@ with lib;
       };
       grub = {
         efiSupport = true;
-        extraConfig = ''
-          serial --unit=1 --speed=115200
+        extraConfig = optionalString (config.serialConsole != null) ''
+          serial --unit=${toString config.serialConsole} --speed=115200
           terminal_input --append serial
           terminal_output --append serial
         '';
