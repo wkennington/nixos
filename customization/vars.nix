@@ -191,51 +191,37 @@ rec {
         sw1g1 = {
           id = 11;
           vlans = [ "mlan" ];
+          bmcMac = "00:12:83:36:DC:00";
         };
         sw10g1 = {
           id = 21;
           vlans = [ "mlan" ];
+          bmcMac = "84:C7:27:80:2B:EB";
         };
         newton = {
           id = 31;
           vlans = [ "slan" "mlan" "tlan" ];
+          bmcMac = "BC:5F:F4:FE:7C:E1";
         };
         page = {
           id = 32;
           vlans = [ "slan" "mlan" "tlan" ];
+          bmcMac = "BC:5F:F4:FE:7D:6D";
         };
         quest = {
           id = 33;
           vlans = [ "slan" "mlan" "tlan" ];
+          bmcMac = "BC:5F:F4:FE:7C:FF";
         };
         delta = {
           id = 34;
           vlans = [ "slan" ];
+          bmcMac = "00:25:90:7C:A1:AE";
         };
         ferrari = {
           id = 35;
           vlans = [ "slan" ];
           bmcMac = "bc:5f:f4:c9:a0:70";
-        };
-        fuel = {
-          id = 36;
-          vlans = [ "slan" ];
-        };
-        hunter = {
-          id = 37;
-          vlans = [ "slan" ];
-        };
-        eagle = {
-          id = 38;
-          vlans = [ "slan" ];
-        };
-        lithium = {
-          id = 39;
-          vlans = [ "slan" ];
-        };
-        marble = {
-          id = 40;
-          vlans = [ "slan" ];
         };
       };
     };
