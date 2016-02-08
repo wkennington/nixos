@@ -3,7 +3,7 @@ with lib;
 rec {
   gateway = {
     dhcpRange = {
-      lower = 100;
+      lower = 200;
       upper = 254;
     };
   };
