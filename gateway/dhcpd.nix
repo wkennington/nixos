@@ -72,7 +72,20 @@ in
           }
         }
       ''
-    )));
+    )) + concatStrings (flip mapAttrsToList calculated.myNetMap.internalMachineMap (host: data: ''
+    '' + optionalString (data ? mac) ''
+      host ${host} {
+        hardware ethernt ${data.mac};
+        ${flip concatMapStrings data.vlans (vlan: ''
+          fixed-address ${calculated.internalIp4 host vlan};
+        '')}
+      }
+    '' + optionalString (data ? bmcMac) ''
+      host ${host}-bmc {
+        hardware ethernet ${data.bmcMac};
+        fixed-address ${calculated.internalIp4 host "mlan"};
+      }
+    '')));
   };
 
   systemd.services.dhcpd = {
