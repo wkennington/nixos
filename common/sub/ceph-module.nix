@@ -2,8 +2,6 @@
 with lib;
 {
   options = {
-    cephPackage = mkOption {
-      default = pkgs.ceph;
-    };
+    cephPackage = mkOption { };
   };
 }
