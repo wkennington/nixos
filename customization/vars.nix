@@ -165,25 +165,10 @@ rec {
       ceph = {
         fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
         mons = [ "newton" "page" "quest" ];
-        osds = {
-          "delta" = [ ];
-          "ferrari" = [ ];
-        };
       };
 
       consul = {
         servers = [ "newton" "page" "quest" ];
-      };
-
-      zookeeper = {
-        # Numbering is important and should be consistent in
-        # the cluster. Therefore it is recommended never to reuse
-        # or reorganize the numeric values for nodes.
-        servers = {
-          newton = 0;
-          page = 1;
-          quest = 2;
-        };
       };
 
       pub4MachineMap = {
@@ -203,18 +188,55 @@ rec {
       };
 
       internalMachineMap = {
-        sw1g1 = { id = 11; vlans = [ "mlan" ]; };
-        sw10g1 = { id = 21; vlans = [ "mlan" ]; };
-        newton = { id = 31; vlans = [ "slan" "mlan" "tlan" ]; };
-        page = { id = 32; vlans = [ "slan" "mlan" "tlan" ]; };
-        quest = { id = 33; vlans = [ "slan" "mlan" "tlan" ]; };
-        delta = { id = 34; vlans = [ "slan" ]; };
-        ferrari = { id = 35; vlans = [ "slan" ]; };
-        fuel = { id = 36; vlans = [ "slan" ]; };
-        hunter = { id = 37; vlans = [ "slan" ]; };
-        eagle = { id = 38; vlans = [ "slan" ]; };
-        lithium = { id = 39; vlans = [ "slan" ]; };
-        marble = { id = 40; vlans = [ "slan" ]; };
+        sw1g1 = {
+          id = 11;
+          vlans = [ "mlan" ];
+        };
+        sw10g1 = {
+          id = 21;
+          vlans = [ "mlan" ];
+        };
+        newton = {
+          id = 31;
+          vlans = [ "slan" "mlan" "tlan" ];
+        };
+        page = {
+          id = 32;
+          vlans = [ "slan" "mlan" "tlan" ];
+        };
+        quest = {
+          id = 33;
+          vlans = [ "slan" "mlan" "tlan" ];
+        };
+        delta = {
+          id = 34;
+          vlans = [ "slan" ];
+        };
+        ferrari = {
+          id = 35;
+          vlans = [ "slan" ];
+          bmcMac = "bc:5f:f4:c9:a0:70";
+        };
+        fuel = {
+          id = 36;
+          vlans = [ "slan" ];
+        };
+        hunter = {
+          id = 37;
+          vlans = [ "slan" ];
+        };
+        eagle = {
+          id = 38;
+          vlans = [ "slan" ];
+        };
+        lithium = {
+          id = 39;
+          vlans = [ "slan" ];
+        };
+        marble = {
+          id = 40;
+          vlans = [ "slan" ];
+        };
       };
     };
 
