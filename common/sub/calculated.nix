@@ -15,6 +15,8 @@ rec {
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
   internalIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.${toString net.internalMachineMap.${name}.id}";
+  bmcIp4 = name: let ndc = dc name; net = vars.netMaps.${ndc}; in
+    "${net.priv4}${toString vars.internalVlanMap."mlan"}.1${toString net.internalMachineMap.${name}.id}";
   publicIp4 = name: let ndc = dc name; net = vars.netMaps.${ndc}; in
     if !(net ? "pub4MachineMap" && net.pub4MachineMap ? "${name}") then null
       else "${net.pub4}${toString net.pub4MachineMap.${name}}";

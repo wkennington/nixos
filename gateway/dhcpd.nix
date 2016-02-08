@@ -83,7 +83,7 @@ in
     '' + optionalString (data ? bmcMac) ''
       host ${host}-bmc {
         hardware ethernet ${data.bmcMac};
-        fixed-address ${calculated.internalIp4 host "mlan"};
+        fixed-address ${calculated.bmcIp4 host};
       }
     '')));
   };
