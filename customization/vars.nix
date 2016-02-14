@@ -234,15 +234,15 @@ rec {
       timeZone = "America/Los_Angeles";
 
       gateways = [
-        "alamo"
+        "lazarus"
       ];
 
       dhcpServers = [
-        "alamo"
+        "lazarus"
       ];
 
       dnsServers = [
-        "alamo"
+        "lazarus"
       ];
 
       ntpServers = [
@@ -252,16 +252,10 @@ rec {
         "1.us.pool.ntp.org"
       ];
 
-      consul = {
-        servers = [ "alamo" ];
-      };
-
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
-        kvm = { id = 9; vlans = [ "mlan" ]; };
-        alamo = { id = 31; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
+        lazarus = { id = 1; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
         exodus = { id = 32; vlans = [ "slan" ]; };
-        legend = { id = 33; vlans = [ "slan" ]; };
       };
 
     };
