@@ -41,11 +41,11 @@ in
       no-hosts
       addn-hosts=${config.environment.etc.hosts.source}
 
-      # Enable Dnssec
-      dnssec
-      trust-anchor=${trustAnchor}
-      dnssec-check-unsigned
-      dnssec-timestamp=/var/lib/dnsmasq/timestamp
+      # Enable Dnssec (disable for now until better resolvers can be added)
+      #dnssec
+      #trust-anchor=${trustAnchor}
+      #dnssec-check-unsigned
+      #dnssec-timestamp=/var/lib/dnsmasq/timestamp
 
       interface=lo
       no-dhcp-interface=lo
