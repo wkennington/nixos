@@ -21,17 +21,15 @@ rec {
     # Assumes a prefix of /24
     subnet = "192.168.17.";
     idMap = {
-      jester = 1;
       prodigy = 2;
       atomic = 3;
-      alamo = 4;
       ferrari = 5;
       delta = 6;
-      legend = 7;
       newton = 8;
       page = 9;
       quest = 10;
       elite = 11;
+      exodus = 12;
     };
   };
 
@@ -77,7 +75,7 @@ rec {
     };
   };
 
-  remotes = [ "nixos" "prodigy" "jester" ];
+  remotes = [ "nixos" "prodigy" ];
 
   ntpServers = [
     "0.pool.ntp.org"
