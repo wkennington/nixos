@@ -15,12 +15,6 @@ with lib;
       Address = atomic.wak.io
       Ed25519PublicKey = wzPej5rz8cMNWE7YO2DIGUgChZ9CkfYkFIz1J0YCfKP
     '';
-    ferrari = ''
-      Ed25519PublicKey = HuyBA/Ol/wH6y4tj4XR6IDI5FLIAcfcdnGXU974K9pC
-    '';
-    delta = ''
-      Ed25519PublicKey = Amd0wHchaDaH25n+4/YEUpCvxDCxjD/vocevi1/wJWB
-    '';
     prodigy = ''
       Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2wJp8PzhAnGtezI
     '';

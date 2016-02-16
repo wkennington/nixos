@@ -23,8 +23,6 @@ rec {
     idMap = {
       prodigy = 2;
       atomic = 3;
-      ferrari = 5;
-      delta = 6;
       newton = 8;
       page = 9;
       quest = 10;
