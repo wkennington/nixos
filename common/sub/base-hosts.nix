@@ -7,8 +7,9 @@ let
 
   ipHosts' = concatLists (flip mapAttrsToList vars.netMaps (dc: dcd:
     concatLists (flip mapAttrsToList dcd.internalMachineMap (host: data: [
-        { "${calculated.internalIp4 host (head data.vlans)}" = "${host}.${vars.domain}"; }
-        { "${calculated.internalIp4 host (head data.vlans)}" = "${host}.${dc}.${vars.domain}"; }
+        # We actually don't want this because it conflicts with public names
+        #{ "${calculated.internalIp4 host (head data.vlans)}" = "${host}.${vars.domain}"; }
+        #{ "${calculated.internalIp4 host (head data.vlans)}" = "${host}.${dc}.${vars.domain}"; }
         { "${calculated.bmcIp4 host}" = "${host}-bmc.${vars.domain}"; }
         { "${calculated.bmcIp4 host}" = "${host}-bmc.${dc}.${vars.domain}"; }
       ] ++ flip concatMap data.vlans (vlan: [
