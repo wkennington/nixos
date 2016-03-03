@@ -3,10 +3,7 @@ with lib;
 {
   # Undo minimalistic settings
   fonts.fontconfig.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull;
-  };
+  hardware.pulseaudio.enable = true;
   security.pam.services.su.forwardXAuth = true;
   sound.enable = true;
 

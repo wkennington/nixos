@@ -60,7 +60,7 @@ in
       Type = "oneshot";
     };
 
-    path = with pkgs; [ gnugrep openntpd systemd ];
+    path = with pkgs; [ gnugrep openntpd config.systemd.package ];
 
     script = ''
       if ntpctl -s all | grep -q 'not resolved'; then
