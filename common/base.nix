@@ -49,7 +49,7 @@ in
     ipset
     iptables
     ldns
-    lm_sensors
+    lm-sensors
     mtr
     nftables
     nmap
@@ -86,7 +86,7 @@ in
   };
   services = {
     journald.extraConfig = "SystemMaxUse=1G";
-    logind.extraConfig = "HandleLidSwitch=sleep";
+    logind.extraConfig = "HandleLidSwitch=suspend";
   };
   system.extraDependencies = with pkgs; [
     # Extra compilers take a long time to compile so keep them always
