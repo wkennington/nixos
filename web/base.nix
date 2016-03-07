@@ -13,7 +13,7 @@ with lib;
           worker_connections 1024;
         }
         http {
-          include ${config.services.nginx.package}/conf/mime.types;
+          include ${config.services.nginx.package}/etc/nginx/mime.types;
           default_type application/octet-stream;
           sendfile off;
           aio on;
@@ -23,7 +23,7 @@ with lib;
             listen 80;
             server_name default;
             location / {
-              root ${config.services.nginx.package}/html;
+              root ${config.services.nginx.package}/share/nginx/html;
               index index.html;
             }
             error_page 500 502 503 504 /50x.html;
@@ -32,7 +32,7 @@ with lib;
             listen 443;
             server_name default;
             location / {
-              root ${config.services.nginx.package}/html;
+              root ${config.services.nginx.package}/share/nginx/html;
               index index.html;
             }
             error_page 500 502 503 504 /50x.html;
