@@ -25,7 +25,7 @@ in
       id = "systemd-failed";
       name = "Systemd Failed Units";
       script = ''
-        OUT="$(${pkgs.systemd}/bin/systemctl --failed)"
+        OUT="$(${config.systemd.package}/bin/systemctl --failed)"
         echo "$OUT"
         if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q '0 loaded units listed'; then
           exit 0
@@ -44,7 +44,7 @@ in
         touch /dev/shm/systemd-starting-jobs
         PREVIOUS="$(cat /dev/shm/systemd-starting-jobs)"
 
-        OUT="$(${pkgs.systemd}/bin/systemctl list-jobs)"
+        OUT="$(${config.systemd.package}/bin/systemctl list-jobs)"
         PARSED="$(echo "$OUT" | tail -n +2 | head -n -2)"
         echo "$PARSED" | tee /dev/shm/systemd-starting-jobs
 
