@@ -5,7 +5,7 @@ let
 
   osdScript = pkgs.writeScript "osd-script" ''
     #! ${pkgs.stdenv.shell} -e
-    export PATH="${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+    export PATH="${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${pkgs.coreutils}/bin:${pkgs.util-linux_full}/bin"
     mkdir -p /var/lib/ceph
     exec 3>/var/lib/ceph/osds.lock
     flock 3 || exit 1
@@ -34,7 +34,7 @@ with lib;
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" "local-fs.target" ];
     unitConfig.RequiresMountsFor = "/var/lib/ceph/osd/by-user";
-    path = with pkgs; [ coreutils gawk gnused gnugrep e2fsprogs utillinux systemd btrfsProgs zfs inotifyTools ];
+    path = with pkgs; [ coreutils gawk gnused gnugrep e2fsprogs util-linux_full config.systemd.package btrfs-progs zfs inotifyTools ];
     script = ''
       lock () {
         exec 3>/var/lib/ceph/osds.lock
