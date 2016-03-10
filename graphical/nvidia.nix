@@ -5,6 +5,6 @@
   services.kmscon.enable = false;
   services.xserver = {
     vaapiDrivers = [ pkgs.vaapiVdpau ];
-    videoDrivers = [ "nvidiaLong" ];
+    videoDrivers = [ "nvidia-long" ];
   };
 }
