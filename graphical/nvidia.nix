@@ -4,7 +4,7 @@
   nixpkgs.config.allowUnfree = true;
   services.kmscon.enable = false;
   services.xserver = {
-    vaapiDrivers = [ pkgs.vaapiVdpau ];
+    vaapiDrivers = [ pkgs.vaapi-vdpau ];
     videoDrivers = [ "nvidia-long" ];
   };
 }
