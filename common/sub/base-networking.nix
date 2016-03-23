@@ -56,5 +56,8 @@ in
 
       nameservers = if hasWanIf then [ "8.8.4.4" "8.8.8.8" ] else calculated.myDnsIp4;
     })
+    (mkIf calculated.iAmRemote {
+      useDHCP = true;
+    })
   ];
 }
