@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
+with lib;
 let
-  trustAnchor = lib.readFile (pkgs.stdenv.mkDerivation {
+  trustAnchor = readFile (pkgs.stdenv.mkDerivation {
     name = "dnssec-anchor-dnsmasq";
     builder = pkgs.writeText "builder.sh" ''
       ${pkgs.gawk}/bin/awk '
@@ -36,7 +37,6 @@ in
       domain-needed
       bogus-priv
       filterwin2k
-
       # Always reload when hosts change
       no-hosts
       addn-hosts=${config.environment.etc.hosts.source}
@@ -53,7 +53,11 @@ in
       bind-dynamic
 
       expand-hosts
-    '';
+    '' + concatStrings (flip mapAttrsToList config.myDns.forwardZones (zone: servers:
+      flip concatMapStrings servers ({ server, port }: ''
+        server=/${zone}/${server}#${port}
+      '')
+    ));
   };
 
   systemd.services.dnsmasq.preStart = ''

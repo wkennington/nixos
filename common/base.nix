@@ -8,13 +8,15 @@ let
 in
 {
   imports = [
-    ./sub/base-dnsmasq.nix
+    # ./sub/base-dnsmasq.nix  # We are using unbound now
     ./sub/base-firewall.nix
     ./sub/base-hosts.nix
     ./sub/base-networking.nix
     ./sub/base-ntpd.nix
+    ./sub/base-unbound.nix
   ];
   require = [
+    ./sub/base-dns-module.nix
     ./sub/base-fs-module.nix
     ./sub/base-if-module.nix
     ./sub/base-keepalived-module.nix

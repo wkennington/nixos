@@ -13,12 +13,12 @@ let
   certName = "${config.networking.hostName}.${calculated.myDc}.${domain}";
 in
 {
-  imports = [
-    ./sub/base-dnsmasq.nix
+  myDns.forwardZones."${domain}" = [
+    {
+      server = "127.0.0.1";
+      port = 8600;
+    }
   ];
-  services.dnsmasq.extraConfig = ''
-    server=/${domain}/127.0.0.1#8600
-  '';
 
   environment.etc."consul.d/systemd-failed.json".text = builtins.toJSON {
     check = {
@@ -69,10 +69,14 @@ in
       ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p udp --dport 8600 -j ACCEPT
       ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 8600 -j ACCEPT
       ip46tables -A OUTPUT -m owner --uid-owner consul -o lo -p tcp --dport 8400 -j ACCEPT
-      
+    '' + optionalString (config.services.dnsmasq.enable) ''
       # Allow dnsmasq to query consul
       ip46tables -A OUTPUT -m owner --uid-owner dnsmasq -o lo -p udp --dport 8600 -j ACCEPT
       ip46tables -A OUTPUT -m owner --uid-owner dnsmasq -o lo -p tcp --dport 8600 -j ACCEPT
+    '' + optionalString (config.services.unbound.enable) ''
+      # Allow unbound to query consul
+      ip46tables -A OUTPUT -m owner --uid-owner unbound -o lo -p udp --dport 8600 -j ACCEPT
+      ip46tables -A OUTPUT -m owner --uid-owner unbound -o lo -p tcp --dport 8600 -j ACCEPT
     '';
   };
   services.consul = {
