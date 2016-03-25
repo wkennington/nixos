@@ -5,9 +5,9 @@ with lib;
   networking.hasLocalResolver = true;
 
   networking.firewall.extraCommands = ''
-    # Allow dnsmasq to access dns servers
-    ip46tables -A OUTPUT -m owner --uid-owner dnsmasq -p udp --dport domain -j ACCEPT
-    ip46tables -A OUTPUT -m owner --uid-owner dnsmasq -p tcp --dport domain -j ACCEPT
+    # Allow unbound to access dns servers
+    ip46tables -A OUTPUT -m owner --uid-owner unbound -p udp --dport domain -j ACCEPT
+    ip46tables -A OUTPUT -m owner --uid-owner unbound -p tcp --dport domain -j ACCEPT
 
     # Allow all users to access dns
     ip46tables -A OUTPUT -o lo -p udp --dport domain -j ACCEPT
