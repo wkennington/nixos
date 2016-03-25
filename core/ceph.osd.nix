@@ -34,7 +34,7 @@ with lib;
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" "local-fs.target" ];
     unitConfig.RequiresMountsFor = "/var/lib/ceph/osd/by-user";
-    path = with pkgs; [ coreutils gawk gnused gnugrep e2fsprogs util-linux_full config.systemd.package btrfs-progs zfs inotifyTools ];
+    path = with pkgs; [ coreutils gawk gnused gnugrep e2fsprogs util-linux_full config.systemd.package btrfs-progs zfs inotify-tools ];
     script = ''
       lock () {
         exec 3>/var/lib/ceph/osds.lock
