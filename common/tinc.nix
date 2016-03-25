@@ -21,7 +21,10 @@ in
       fsType = "none";
       device = "/conf/tinc";
       neededForBoot = true;
-      options = "defaults,bind";
+      options = [
+        "defaults"
+        "bind"
+      ];
     }
   ];
   networking = {

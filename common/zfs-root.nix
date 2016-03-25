@@ -56,35 +56,50 @@ with lib;
         fsType = "none";
         device = "/conf/nixos";
         neededForBoot = true;
-        options = "defaults,bind";
+        options = [
+          "defaults"
+          "bind"
+        ];
       }
       {
         mountPoint = "/home";
         fsType = "none";
         device = "/state/home";
         neededForBoot = true;
-        options = "defaults,bind";
+        options = [
+          "defaults"
+          "bind"
+        ];
       }
       {
         mountPoint = "/root";
         fsType = "none";
         device = "/state/home/root";
         neededForBoot = true;
-        options = "defaults,bind";
+        options = [
+          "defaults"
+          "bind"
+        ];
       }
       {
         mountPoint = "/var/lib";
         fsType = "none";
         device = "/state/lib";
         neededForBoot = true;
-        options = "defaults,bind";
+        options = [
+          "defaults"
+          "bind"
+        ];
       }
       {
         mountPoint = "/var/db";
         fsType = "none";
         device = "/state/lib";
         neededForBoot = true;
-        options = "defaults,bind";
+        options = [
+          "defaults"
+          "bind"
+        ];
       }
     ])
   ];

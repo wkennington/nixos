@@ -23,7 +23,10 @@ with lib;
       fsType = "none";
       device = "/conf/ceph";
       neededForBoot = true;
-      options = "defaults,bind";
+      options = [
+        "defaults"
+        "bind"
+      ];
     }
   ];
   networking.firewall.extraCommands = ''

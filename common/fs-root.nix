@@ -34,7 +34,10 @@
         mountPoint = arg.path;
         device = "${head arg.devices}-part2";
         fsType = "vfat";
-        options = "defaults,noatime";
+        options = [
+          "defaults"
+          "noatime"
+        ];
         neededForBoot = true;
       })
     ))
@@ -43,7 +46,10 @@
         mountPoint = "/tmp";
         device = "tmpfs";
         fsType = "tmpfs";
-        options = "defaults,noatime";
+        options = [
+          "defaults"
+          "noatime"
+        ];
         neededForBoot = true;
       }
     ])

@@ -18,7 +18,15 @@ in
     type = "ceph";
     what = "${concatStringsSep "," calculated.myCeph.monIps}:/";
     where = "/ceph";
-    options = "name=admin,secretfile=/etc/ceph/ceph.client.admin.key";
-    #options = "name=admin,secretfile=/etc/ceph/ceph.client.admin.key,fsc,dcache";
+    options = [
+      "name=admin"
+      secretfile=/etc/ceph/ceph.client.admin.key"
+    ];
+    /*options = [
+      "name=admin"
+      "secretfile=/etc/ceph/ceph.client.admin.key"
+      "fsc"
+      "dcache"
+    ];*/
   } ];
 }
