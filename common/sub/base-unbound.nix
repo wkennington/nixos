@@ -22,7 +22,12 @@ with lib;
       )
     )) + ''
       server:
-        verbosity: 2
+        interface: 0.0.0.0
+        interface: ::0
+        access-control: 0.0.0.0/0 allow
+      remote-control:
+        control-enable: yes
+        control-use-cert: no
     '';
   };
 
