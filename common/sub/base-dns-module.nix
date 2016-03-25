@@ -4,7 +4,7 @@ with lib;
   options = {
     myDns = rec {
       forwardZones = mkOption {
-        default = [ ];
+        default = { };
         type = types.attrsOf (types.listOf types.optionSet);
         options = {
           zone = mkOption {
