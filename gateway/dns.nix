@@ -19,4 +19,10 @@ with lib;
         interface=${n}
         no-dhcp-interface=${n}
       ''));
+
+  services.unbound.extraConfig = ''
+    server:
+      prefetch: yes
+      prefetch-key: yes
+  '';
 }
