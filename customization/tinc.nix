@@ -32,6 +32,7 @@ with lib;
     '';
     exodus = ''
       Ed25519PublicKey = LIkjY1u8bIHOWqM6Y+5cP6kGecMRLRRH/WbMgCkpEEL
+      Subnet = 10.1.0.0/16
     '';
   };
 }
