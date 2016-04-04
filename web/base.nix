@@ -6,6 +6,7 @@ with lib;
 
   services.nginx = {
     enable = true;
+    package = pkgs.nginx_unstable;
     config = mkMerge [
       (mkBefore ''
         worker_processes 4;
@@ -29,7 +30,7 @@ with lib;
             error_page 500 502 503 504 /50x.html;
           }
           server {
-            listen 443;
+            listen 443 ssl http2;
             server_name default;
             location / {
               root ${config.services.nginx.package}/share/nginx/html;

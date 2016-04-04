@@ -24,7 +24,7 @@ with lib;
     consul.webUi = true;
     nginx.config = ''
       server {
-        listen 443;
+        listen 443 ssl http2;
         server_name ${domain};
         server_name ${topDomain};
         server_name ${consulDomain};

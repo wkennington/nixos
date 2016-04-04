@@ -31,7 +31,7 @@ with lib;
   services = {
     nginx.config = ''
       server {
-        listen 443;
+        listen 443 ssl http2;
         server_name ${domain};
         location / {
           ${flip concatMapStrings constants.privateIp4 (ip: ''
