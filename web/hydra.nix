@@ -22,14 +22,7 @@ in
         proxy_redirect off;
       }
 
-      ssl on;
-      ssl_protocols TLSv1.2;
-      ssl_ciphers EECDH+AESGCM:EDH+AESGCM;
-      ssl_ecdh_curve secp384r1;
-      ssl_prefer_server_ciphers on;
-      ssl_dhparam /conf/ssl/nginx/dhparam;
-      ssl_certificate /conf/ssl/nginx/${domain}.crt;
-      ssl_certificate_key /conf/ssl/nginx/${domain}.key;
+      ${import sub/ssl-settings.nix { inherit domain; }}
     }
 
     server {
