@@ -14,5 +14,5 @@
   ssl_session_timeout 10m;
   ssl_stapling on;
   ssl_stapling_verify on;
-  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 ''
