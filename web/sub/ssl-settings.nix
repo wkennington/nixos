@@ -12,5 +12,8 @@
   ssl_session_ticket_key /conf/ssl/nginx/ticket2.key;
   ssl_session_tickets on;
   ssl_session_timeout 10m;
-  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  resolver 127.0.0.1;
+  add_header Strict-Transport-Security "max-age=10886400; includeSubDomains; preload";
 ''
