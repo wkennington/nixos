@@ -7,5 +7,10 @@
   ssl_prefer_server_ciphers on;
   ssl_certificate /conf/ssl/${domain}.crt;
   ssl_certificate_key /conf/ssl/${domain}.key;
+  ssl_session_cache builtin:1000 shared:SSL:10m;
+  ssl_session_ticket_key /conf/ssl/nginx/ticket1.key;
+  ssl_session_ticket_key /conf/ssl/nginx/ticket2.key;
+  ssl_session_tickets on;
+  ssl_session_timeout 10m;
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 ''
