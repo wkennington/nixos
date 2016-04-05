@@ -9,6 +9,7 @@ with lib;
     "newton"
     "page"
     "quest"
+    "exodus"
   ];
   hosts = {
     atomic = ''
@@ -31,6 +32,7 @@ with lib;
       Ed25519PublicKey = nXRjIs3FLanILhsDF36XGq39lnojdL0VJJsvI52cAEA
     '';
     exodus = ''
+      Address = lb.mtv-w.wak.io
       Ed25519PublicKey = LIkjY1u8bIHOWqM6Y+5cP6kGecMRLRRH/WbMgCkpEEL
       Subnet = 10.1.0.0/16
     '';
