@@ -15,6 +15,7 @@ in
       gateway=""
       while [ -z "$gateway" ]; do
         gateway="$(ip route | grep default | sed -n 's,.*via \([^ ]*\).*,\1,p')"
+        sleep 1
       done
       while ! ping -c 1 "$gateway" -W 1; do
         true
