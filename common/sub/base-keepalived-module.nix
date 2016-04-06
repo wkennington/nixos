@@ -200,7 +200,7 @@ in
 
           garpMasterDelay = mkOption {
             type = types.addCheck types.int (n: n > 0);
-            default = 1;
+            default = 10;
             description = ''
               The delay for gratuitous ARP after transition to MASTER.
             '';

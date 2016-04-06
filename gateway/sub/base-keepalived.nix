@@ -9,6 +9,19 @@ let
   ));
 in
 {
+  systemd.services.keepalived = {
+    path = [ pkgs.iputils pkgs.iproute pkgs.gnugrep pkgs.gnused ];
+    preStart = ''
+      gateway=""
+      while [ -z "$gateway" ]; do
+        gateway="$(ip route | grep default | sed -n 's,.*via \([^ ]*\).*,\1,p')"
+      done
+      while ! ping -c 1 "$gateway" -W 1; do
+        true
+      done
+    '';
+  };
+
   services.keepalived = {
     enable = true;
     syncGroups.gateway.group = [ "wan" ] ++ attrNames internalVlanMap;
