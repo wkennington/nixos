@@ -10,6 +10,10 @@ in
 {
   environment.systemPackages = [ pkgs.conntrack-tools ];
 
+  networking.firewall.extraCommands = ''
+    iptables -I INPUT -i tlan -d 225.0.0.50 -j ACCEPT
+  '';
+
   services.conntrackd = {
     enable = true;
     interface = "tlan";
