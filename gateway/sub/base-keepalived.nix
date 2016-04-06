@@ -13,6 +13,7 @@ in
     enable = true;
     syncGroups.gateway.group = [ "wan" ] ++ attrNames internalVlanMap;
     instances = flip mapAttrs internalVlanMap (n: id: {
+      preempt = false;
       interface = "tlan";
       trackInterfaces = [ n ];
       virtualRouterId = id + 1;
@@ -23,6 +24,7 @@ in
         { ip = "${calculated.gatewayIp4 config.networking.hostName n}/32"; device = n; }
       ];
     }) // { wan = {
+      preempt = false;
       interface = "tlan";
       trackInterfaces = [ "wan" ];
       virtualRouterId = 254;

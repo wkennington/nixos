@@ -18,6 +18,7 @@ let
       virtual_router_id ${toString config.virtualRouterId}
       priority ${toString config.priority}
       advert_int ${toString config.advertInt}
+      garp_master_delay ${toString config.garpMasterDelay}
       authentication {
         auth_type ${config.authType}
         auth_pass ${config.authPass}
@@ -135,7 +136,7 @@ in
 
           state = mkOption {
             type = types.addCheck types.str (n: elem n [ "MASTER" "BACKUP" ]);
-            default = "MASTER";
+            default = "BACKUP";
             description = ''
               The state the node should start in.
             '';
@@ -194,6 +195,14 @@ in
             default = 1;
             description = ''
               The interval of time between probes for instance advertisement.
+            '';
+          };
+
+          garpMasterDelay = mkOption {
+            type = types.addCheck types.int (n: n > 0);
+            default = 1;
+            description = ''
+              The delay for gratuitous ARP after transition to MASTER.
             '';
           };
 
