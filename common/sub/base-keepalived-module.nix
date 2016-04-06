@@ -42,6 +42,9 @@ let
       group {
         ${concatMapStrings (n: "    ${n}\n") config.group}
       }
+      ${optionalString (config.notifyMaster != null) "notify_master \"${config.notifyMaster}\""}
+      ${optionalString (config.notifyBackup != null) "notify_backup \"${config.notifyBackup}\""}
+      ${optionalString (config.notifyFault != null) "notify_fault \"${config.notifyFault}\""}
     }
   '';
 
@@ -92,6 +95,30 @@ in
             default = [ ];
             description = ''
               Add an entry for each vrrp_instance you want to be a part of the sync group.
+            '';
+          };
+
+          notifyMaster = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Add a notify_master script to run when this node becomes the master.
+            '';
+          };
+
+          notifyBackup = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Add a notify_backup script to run when this node becomes the backup.
+            '';
+          };
+
+          notifyFault = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Add a notify_fault script to run when a node faults.
             '';
           };
 

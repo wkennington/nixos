@@ -19,8 +19,16 @@ in
     ] ++ map (vlan: calculated.internalIp4 config.networking.hostName vlan) calculated.myNetData.vlans;
   };
 
+  services.keepalived.syncGroups.gateway = {
+    notifyMaster = "${pkgs.conntrack-tools}/libexec/primary-backup.sh primary";
+    notifyBackup = "${pkgs.conntrack-tools}/libexec/primary-backup.sh backup";
+    notifyFault = "${pkgs.conntrack-tools}/libexec/primary-backup.sh fault";
+  };
+
   systemd.services.keepalived = {
     requires = [ "conntrackd.service" ];
     after = [ "conntrackd.service" ];
+    bindsTo = [ "conntrackd.service" ];
+    partOf = [ "conntrackd.service" ];
   };
 }
