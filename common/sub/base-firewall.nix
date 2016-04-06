@@ -12,7 +12,7 @@ with lib;
   };
   networking.firewall = {
     enable = true;
-    rejectPackets = true;
+    rejectPackets = false;
     allowPing = true;
     logRefusedConnections = false;
     extraPackages = [ pkgs.ipset ];
