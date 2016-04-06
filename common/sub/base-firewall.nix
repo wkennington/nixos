@@ -69,12 +69,12 @@ with lib;
       '')
       (mkAfter ''
         # Allow everything to make external connections
-        ip46tables -A OUTPUT -o lo -j REJECT
-        iptables -A OUTPUT -m set --match-set private dst -j REJECT
-        ip6tables -A OUTPUT -m set --match-set private6 dst -j REJECT
+        ip46tables -A OUTPUT -o lo -j DROP
+        iptables -A OUTPUT -m set --match-set private dst -j DROP
+        ip6tables -A OUTPUT -m set --match-set private6 dst -j DROP
         ip46tables -A OUTPUT -j ACCEPT
 
-        ip46tables -A FORWARD -j REJECT
+        ip46tables -A FORWARD -j DROP
       '')
     ];
     extraStopCommands = mkAfter ''
