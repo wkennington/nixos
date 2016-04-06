@@ -1,5 +1,13 @@
 { config, lib, ... }:
 with lib;
+let
+  calculated = (import ../../common/sub/calculated.nix { inherit config lib; });
+
+  natval = let
+    outboundOrNull = calculated.myNetMap.pub4MachineMap.outbound or null;
+    pub4OrNull = calculated.myNetMap.pub4 or null;
+  in if outboundOrNull == null || pub4OrNull == null then "MASQUERADE" else "SNAT --to ${pub4OrNull}${toString outboundOrNull}";
+in
 {
   networking.firewall.extraCommands = mkOrder 2 ''
     # Forward Outbound Connections
@@ -15,8 +23,8 @@ with lib;
     #iptables -t nat -A POSTROUTING -m mark --mark 0x10 -j MASQUERADE
 
     # Masquerade all public connections
-    iptables -t nat -A POSTROUTING -o wan -m mark --mark 0x10 -j MASQUERADE
-    iptables -t nat -A POSTROUTING -o gwan -m mark --mark 0x10 -j MASQUERADE
+    iptables -t nat -A POSTROUTING -o wan -m mark --mark 0x10 -j ${natval}
+    iptables -t nat -A POSTROUTING -o gwan -m mark --mark 0x10 -j ${natval}
 
     # Allow access to servers
     ${concatStrings (map (n: ''
