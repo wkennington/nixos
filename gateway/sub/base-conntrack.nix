@@ -18,4 +18,9 @@ in
       calculated.myVpnIp4
     ] ++ map (vlan: calculated.internalIp4 config.networking.hostName vlan) calculated.myNetData.vlans;
   };
+
+  systemd.services.keepalived = {
+    requires = [ "conntrackd.service" ];
+    after = [ "conntrackd.service" ];
+  };
 }

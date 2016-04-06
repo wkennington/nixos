@@ -135,7 +135,6 @@ rec {
       timeZone = "America/Los_Angeles";
 
       gateways = [
-        "newton"
         "page"
         "quest"
       ];
@@ -146,7 +145,6 @@ rec {
       ];
 
       dnsServers = [
-        "newton"
         "page"
         "quest"
       ];
