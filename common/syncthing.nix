@@ -9,8 +9,4 @@
     ip46tables -A OUTPUT -o lo -p tcp --dport 8384 -j ACCEPT
   '';
   services.syncthing.enable = true;
-  users.extraUsers.syncthing = {
-    description = "Syncthing service user";
-    isSystemUser = true;
-  };
 }
