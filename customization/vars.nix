@@ -23,6 +23,7 @@ rec {
     idMap = {
       prodigy = 2;
       atomic = 3;
+      legend = 4;
       newton = 8;
       page = 9;
       quest = 10;
@@ -40,7 +41,7 @@ rec {
       uid = 1000;
       description = "William A. Kennington III";
       canRoot = true;
-      loginMachines = [ "exodus" "prodigy" ];
+      loginMachines = [ "legend" "prodigy" ];
       canShareData = true;
     };
     bill = {
@@ -250,6 +251,7 @@ rec {
       internalMachineMap = {
         lazarus = { id = 1; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
         exodus = { id = 32; vlans = [ "slan" ]; };
+        legend = { id = 33; vlans = [ "slan" ]; };
       };
 
     };
