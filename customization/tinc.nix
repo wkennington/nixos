@@ -9,7 +9,7 @@ with lib;
     "newton"
     "page"
     "quest"
-    "exodus"
+    "legend"
   ];
   hosts = {
     atomic = ''
@@ -31,9 +31,9 @@ with lib;
       Address = quest.wak.io
       Ed25519PublicKey = nXRjIs3FLanILhsDF36XGq39lnojdL0VJJsvI52cAEA
     '';
-    exodus = ''
+    legend = ''
       Address = lb.mtv-w.wak.io
-      Ed25519PublicKey = LIkjY1u8bIHOWqM6Y+5cP6kGecMRLRRH/WbMgCkpEEL
+      Ed25519PublicKey = zSAeyznGvqmaQAOmv9F4LOQGWpGQJNGGzP5DrEK9tAE
       Subnet = 10.1.0.0/16
     '';
   };

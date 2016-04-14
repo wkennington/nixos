@@ -28,7 +28,6 @@ rec {
       page = 9;
       quest = 10;
       elite = 11;
-      exodus = 12;
     };
   };
 
