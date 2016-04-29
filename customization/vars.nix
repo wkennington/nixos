@@ -142,8 +142,11 @@ rec {
       pub4Gateway = "65.19.134.241";
       pub4PrefixLength = 28;
 
+      pub6 = "2001:470:1:572::";
+      pub6Gateway = "2001:470:1:572::1";
+      pub6PrefixLength = 64;
+
       priv4 = "10.2.";
-      pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
 
       pubDnsServers = [
@@ -185,6 +188,16 @@ rec {
 
       consul = {
         servers = [ "newton" "page" "quest" ];
+      };
+
+      pub6MachineMap = {
+        outbound = 2;
+        newton = 3;
+        page = 4;
+        quest = 5;
+        lb1 = 6;
+        lb2 = 7;
+        lb3 = 8;
       };
 
       pub4MachineMap = {

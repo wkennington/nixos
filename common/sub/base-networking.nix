@@ -22,6 +22,9 @@ in
       defaultGateway = mkDefault (if !hasWanIf then calculated.myGatewayIp4
         else if calculated.myPublicIp4 != null then net.pub4Gateway else null);
 
+      defaultGateway6 = mkDefault (if !hasWanIf && net ? pub6Routed then calculated.myGatewayIp6
+        else if calculated.myPublicIp6 != null then net.pub6Gateway else null);
+
       interfaces = mkMerge [
         { lan = { }; }
         (listToAttrs (flip map (calculated.myNetData.vlans ++ [ "lan" ]) (vlan:
@@ -33,16 +36,25 @@ in
               { address = "${net.priv4}${toString vid}.${toString networkId}"; prefixLength = 24; }
             ] ++ optional calculated.iAmOnlyGateway
               { address = "${net.priv4}${toString vid}.1"; prefixLength = 32; });
-            ip6 = mkOverride 0 [
-              { address = "${net.pub6}${toString vid}::${toString networkId}"; prefixLength = 64; }
+            ip6 = mkOverride 0 ([
               { address = "${net.priv6}${toString vid}::${toString networkId}"; prefixLength = 64; }
-            ];
+            ] ++ optionals (net ? pub6Routed) [
+              { address = "${net.pub6Routed}${toString vid}::${toString networkId}"; prefixLength = 64; }
+            ]);
           }
         )))
-        (mkIf (calculated.myPublicIp4 != null) ({ wan.ip4 = [ {
-          address = calculated.myPublicIp4;
-          prefixLength = net.pub4PrefixLength;
-        } ]; }))
+        (mkIf (calculated.myPublicIp4 != null) ({
+          wan = {
+            ip4 = [ {
+              address = calculated.myPublicIp4;
+              prefixLength = net.pub4PrefixLength;
+            } ];
+            ip6 = [ {
+              address = calculated.myPublicIp6;
+              prefixLength = net.pub6PrefixLength;
+            } ];
+          };
+        }))
       ];
 
       vlans = listToAttrs (flip map calculated.myNetData.vlans (vlan:

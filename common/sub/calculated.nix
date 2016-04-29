@@ -20,6 +20,9 @@ rec {
   publicIp4 = name: let ndc = dc name; net = vars.netMaps.${ndc}; in
     if !(net ? "pub4MachineMap" && net.pub4MachineMap ? "${name}") then null
       else "${net.pub4}${toString net.pub4MachineMap.${name}}";
+  publicIp6 = name: let ndc = dc name; net = vars.netMaps.${ndc}; in
+    if !(net ? "pub6MachineMap" && net.pub6MachineMap ? "${name}") then null
+      else "${net.pub6}${toString net.pub6MachineMap.${name}}";
   gatewayIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
@@ -32,6 +35,7 @@ rec {
   myVpnIp4 = vpnIp4 host;
   myInternalIp4 = internalIp4 host (head myNetData.vlans);
   myPublicIp4 = publicIp4 host;
+  myPublicIp6 = publicIp6 host;
   myGatewaysIp4 = map (gatewayIp4 host) myNetData.vlans;
   myGatewayIp4 = head myGatewaysIp4;
   myNasIp4s = flip map myNetMap.nasIds
