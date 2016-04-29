@@ -8,6 +8,7 @@ with lib;
     '');
 
   services.openntpd.extraConfig = ''
-    listen on *
+    listen on 0.0.0.0
+    listen on ::
   '';
 }
