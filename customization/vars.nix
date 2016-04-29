@@ -75,12 +75,17 @@ rec {
 
   remotes = [ "nixos" "prodigy" ];
 
-  ntpServers = [
+  pubDnsServers = [
+    "8.8.8.8"
+    "8.8.4.4"
+  ];
+
+  pubNtpServers = [
     "0.pool.ntp.org"
     "1.pool.ntp.org"
     "2.pool.ntp.org"
     "3.pool.ntp.org"
-   ];
+  ];
 
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
   # ip processing in nix is hard :/
@@ -92,7 +97,12 @@ rec {
 
       timeZone = "America/New_York";
 
-      ntpServers = [
+      pubDnsServers = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
+
+      pubNtpServers = [
         "clock.nyc.he.net"
         "0.us.pool.ntp.org"
         "1.us.pool.ntp.org"
@@ -108,6 +118,10 @@ rec {
       ];
 
       dnsServers = [
+        "atomic"
+      ];
+
+      ntpServers = [
         "atomic"
       ];
 
@@ -132,6 +146,18 @@ rec {
       pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
 
+      pubDnsServers = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
+
+      pubNtpServers = [
+        "clock.fmt.he.net"
+        "clock.sjc.he.net"
+        "0.us.pool.ntp.org"
+        "1.us.pool.ntp.org"
+      ];
+
       timeZone = "America/Los_Angeles";
 
       gateways = [
@@ -150,10 +176,8 @@ rec {
       ];
 
       ntpServers = [
-        "clock.fmt.he.net"
-        "clock.sjc.he.net"
-        "0.us.pool.ntp.org"
-        "1.us.pool.ntp.org"
+        "page"
+        "quest"
       ];
 
       ceph = {
@@ -225,6 +249,18 @@ rec {
       pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
 
+      pubDnsServers = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
+
+      pubNtpServers = [
+        "clock.fmt.he.net"
+        "clock.sjc.he.net"
+        "0.us.pool.ntp.org"
+        "1.us.pool.ntp.org"
+      ];
+
       timeZone = "America/Los_Angeles";
 
       gateways = [
@@ -240,10 +276,7 @@ rec {
       ];
 
       ntpServers = [
-        "clock.fmt.he.net"
-        "clock.sjc.he.net"
-        "0.us.pool.ntp.org"
-        "1.us.pool.ntp.org"
+        "lazarus"
       ];
 
       # Cannot use 1 as this is reserved for the default gateway

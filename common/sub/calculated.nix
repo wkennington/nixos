@@ -24,6 +24,7 @@ rec {
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
   dnsIp4 = lan: map (flip internalIp4 lan) myNetMap.dnsServers;
+  ntpIp4 = lan: map (flip internalIp4 lan) myNetMap.ntpServers;
 
   iAmRemote = isRemote host;
   myDc = dc host;
@@ -43,7 +44,21 @@ rec {
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
   myTimeZone = if iAmRemote then "UTC" else myNetMap.timeZone;
 
-  myNtpServers = if iAmRemote then vars.ntpServers else myNetMap.ntpServers;
+  myDnsServers =
+    if iAmRemote then
+      vars.pubDnsServers
+    else if iAmGateway then
+      myNetMap.pubDnsServers
+    else
+      myNetMap.dnsServers;
+
+  myNtpServers =
+    if iAmRemote then
+      vars.pubNtpServers
+    else if iAmGateway then
+      myNetMap.pubNtpServers
+    else
+      myNetMap.ntpServers;
 
   myCeph = {
     mons = myNetMap.ceph.mons;

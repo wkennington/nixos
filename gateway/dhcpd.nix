@@ -58,6 +58,7 @@ in
       let
         subnet = "${net.priv4}${toString vid}";
         nameservers = concatStringsSep ", " (calculated.dnsIp4 vlan);
+        timeservers = concatStringsSep ", " (calculated.ntpIp4 vlan);
         dhcpLower = "${subnet}.${toString vars.gateway.dhcpRange.lower}";
         dhcpUpper = "${subnet}.${toString vars.gateway.dhcpRange.upper}";
       in ''
@@ -65,6 +66,7 @@ in
           option broadcast-address ${subnet}.255;
           option routers ${subnet}.1;
           option domain-name-servers ${nameservers};
+          option time-servers ${timeservers};
           option domain-name "${calculated.myDomain}";
           pool {
             ${optionalString (peer != null) "failover peer \"failover\";"}
