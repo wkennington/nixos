@@ -154,8 +154,6 @@ rec {
       pubNtpServers = [
         "clock.fmt.he.net"
         "clock.sjc.he.net"
-        "0.us.pool.ntp.org"
-        "1.us.pool.ntp.org"
       ];
 
       timeZone = "America/Los_Angeles";
