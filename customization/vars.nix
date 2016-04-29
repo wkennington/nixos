@@ -157,6 +157,9 @@ rec {
       pubNtpServers = [
         "clock.fmt.he.net"
         "clock.sjc.he.net"
+        "clepsydra.dec.com"
+        "clock.via.net"
+        "tock.gpsclock.com"
       ];
 
       timeZone = "America/Los_Angeles";
@@ -270,8 +273,9 @@ rec {
       pubNtpServers = [
         "clock.fmt.he.net"
         "clock.sjc.he.net"
-        "0.us.pool.ntp.org"
-        "1.us.pool.ntp.org"
+        "clepsydra.dec.com"
+        "clock.via.net"
+        "tock.gpsclock.com"
       ];
 
       timeZone = "America/Los_Angeles";
