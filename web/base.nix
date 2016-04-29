@@ -6,7 +6,7 @@ with lib;
 
   services.nginx = {
     enable = true;
-    package = pkgs.nginx_unstable;
+    package = pkgs.nginx;
     config = mkMerge [
       (mkBefore ''
         worker_processes 4;
