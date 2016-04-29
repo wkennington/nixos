@@ -47,6 +47,7 @@ in
       authPass = "none";
       virtualIpAddresses = [
         { ip = "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound}/32"; device = "wan"; }
+        { ip = "${calculated.myNetMap.pub6}${toString calculated.myNetMap.pub6MachineMap.outbound}/64"; device = "wan"; }
       ];
     }; };
   };
