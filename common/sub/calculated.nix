@@ -33,7 +33,6 @@ rec {
   myInternalIp4 = internalIp4 host (head myNetData.vlans);
   myPublicIp4 = publicIp4 host;
   myGatewaysIp4 = map (gatewayIp4 host) myNetData.vlans;
-  myDnsIp4 = dnsIp4 (head myNetData.vlans);
   myGatewayIp4 = head myGatewaysIp4;
   myNasIp4s = flip map myNetMap.nasIds
     (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
@@ -50,7 +49,7 @@ rec {
     else if iAmGateway then
       myNetMap.pubDnsServers
     else
-      myNetMap.dnsServers;
+      dnsIp4 (head myNetData.vlans);
 
   myNtpServers =
     if iAmRemote then
@@ -58,7 +57,7 @@ rec {
     else if iAmGateway then
       myNetMap.pubNtpServers
     else
-      myNetMap.ntpServers;
+      ntpIp4 (head myNetData.vlans);
 
   myCeph = {
     mons = myNetMap.ceph.mons;

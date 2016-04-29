@@ -54,7 +54,7 @@ in
 
       useDHCP = false;
 
-      nameservers = if hasWanIf then [ "8.8.4.4" "8.8.8.8" ] else calculated.myDnsIp4;
+      nameservers = calculated.myDnsServers;
     })
     (mkIf calculated.iAmRemote {
       useDHCP = true;
