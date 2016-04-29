@@ -50,7 +50,7 @@ rec {
   myDnsServers =
     if iAmRemote then
       vars.pubDnsServers
-    else if iAmGateway then
+    else if any (n: host == n) myNetMap.dnsServers then
       myNetMap.pubDnsServers
     else
       dnsIp4 (head myNetData.vlans);
@@ -58,7 +58,7 @@ rec {
   myNtpServers =
     if iAmRemote then
       vars.pubNtpServers
-    else if iAmGateway then
+    else if any (n: host == n) myNetMap.ntpServers then
       myNetMap.pubNtpServers
     else
       ntpIp4 (head myNetData.vlans);
