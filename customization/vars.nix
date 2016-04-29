@@ -172,11 +172,13 @@ rec {
       ];
 
       dnsServers = [
+        "newton"
         "page"
         "quest"
       ];
 
       ntpServers = [
+        "newton"
         "page"
         "quest"
       ];
