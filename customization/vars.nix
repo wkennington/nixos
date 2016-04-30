@@ -155,11 +155,11 @@ rec {
       ];
 
       pubNtpServers = [
-        "clock.fmt.he.net"
-        "clock.sjc.he.net"
-        "clepsydra.dec.com"
-        "clock.via.net"
-        "tock.gpsclock.com"
+        { server = "clock.fmt.he.net"; weight = "5"; }
+        { server = "clock.sjc.he.net"; weight = "5"; }
+        { server = "clepsydra.dec.com"; weight = "2"; }
+        { server = "clock.via.net"; weight = "1"; }
+        { server = "tock.gpsclock.com"; weight = "1"; }
       ];
 
       timeZone = "America/Los_Angeles";
@@ -271,11 +271,11 @@ rec {
       ];
 
       pubNtpServers = [
-        "clock.fmt.he.net"
-        "clock.sjc.he.net"
-        "clepsydra.dec.com"
-        "clock.via.net"
-        "tock.gpsclock.com"
+        { server = "clock.fmt.he.net"; weight = "5"; }
+        { server = "clock.sjc.he.net"; weight = "5"; }
+        { server = "clepsydra.dec.com"; weight = "2"; }
+        { server = "clock.via.net"; weight = "1"; }
+        { server = "tock.gpsclock.com"; weight = "1"; }
       ];
 
       timeZone = "America/Los_Angeles";

@@ -2,15 +2,19 @@
 let
   calculated = (import ./calculated.nix { inherit config lib; });
 in
+with lib;
 {
   services = {
     ntp = {
       enable = false;
-      servers = calculated.myNtpServers;
+      servers = [ ];
     };
     openntpd = {
       enable = true;
       extraOptions = "-s";
+      extraConfig = ''
+        ${concatStringsSep "\n" (map ({ server, weight }: "servers ${server} weight ${weight}") calculated.myNtpServers)}
+      '';
     };
   };
 
