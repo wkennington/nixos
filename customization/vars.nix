@@ -81,10 +81,10 @@ rec {
   ];
 
   pubNtpServers = [
-    "0.pool.ntp.org"
-    "1.pool.ntp.org"
-    "2.pool.ntp.org"
-    "3.pool.ntp.org"
+    { server = "0.pool.ntp.org"; weight = "1"; }
+    { server = "1.pool.ntp.org"; weight = "1"; }
+    { server = "2.pool.ntp.org"; weight = "1"; }
+    { server = "3.pool.ntp.org"; weight = "1"; }
   ];
 
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
@@ -122,7 +122,7 @@ rec {
       ];
 
       ntpServers = [
-        "atomic"
+        { server = "atomic"; weight = "1"; }
       ];
 
       internalMachineMap = {
@@ -181,9 +181,9 @@ rec {
       ];
 
       ntpServers = [
-        "newton"
-        "page"
-        "quest"
+        { server = "newton"; weight = "1"; }
+        { server = "page"; weight = "1"; }
+        { server = "quest"; weight = "1"; }
       ];
 
       ceph = {
@@ -293,7 +293,7 @@ rec {
       ];
 
       ntpServers = [
-        "lazarus"
+        { server = "lazarus"; weight = "1"; }
       ];
 
       # Cannot use 1 as this is reserved for the default gateway
