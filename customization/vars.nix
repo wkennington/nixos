@@ -257,6 +257,11 @@ rec {
           vlans = [ "slan" ];
           bmcMac = "bc:5f:f4:c9:a0:70";
         };
+        atlas = {
+          id = 36;
+          vlans = [ "slan" ];
+          bmcMac = "0c:c4:7a:ae:6d:80";
+        };
       };
     };
 
