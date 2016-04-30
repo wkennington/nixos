@@ -41,6 +41,7 @@ in
     efibootmgr
     fish
     git
+    gnupg
     gptfdisk
     hdparm
     htop
