@@ -8,7 +8,7 @@ rec {
   isRemote = name: any (n: n == name) vars.remotes;
   dc = name: let
     dcs = flip filterAttrs vars.netMaps (dc: { internalMachineMap, ... }:
-      any (n: n == name) (attrNames internalMachineMap));
+      internalMachineMap ? "${name}");
   in if isRemote name then "remote" else head (attrNames dcs);
   vpnIp4 = name: "${vars.vpn.subnet}${toString vars.vpn.idMap.${name}}";
   internalIp4Net = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
@@ -27,7 +27,10 @@ rec {
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
   domain = name: "${dc name}.${vars.domain}";
   dnsIp4 = lan: map (flip internalIp4 lan) myNetMap.dnsServers;
-  ntpIp4 = lan: map (flip internalIp4 lan) myNetMap.ntpServers;
+  ntpIp4 = lan: flip map myNetMap.ntpServers ({ server, weight }: {
+    server = internalIp4 server lan;
+    inherit weight;
+  });
 
   iAmRemote = isRemote host;
   myDc = dc host;
