@@ -59,6 +59,7 @@ in
     config.programs.ssh.package
     openssl
     psmisc
+    rsync
     smartmontools
     sysstat
     tcpdump
