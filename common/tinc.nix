@@ -14,7 +14,7 @@ let
 in
 {
   myNatIfs = [ "tinc.vpn" ];
-  environment.systemPackages = [ pkgs.tinc_pre ];
+  environment.systemPackages = [ config.services.tinc.networks.vpn.package ];
   fileSystems = [
     {
       mountPoint = "/etc/tinc";
@@ -45,7 +45,7 @@ in
     '');
   };
   services.tinc.networks.vpn = {
-    package = pkgs.tinc_pre;
+    package = pkgs.tinc_1_1;
     name = config.networking.hostName;
     extraConfig = ''
       StrictSubnets yes
