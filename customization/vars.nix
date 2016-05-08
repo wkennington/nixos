@@ -260,7 +260,12 @@ rec {
         atlas = {
           id = 36;
           vlans = [ "slan" ];
-          bmcMac = "0c:c4:7a:ae:6d:80";
+          bmcMac = "0C:C4:7A:AE:6D:80";
+        };
+        nevada = {
+          id = 37;
+          vlans = [ "slan" ];
+          bmcMac = "00:C0:A8:12:34:56";
         };
       };
     };
