@@ -58,7 +58,7 @@ in
       let
         subnet = "${net.priv4}${toString vid}";
         nameservers = concatStringsSep ", " (calculated.dnsIp4 vlan);
-        timeservers = concatStringsSep ", " (calculated.ntpIp4 vlan);
+        timeservers = concatStringsSep ", " (map ({ server, ... }: server) (calculated.ntpIp4 vlan));
         dhcpLower = "${subnet}.${toString vars.gateway.dhcpRange.lower}";
         dhcpUpper = "${subnet}.${toString vars.gateway.dhcpRange.upper}";
       in ''
