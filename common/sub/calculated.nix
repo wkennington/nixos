@@ -61,7 +61,7 @@ rec {
   myNtpServers =
     if iAmRemote then
       vars.pubNtpServers
-    else if any (n: host == n) myNetMap.ntpServers then
+    else if any (n: host == n.server) myNetMap.ntpServers then
       myNetMap.pubNtpServers
     else
       ntpIp4 (head myNetData.vlans);
