@@ -25,6 +25,8 @@ rec {
       else "${net.pub6}${toString net.pub6MachineMap.${name}}";
   gatewayIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.1";
+  gatewayIp6 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
+    "${net.priv6}${toString vars.internalVlanMap.${lan}}::1";
   domain = name: "${dc name}.${vars.domain}";
   dnsIp4 = lan: map (flip internalIp4 lan) myNetMap.dnsServers;
   ntpIp4 = lan: flip map myNetMap.ntpServers ({ server, weight }: {

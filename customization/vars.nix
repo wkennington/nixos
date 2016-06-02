@@ -147,7 +147,7 @@ rec {
       pub6PrefixLength = 64;
 
       priv4 = "10.2.";
-      priv6 = "fda4:941a:81b5:100";
+      priv6 = "fda4:941a:81b5:200";
 
       pubDnsServers = [
         "8.8.8.8"
@@ -219,6 +219,29 @@ rec {
         lb1 = "newton";
         lb2 = "page";
         lb3 = "quest";
+      };
+
+      vrrpMap = {
+        lan-4 = 1;
+        lan-6 = 2;
+        mlan-4 = 3;
+        mlan-6 = 4;
+        slan-4 = 5;
+        slan-6 = 6;
+        dlan-4 = 7;
+        dlan-6 = 8;
+        ulan-4 = 9;
+        ulan-6 = 10;
+        tlan-4 = 11;
+        tlan-6 = 12;
+        lb1-4 = 20;
+        lb1-6 = 21;
+        lb2-4 = 22;
+        lb2-6 = 23;
+        lb3-4 = 24;
+        lb3-6 = 25;
+        wan-4 = 254;
+        wan-6 = 255;
       };
 
       internalMachineMap = {

@@ -25,30 +25,55 @@ in
 
   services.keepalived = {
     enable = true;
-    syncGroups.gateway.group = [ "wan" ] ++ attrNames internalVlanMap;
-    instances = flip mapAttrs internalVlanMap (n: id: {
+    syncGroups.gateway.group = [ "wan-4" "wan-6" ] ++ concatMap (n: [ "${n}-4" "${n}-6" ]) (attrNames internalVlanMap);
+    instances = flip mapAttrs' internalVlanMap (n: id: nameValuePair "${n}-4" {
       preempt = false;
       interface = "tlan";
       trackInterfaces = [ n ];
-      virtualRouterId = id + 1;
+      virtualRouterId = calculated.myNetMap.vrrpMap."${n}-4";
       priority = calculated.myNetData.id;
       authType = "PASS";
       authPass = "none";
       virtualIpAddresses = [
         { ip = "${calculated.gatewayIp4 config.networking.hostName n}/32"; device = n; }
       ];
-    }) // { wan = {
+    }) // flip mapAttrs' internalVlanMap (n: id: nameValuePair "${n}-6" {
       preempt = false;
       interface = "tlan";
-      trackInterfaces = [ "wan" ];
-      virtualRouterId = 254;
+      trackInterfaces = [ n ];
+      virtualRouterId = calculated.myNetMap.vrrpMap."${n}-6";
       priority = calculated.myNetData.id;
       authType = "PASS";
       authPass = "none";
       virtualIpAddresses = [
-        { ip = "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound}/32"; device = "wan"; }
-        { ip = "${calculated.myNetMap.pub6}${toString calculated.myNetMap.pub6MachineMap.outbound}/64"; device = "wan"; }
+        { ip = "${calculated.gatewayIp6 config.networking.hostName n}/128"; device = n; }
       ];
-    }; };
+    }) // {
+      "wan-4" = {
+        preempt = false;
+        interface = "tlan";
+        trackInterfaces = [ "wan" ];
+        virtualRouterId = calculated.myNetMap.vrrpMap.wan-4;
+        priority = calculated.myNetData.id;
+        authType = "PASS";
+        authPass = "none";
+        virtualIpAddresses = [
+          { ip = "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound}/32"; device = "wan"; }
+        ];
+      };
+
+      "wan-6" = {
+        preempt = false;
+        interface = "tlan";
+        trackInterfaces = [ "wan" ];
+        virtualRouterId = calculated.myNetMap.vrrpMap.wan-6;
+        priority = calculated.myNetData.id;
+        authType = "PASS";
+        authPass = "none";
+        virtualIpAddresses = [
+          { ip = "${calculated.myNetMap.pub6}${toString calculated.myNetMap.pub6MachineMap.outbound}/128"; device = "wan"; }
+        ];
+      };
+    };
   };
 }

@@ -21,17 +21,26 @@ in
 {
   services.keepalived = {
     enable = true;
-    syncGroups = flip mapAttrs' lbPrioMap (lb: _: nameValuePair "${lb}g" { group = [ lb ]; });
-    instances = flip mapAttrs lbPrioMap (lb: priorities: {
+    syncGroups = flip mapAttrs' lbPrioMap (lb: _: nameValuePair "${lb}g" { group = [ "${lb}-4" "${lb}-6" ]; });
+    instances = flip mapAttrs' lbPrioMap (lb: priorities: nameValuePair "${lb}-4" {
       interface = "tlan";
       trackInterfaces = [ "wan" ];
-      virtualRouterId = calculated.myNetMap.pub4MachineMap."${lb}";
+      virtualRouterId = calculated.myNetMap.vrrpMap."${lb}-4";
       priority = priorities."${config.networking.hostName}";
       authType = "PASS";
       authPass = "none";
       virtualIpAddresses = [
         { ip = "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap."${lb}"}/32"; device = "wan"; }
-        { ip = "${calculated.myNetMap.pub6}${toString calculated.myNetMap.pub6MachineMap."${lb}"}/64"; device = "wan"; }
+      ];
+    }) // flip mapAttrs' lbPrioMap (lb: priorities: nameValuePair "${lb}-6" {
+      interface = "tlan";
+      trackInterfaces = [ "wan" ];
+      virtualRouterId = calculated.myNetMap.vrrpMap."${lb}-6";
+      priority = priorities."${config.networking.hostName}";
+      authType = "PASS";
+      authPass = "none";
+      virtualIpAddresses = [
+        { ip = "${calculated.myNetMap.pub6}${toString calculated.myNetMap.pub6MachineMap."${lb}"}/128"; device = "wan"; }
       ];
     });
   };
