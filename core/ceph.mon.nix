@@ -10,6 +10,7 @@ let
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
       mon data = /var/lib/ceph/mon/ceph-${config.networking.hostName}
+      admin socket = /run/ceph/ceph-mon.${config.networking.hostName}.asok
       log file = /dev/null
       log to stderr = false
       err to stderr = false
