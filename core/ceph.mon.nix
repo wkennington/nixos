@@ -9,7 +9,7 @@ let
       fsid = ${calculated.myCeph.fsId}
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
-      mon data = /var/lib/ceph/mon/ceph-${config.networking.hostName}
+      mon data = ${stateDir}
       admin socket = /run/ceph/ceph-mon.${config.networking.hostName}.asok
       log file = /dev/null
       log to stderr = false
@@ -58,7 +58,12 @@ in
 
     preStart = ''
       mkdir -p -m 0775 /var/lib/ceph/mon
-      [ ! -d "${stateDir}" ] && ceph-mon -i ${config.networking.hostName} --mkfs
+      if [ ! -d "${stateDir}" ]; then
+        ceph-authtool --create-keyring /var/lib/ceph/mon/new-keyring --gen-key -n mon.
+        ceph-authtool /var/lib/ceph/mon/new-keyring --import-keyring /etc/ceph/ceph.client.admin.keyring
+        ceph-mon -i ${config.networking.hostName} --mkfs --keyring /var/lib/ceph/mon/new-keyring
+        rm /var/lib/ceph/mon/new-keyring
+      fi
       chmod 0700 ${stateDir}
       chown -R ceph-mon ${stateDir}
       
