@@ -10,6 +10,13 @@ let
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
       mon data = /var/lib/ceph/mon/ceph-${config.networking.hostName}
+      log file = /dev/null
+      log to stderr = false
+      err to stderr = false
+      log to syslog = true
+      err to syslog = true
+      mon cluster log to syslog = true
+      mon cluster log to file = /dev/null
       public network = ${calculated.myInternalIp4Net}
       auth cluster required = cephx
       auth service required = cephx
@@ -56,9 +63,6 @@ in
       
       mkdir -p -m 0775 /var/run/ceph
       chown ceph-mon:ceph /var/run/ceph
-
-      mkdir -p -m 0775 /var/log/ceph
-      chown ceph-mon:ceph /var/log/ceph
     '';
   };
 }
