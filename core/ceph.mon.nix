@@ -59,10 +59,7 @@ in
     preStart = ''
       mkdir -p -m 0775 /var/lib/ceph/mon
       if [ ! -d "${stateDir}" ]; then
-        ceph-authtool --create-keyring /var/lib/ceph/mon/new-keyring --gen-key -n mon.
-        ceph-authtool /var/lib/ceph/mon/new-keyring --import-keyring /etc/ceph/ceph.client.admin.keyring
-        ceph-mon -i ${config.networking.hostName} --mkfs --keyring /var/lib/ceph/mon/new-keyring
-        rm /var/lib/ceph/mon/new-keyring
+        ceph-mon -i ${config.networking.hostName} --mkfs --keyring /etc/ceph/ceph.client.admin.keyring
       fi
       chmod 0700 ${stateDir}
       chown -R ceph-mon ${stateDir}
