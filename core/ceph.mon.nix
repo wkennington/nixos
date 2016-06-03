@@ -16,7 +16,7 @@ let
       log to syslog = true
       err to syslog = true
       mon cluster log to syslog = true
-      mon cluster log to file = /dev/null
+      mon cluster log file = /dev/null
       public network = ${calculated.myInternalIp4Net}
       auth cluster required = cephx
       auth service required = cephx
