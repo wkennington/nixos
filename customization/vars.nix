@@ -187,7 +187,7 @@ rec {
       ];
 
       ceph = {
-        fsId = "40d2204b-4833-4249-ae3e-308c0c8171cb";
+        fsId = "82f46d16-7a12-436a-b18a-f612136c4062";
         mons = [ "newton" "page" "quest" ];
       };
 

@@ -9,6 +9,7 @@ let
       fsid = ${calculated.myCeph.fsId}
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
+      mon data = /var/lib/ceph/mon/ceph-${config.networking.hostName}
       public network = ${calculated.myInternalIp4Net}
       auth cluster required = cephx
       auth service required = cephx

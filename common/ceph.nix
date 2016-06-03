@@ -12,8 +12,6 @@ with lib;
       fsid = ${calculated.myCeph.fsId};
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
-    [osd]
-      filestore zfs_snap = 1
     [mds]
       keyring = /etc/ceph/ceph.mds.keyring
   '';
