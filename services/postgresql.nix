@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 with lib;
 {
+  require = [
+    ./sub/postgresql-module.nix
+  ];
   services.postgresql = {
     enable = true;
     enableTCPIP = true;
-    package = pkgs.postgresql94;
+    package = config.postgresqlPackage;
   };
   users.extraUsers.postgres.useDefaultShell = true;
 }
