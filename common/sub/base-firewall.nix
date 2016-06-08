@@ -15,7 +15,10 @@ with lib;
     rejectPackets = false;
     allowPing = true;
     logRefusedConnections = false;
-    extraPackages = [ pkgs.ipset ];
+    extraPackages = [
+      pkgs.ipset
+      pkgs.iproute
+    ];
     extraCommands = mkMerge [
       (mkOrder 1 ''
         # Default Policy
