@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+let
+  calculated = (import ../common/sub/calculated.nix { inherit config lib; });
+
+  outboundIp = "${calculated.myNetMap.pub4}${toString calculated.myNetMap.pub4MachineMap.outbound}";
+in
 {
   environment.systemPackages = [
     pkgs.knot
@@ -10,6 +15,11 @@
     ip46tables -I INPUT -p tcp --dport 1153 -j ACCEPT
     ip46tables -t nat -A PREROUTING -i wan -p udp --dport 53 -j REDIRECT --to-port 1153
     ip46tables -t nat -A PREROUTING -i wan -p tcp --dport 53 -j REDIRECT --to-port 1153
+
+    # Rewrite traffic to gandi and no-ip to the correct ip
+    iptables -t mangle -I OUTPUT -m owner --uid-owner knot -j MARK --set-mark 0x20
+    iptables -t nat -A POSTROUTING -d 8.23.224.170 -m mark --mark 0x20 -p udp --dport 53 -j SNAT --to-source ${outboundIp}
+    iptables -t nat -A POSTROUTING -d 217.70.177.40 -m mark --mark 0x20 -p udp --dport 53 -j SNAT --to-source ${outboundIp}
   '';
 
   systemd.services.knot = {

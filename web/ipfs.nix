@@ -21,7 +21,6 @@ with lib;
   '';
 
   services = {
-    consul.webUi = true;
     nginx.config = ''
       server {
         listen 443 ssl http2;
@@ -77,7 +76,7 @@ with lib;
         {
           script = ''
             # TODO: Get a new cert and remove -k
-            if ${pkgs.curl}/bin/curl -k https://${checkDomain}/ui/; then
+            if ${pkgs.curl}/bin/curl -k https://${checkDomain}; then
               exit 0
             fi
             exit 2 # Critical
