@@ -15,6 +15,7 @@ with lib;
     rejectPackets = false;
     allowPing = true;
     logRefusedConnections = false;
+    checkReversePath = false;
     extraPackages = [
       pkgs.ipset
     ];
