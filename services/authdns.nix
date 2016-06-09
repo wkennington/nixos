@@ -16,9 +16,8 @@ in
     ip46tables -t nat -A PREROUTING -i wan -p udp --dport 53 -j REDIRECT --to-port 1153
     ip46tables -t nat -A PREROUTING -i wan -p tcp --dport 53 -j REDIRECT --to-port 1153
 
-    # Rewrite traffic to gandi and no-ip to the correct ip
+    # Rewrite traffic to replicate from the correct ip
     iptables -t mangle -A OUTPUT -m owner --uid-owner knot -p tcp --dport 53 -j MARK --set-mark 0x20
-    iptables -t nat -A POSTROUTING -m mark --mark 0x20 -j LOG
   '';
 
   networking.localCommands = ''
