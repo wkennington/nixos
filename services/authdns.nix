@@ -18,11 +18,14 @@ in
 
     # Rewrite traffic to gandi and no-ip to the correct ip
     iptables -t mangle -A OUTPUT -m owner --uid-owner knot -p tcp --dport 53 -j MARK --set-mark 0x20
-    ip route del table 10 default || true
-    ip route add table 10 default via ${calculated.myGatewayIp4}
-    ip rule del fwmark 0x20 || true
-    ip rule add fwmark 0x20 table 10
     iptables -t nat -A POSTROUTING -m mark --mark 0x20 -j LOG
+  '';
+
+  networking.localCommands = ''
+    ${pkgs.iproute}/bin/ip route del table 10 default || true
+    ${pkgs.iproute}/bin/ip route add table 10 default via ${calculated.myGatewayIp4}
+    ${pkgs.iproute}/bin/ip rule del fwmark 0x20 || true
+    ${pkgs.iproute}/bin/ip rule add fwmark 0x20 table 10
   '';
 
   systemd.services.knot = {

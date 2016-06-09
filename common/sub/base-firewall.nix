@@ -17,7 +17,6 @@ with lib;
     logRefusedConnections = false;
     extraPackages = [
       pkgs.ipset
-      pkgs.iproute
     ];
     extraCommands = mkMerge [
       (mkOrder 1 ''
