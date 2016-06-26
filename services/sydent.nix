@@ -14,9 +14,9 @@ in
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     preStart = ''
-      mkdir -p ${varDir}
-      chown sydent ${varDir}
-      chmod 0700 ${varDir}
+      mkdir -p "${varDir}"
+      chown sydent "${varDir}"
+      chmod 0700 "${varDir}"
     '';
     serviceConfig = {
       Type = "simple";
