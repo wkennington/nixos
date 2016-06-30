@@ -14,6 +14,7 @@ in
     ./sub/base-networking.nix
     ./sub/base-ntpd.nix
     ./sub/base-unbound.nix
+    ./sub/base-wireguard.nix
   ];
   require = [
     ./sub/base-dns-module.nix
