@@ -3,8 +3,8 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   vars = (import ../customization/vars.nix { inherit lib; });
 
-  domain = "consul.${calculated.myDomain}";
-  topDomain = "consul.${vars.domain}";
+  domain = "pub.${calculated.myDomain}";
+  topDomain = "pub.${vars.domain}";
   consulService = "pub";
   consulDomain = "${consulService}.service.consul.${vars.domain}";
   checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
