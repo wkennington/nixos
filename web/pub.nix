@@ -3,7 +3,8 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   vars = (import ../customization/vars.nix { inherit lib; });
 
-  domain = "pub.${vars.domain}";
+  domain = "consul.${calculated.myDomain}";
+  topDomain = "consul.${vars.domain}";
   consulService = "pub";
   consulDomain = "${consulService}.service.consul.${vars.domain}";
   checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
@@ -16,6 +17,7 @@ in
     server {
       listen 443 ssl http2;
       server_name ${domain};
+      server_name ${topDomain};
       server_name ${consulDomain};
       server_name ${checkDomain};
 
@@ -31,7 +33,9 @@ in
     server {
       listen 80;
       server_name ${domain};
+      server_name ${topDomain};
       server_name ${consulDomain};
+      server_name ${checkDomain};
 
       location / {
         root ${path};
