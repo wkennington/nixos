@@ -41,7 +41,7 @@ in
       }
 
       location /.well-known/acme-challenge/ {
-        root /var/lib/letsencrypt/www;
+        root /var/lib/letsencrypt/www/.well-known/acme-challenge;
         autoindex off;
       }
 
