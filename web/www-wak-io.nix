@@ -40,7 +40,7 @@ in
         autoindex on;
       }
 
-      location /.well-known/acme-challenge {
+      location /.well-known/acme-challenge/ {
         root /var/lib/letsencrypt/www;
         autoindex off;
       }
@@ -59,7 +59,7 @@ in
         rewrite ^(.*) https://${n}$1 permanent;
       }
 
-      location /.well-known/acme-challenge {
+      location /.well-known/acme-challenge/ {
         root /var/lib/letsencrypt/www/.well-known/acme-challenge;
         autoindex off;
       }
