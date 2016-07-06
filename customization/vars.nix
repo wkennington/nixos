@@ -92,10 +92,7 @@ rec {
   netMaps = {
     "abe-p" = {
       priv4 = "10.0.";
-      pub6 = "2001:470:88fa:000";
       priv6 = "fda4:941a:81b5:000";
-
-      timeZone = "America/New_York";
 
       pubDnsServers = [
         "8.8.8.8"
@@ -103,11 +100,13 @@ rec {
       ];
 
       pubNtpServers = [
-        "clock.nyc.he.net"
-        "0.us.pool.ntp.org"
-        "1.us.pool.ntp.org"
-        "2.us.pool.ntp.org"
+        { server = "clock.nyc.he.net"; weight = "5"; }
+        { server = "0.us.pool.ntp.org"; weight = "1"; }
+        { server = "1.us.pool.ntp.org"; weight = "1"; }
+        { server = "2.us.pool.ntp.org"; weight = "1"; }
       ];
+
+      timeZone = "America/New_York";
 
       gateways = [
         "atomic"
@@ -125,9 +124,21 @@ rec {
         { server = "atomic"; weight = "1"; }
       ];
 
+      consul = {
+        servers = [ "atomic" ];
+      };
+
       internalMachineMap = {
-        atomic = { id = 2; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
-        elite = { id = 31; vlans = [ "slan" "dlan" ]; };
+        atomic = {
+          id = 30;
+          vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
+          bmcMac = "00:12:83:36:DC:00";
+        };
+        elite = {
+          id = 31;
+          vlans = [ "slan" "dlan" ];
+          bmcMac = "00:12:83:36:DC:00";
+        };
       };
 
       nasIds = [ 8 9 ];

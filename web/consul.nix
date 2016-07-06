@@ -13,6 +13,7 @@ in
 with lib;
 {
   imports = [
+    ./base.nix
     ../common/consul.nix
   ];
 

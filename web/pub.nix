@@ -13,6 +13,7 @@ let
 in
 {
   imports = [ ./base.nix ];
+
   services.nginx.config = ''
     server {
       listen 443 ssl http2;
