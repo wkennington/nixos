@@ -14,7 +14,7 @@ with lib;
   hosts = {
     atomic = ''
       Address = atomic.wak.io
-      Ed25519PublicKey = wzPej5rz8cMNWE7YO2DIGUgChZ9CkfYkFIz1J0YCfKP
+      Ed25519PublicKey = CyQA7TSZ1hksT5YlM6JA1ZKsGwy4wufkG2UDg8+BGaA
     '';
     prodigy = ''
       Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2wJp8PzhAnGtezI
@@ -32,7 +32,7 @@ with lib;
       Ed25519PublicKey = nXRjIs3FLanILhsDF36XGq39lnojdL0VJJsvI52cAEA
     '';
     legend = ''
-      Address = lb.mtv-w.wak.io
+      Address = lazarus.wak.io
       Ed25519PublicKey = zSAeyznGvqmaQAOmv9F4LOQGWpGQJNGGzP5DrEK9tAE
       Subnet = 10.1.0.0/16
     '';
