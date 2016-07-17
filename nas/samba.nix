@@ -32,7 +32,9 @@ in
       ${calculated.vpnIp4 n}
     '');
 
-  environment.systemPackages = with pkgs; [ samba ];
+  environment.systemPackages = with pkgs; [
+    samba_full
+  ];
 
   services.samba = {
     enable = true;

@@ -39,8 +39,8 @@ let
   ctdbPath = pkgs.buildEnv {
     name = "ctdb-path";
     paths = [ samba ] ++ (with pkgs; [
-      tdb procps iproute gawk coreutils which nettools
-      gnused gnugrep ethtool iptables utillinux
+      tdb procps iproute gawk coreutils which net-tools
+      gnused gnugrep ethtool iptables util-linux_full
     ]);
     pathsToLink = [
       "/bin" "/sbin"
