@@ -60,6 +60,7 @@ in
     nmap
     config.programs.ssh.package
     openssl
+    powertop
     psmisc
     rsync
     smartmontools
