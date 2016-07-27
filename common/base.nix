@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    ./sub/base-bcachefs.nix
     # ./sub/base-dnsmasq.nix  # We are using unbound now
     ./sub/base-firewall.nix
     ./sub/base-hosts.nix
