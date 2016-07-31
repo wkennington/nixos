@@ -19,6 +19,9 @@ with lib;
     prodigy = ''
       Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2wJp8PzhAnGtezI
     '';
+    lotus = ''
+      Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2aJp8PzhAnGtezI
+    '';
     newton = ''
       Address = newton.wak.io
       Ed25519PublicKey = Y3l5+f/+GyOKcA99pXN5h2/DY5eYWYGSzVylKlv10lB

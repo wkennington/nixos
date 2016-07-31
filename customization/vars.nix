@@ -28,6 +28,7 @@ rec {
       page = 9;
       quest = 10;
       elite = 11;
+      lotus = 2;
     };
   };
 
@@ -40,7 +41,7 @@ rec {
       uid = 1000;
       description = "William A. Kennington III";
       canRoot = true;
-      loginMachines = [ "legend" "prodigy" ];
+      loginMachines = [ "legend" "prodigy" "lotus" ];
       canShareData = true;
     };
     bill = {
@@ -73,7 +74,7 @@ rec {
     };
   };
 
-  remotes = [ "nixos" "prodigy" ];
+  remotes = [ "nixos" "prodigy" "lotus" ];
 
   pubDnsServers = [
     "8.8.8.8"
