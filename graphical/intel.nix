@@ -2,9 +2,9 @@
 {
   imports = [ ./base.nix ];
   hardware.opengl.s3tcSupport = true;
-  services.kmscon.enable = true;
+  services.kmscon.enable = false;
   services.xserver = {
     vaapiDrivers = [ pkgs.vaapi-intel ];
-    videoDrivers = [ "intel" ];
+    videoDrivers = [ "modesetting" ];
   };
 }
