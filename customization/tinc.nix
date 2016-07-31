@@ -20,7 +20,7 @@ with lib;
       Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2wJp8PzhAnGtezI
     '';
     lotus = ''
-      Ed25519PublicKey = kKcEmjbD+1Fx8llu6xlAQsBiuSmb2aJp8PzhAnGtezI
+      Ed25519PublicKey = M0pHIXS55y831Hhs4zvB8PbdBfXV6T5hFMRSYMW8WeC
     '';
     newton = ''
       Address = newton.wak.io
