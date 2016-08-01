@@ -114,6 +114,7 @@ in
         inherit uid description;
         createHome = canLogin;
         home = "/home/${user}";
+        group = if canLogin then "users" else "nogroup";
         extraGroups = [ ]
           ++ optional canRoot "wheel"
           ++ optional canShareData "share";

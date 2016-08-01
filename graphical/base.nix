@@ -10,7 +10,10 @@ with lib;
   environment.systemPackages = [ pkgs.slock ];
   services = {
     kmscon.hwRender = true;
-    pcscd.enable = true;
+    pcscd = {
+      enable = true;
+      allowedGroups = [ "users" ];
+    };
     xserver = {
       enable = true;
       windowManager.default = "none";
