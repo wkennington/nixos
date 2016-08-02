@@ -28,7 +28,7 @@ rec {
       page = 9;
       quest = 10;
       elite = 11;
-      lotus = 2;
+      lotus = 12;
     };
   };
 
