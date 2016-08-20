@@ -35,7 +35,7 @@ with lib;
       Ed25519PublicKey = nXRjIs3FLanILhsDF36XGq39lnojdL0VJJsvI52cAEA
     '';
     legend = ''
-      Address = lazarus.wak.io
+      Address = legend.wak.io
       Ed25519PublicKey = zSAeyznGvqmaQAOmv9F4LOQGWpGQJNGGzP5DrEK9tAE
       Subnet = 10.1.0.0/16
     '';
