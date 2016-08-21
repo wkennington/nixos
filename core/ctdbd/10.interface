@@ -1,4 +1,4 @@
-#!/nix/store/kz4aii9y5kdxilxrjdz55gdr0piziwcz-bash-4.3-p33/bin/sh  
+#!/bin/sh
 
 #################################
 # interface event script for ctdb
