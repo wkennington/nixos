@@ -8,6 +8,7 @@ with lib;
   sound.enable = true;
 
   environment.systemPackages = [ pkgs.slock ];
+  security.sudo.enable = true;
   services = {
     kmscon.hwRender = true;
     pcscd = {
