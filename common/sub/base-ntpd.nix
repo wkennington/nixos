@@ -13,7 +13,7 @@ with lib;
       enable = true;
       extraOptions = "-s";
       extraConfig = ''
-        ${concatStringsSep "\n" (map ({ server, weight }: "servers ${server} weight ${weight}") calculated.myNtpServers)}
+        ${concatStringsSep "\n" (map ({ server, weight }: "server ${server} weight ${weight}") calculated.myNtpServers)}
       '';
     };
   };
