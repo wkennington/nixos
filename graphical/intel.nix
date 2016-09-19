@@ -4,7 +4,7 @@
   hardware.opengl.s3tcSupport = true;
   services.kmscon.enable = false;
   services.xserver = {
-    vaapiDrivers = [ pkgs.vaapi-intel ];
+    vaapiDrivers = [ pkgs.libva-intel-driver ];
     videoDrivers = [ "modesetting" ];
   };
 }
