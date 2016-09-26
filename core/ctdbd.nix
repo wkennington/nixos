@@ -6,31 +6,35 @@ let
     "functions"
     "events.d/00.ctdb"
     "events.d/01.reclock"
-    #"events.d/10.interface"
+    "events.d/10.interface"
     "events.d/11.routing"
     "events.d/99.timeout"
   ];
   files = {
     "ctdb/ctdbd.conf".text = ''
       CTDBD=${samba}/bin/ctdbd
-      CTDB_LOGFILE=/dev/null
-      CTDB_SYSLOG=yes
-      CTDB_VARDIR=/var/lib/ctdb
+      CTDB_PIDFILE=/run/ctdb/ctdb.pid
       CTDB_BASE=/etc/ctdb
-      CTDB_SOCKET=/run/ctdb/ctdbd.socket
+      CTDB_DBDIR=/var/lib/ctdb
+      CTDB_DBDIR_PERSISTENT=/var/lib/ctdb/persistent
+      CTDB_DBDIR_STATE=/var/lib/ctdb/state
+      CTDB_DEBUGLEVEL=5
+      CTDB_EVENT_SCRIPT_DIR=/etc/ctdb/events.d
+      CTDB_LOGGING=syslog
       CTDB_NODES=/etc/ctdb/nodes
       CTDB_PUBLIC_ADDRESSES=/etc/ctdb/public_addresses
-
       CTDB_RECOVERY_LOCK=/ceph/ctdb/reclock
-
-      #CTDB_DEBUGLEVEL=5
+      CTDB_SOCKET=/run/ctdb/ctdbd.socket
       CTDB_STARTUP_TIMEOUT=60
+
+      CTDB_VARDIR=/var/lib/ctdb
+
+      CTDB_NOSETSCHED=yes
     '';
     "ctdb/public_addresses".text = ''
     '';
     "ctdb/nodes".text = ''
     '';
-    "ctdb/events.d/10.interface".source = ./ctdbd/10.interface;
   } // listToAttrs (flip map needed
     (n: nameValuePair "ctdb/${n}" { source = "${samba}/etc/ctdb/${n}"; }));
 
@@ -38,12 +42,23 @@ let
 
   ctdbPath = pkgs.buildEnv {
     name = "ctdb-path";
-    paths = [ samba ] ++ (with pkgs; [
-      tdb procps iproute gawk coreutils which net-tools
-      gnused gnugrep ethtool iptables util-linux_full
-    ]);
+    paths = [
+      samba
+      pkgs.coreutils
+      pkgs.gawk
+      pkgs.gnugrep
+      pkgs.gnused
+      pkgs.ethtool
+      pkgs.iproute
+      pkgs.iptables
+      pkgs.net-tools
+      pkgs.procps
+      pkgs.tdb
+      pkgs.util-linux_full
+      pkgs.which
+    ];
     pathsToLink = [
-      "/bin" "/sbin"
+      "/bin"
     ];
     ignoreCollisions = true;
   };
@@ -88,6 +103,8 @@ in
 
     path = [ ctdbPath ];
 
+    environment.CTDBD_CONF = "/etc/ctdb/ctdbd.conf";
+
     restartTriggers = flip mapAttrsToList files
       (name: data: config.environment.etc.${name}.source);
 
@@ -95,7 +112,7 @@ in
       ${samba}/bin/ctdb stop
       ${samba}/bin/ctdb shutdown
     '';
-    
+
     serviceConfig = {
       Type = "forking";
       ExecStart = "@${samba}/bin/ctdbd_wrapper ctdbd /run/ctdb/ctdbd.pid start";
