@@ -37,6 +37,7 @@ in
     };
   };
   environment.systemPackages = with pkgs; [
+    acme-client
     acpi
     dnsutils
     edac-utils
