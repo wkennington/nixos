@@ -39,7 +39,7 @@ in
   environment.systemPackages = with pkgs; [
     acme-client
     acpi
-    dnsutils
+    bind_tools
     edac-utils
     efibootmgr
     fish
