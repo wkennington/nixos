@@ -41,7 +41,7 @@ in
       }
 
       location /.well-known/acme-challenge {
-        root /var/lib/acme;
+        alias /var/lib/acme;
         autoindex on;
       }
 
@@ -60,7 +60,7 @@ in
       }
 
       location /.well-known/acme-challenge {
-        root /var/lib/acme;
+        alias /var/lib/acme;
         autoindex on;
       }
     }
