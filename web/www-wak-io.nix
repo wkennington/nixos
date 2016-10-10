@@ -40,9 +40,9 @@ in
         autoindex on;
       }
 
-      location /.well-known/acme-challenge/ {
-        root /var/lib/letsencrypt/www/.well-known/acme-challenge;
-        autoindex off;
+      location /.well-known/acme-challenge {
+        root /var/lib/acme;
+        autoindex on;
       }
 
       error_page 500 502 503 504 /50x.html;
@@ -60,8 +60,8 @@ in
       }
 
       location /.well-known/acme-challenge/ {
-        root /var/lib/letsencrypt/www/.well-known/acme-challenge;
-        autoindex off;
+        root /var/lib/acme;
+        autoindex on;
       }
     }
   '');
