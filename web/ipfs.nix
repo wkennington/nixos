@@ -45,25 +45,56 @@ with lib;
           }
         }
 
+        location /.well-known/acme-challenge {
+          alias /var/lib/acme;
+          expires -1;
+          autoindex on;
+        }
+
         ${import sub/ssl-settings.nix { inherit domain; }}
       }
 
       server {
         listen 80;
         server_name ${domain};
-        rewrite ^(.*) https://${domain}$1 permanent;
+
+        location / {
+          rewrite ^(.*) https://${domain}$1 permanent;
+        }
+
+        location /.well-known/acme-challenge {
+          alias /var/lib/acme;
+          expires -1;
+          autoindex on;
+        }
       }
 
       server {
         listen 80;
         server_name ${consulDomain};
-        rewrite ^(.*) https://${consulDomain}$1 permanent;
+        location / {
+          rewrite ^(.*) https://${consulDomain}$1 permanent;
+        }
+
+        location /.well-known/acme-challenge {
+          alias /var/lib/acme;
+          expires -1;
+          autoindex on;
+        }
       }
 
       server {
         listen 80;
         server_name ${topDomain};
-        rewrite ^(.*) https://${topDomain}$1 permanent;
+        location / {
+          rewrite ^(.*) https://${topDomain}$1 permanent;
+        }
+
+        location /.well-known/acme-challenge {
+          alias /var/lib/acme;
+          expires -1;
+          autoindex on;
+        }
       }
     '';
   };
