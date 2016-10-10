@@ -60,7 +60,7 @@ in
         rewrite ^(.*) https://${n}$1 permanent;
       }
 
-      location /.well-known/acme-challenge/ {
+      location /.well-known/acme-challenge {
         alias /var/lib/acme;
         expires -1;
         autoindex on;
