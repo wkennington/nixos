@@ -7,6 +7,6 @@ in
     pkgs.glusterfs
   ];
   networking.firewall.extraCommands = ''
-    ip46tables -A INPUT -p tcp --dport 24007 -s ${calculated.myInternalIp4Net} -j ACCEPT
+    iptables -A INPUT -p tcp --dport 24007 -s ${calculated.myInternalIp4Net} -j ACCEPT
   '';
 }
