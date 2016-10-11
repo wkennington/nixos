@@ -95,7 +95,8 @@ in
   system.extraDependencies = with pkgs; [
     # Extra compilers take a long time to compile so keep them always
     go
-    #rustc
+    rustc
+    stdenv
 
     # We always want to keep small trust roots
     cacert dnssec-root
