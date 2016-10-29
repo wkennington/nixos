@@ -99,7 +99,9 @@ in
     stdenv
 
     # We always want to keep small trust roots
-    cacert dnssec-root
+    cacert
+    dnssec-root
+    root-nameservers
   ] ++ stdenv.bootstrappedPackages; # Make sure we never need the bootstrap
   users = {
     mutableUsers = false;
