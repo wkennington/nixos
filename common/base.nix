@@ -39,7 +39,9 @@ in
   environment.systemPackages = with pkgs; [
     acme-client
     acpi
+    aria2
     bind_tools
+    curl
     edac-utils
     efibootmgr
     fish
