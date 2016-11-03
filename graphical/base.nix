@@ -15,6 +15,9 @@ with lib;
       enable = true;
       allowedGroups = [ "users" ];
     };
+    udev.packages = [
+      pkgs.libu2f-host
+    ];
     xserver = {
       enable = true;
       windowManager.default = "none";
