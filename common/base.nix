@@ -41,6 +41,7 @@ in
     acpi
     aria2
     bind_tools
+    borgbackup
     curl
     edac-utils
     efibootmgr
