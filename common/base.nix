@@ -70,6 +70,7 @@ in
     smartmontools
     sysstat
     tcpdump
+    time
     tmux
     vim
   ];
