@@ -25,6 +25,7 @@ in
       location / {
         root ${path};
         autoindex on;
+        autoindex_exact_size off;
       }
 
       location /.well-known/acme-challenge {
@@ -48,6 +49,7 @@ in
       location / {
         root ${path};
         autoindex on;
+        autoindex_exact_size off;
       }
 
       location /.well-known/acme-challenge {
