@@ -59,6 +59,7 @@ in
     iptables
     ldns
     lm-sensors
+    mcelog
     mtr
     nftables
     nmap
