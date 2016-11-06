@@ -3,10 +3,10 @@
 let
   calculated = (import ./calculated.nix { inherit config lib; });
 
-  timeSyncdScript = pkgs.writeScript "osd-script" ''
+  timeSyncdScript = pkgs.writeScript "time-syncd-script" ''
     #! ${pkgs.stdenv.shell} -e
     export PATH="${pkgs.chrony}/bin:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin"
-    out="$(chronyc tracking)"
+    out="$(chronyc tracking)" || exit 1
     echo "$out" >&2
     chronyc sourcestats
     if [ "$(echo "$out" | awk -F'[ ]*:[ ]*' '/Stratum/{print $2;}')" -eq "0" ]; then
@@ -70,10 +70,7 @@ with lib;
       id = "chronyd";
       name = "Chrony Clock Sync";
       script = ''
-        if ! ${timeSyncdScript}; then
-          exit 2 # Critical Error
-        fi
-        exit 0
+        ${timeSyncdScript} || exit 2 # Exit 2 means critical
       '';
       interval = "10s";
     };
