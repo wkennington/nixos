@@ -26,6 +26,10 @@ with lib;
     };
     chrony = {
       enable = true;
+      initstepslew = {
+        enable = true;
+        threshold = "0.1";
+      };
       extraConfig = ''
         leapsecmode slew
         maxslewrate 1000
@@ -40,10 +44,7 @@ with lib;
   '';
 
   systemd.targets.time-syncd = {
-    description = ''
-      This target is met when the time is in sync
-      with upstream servers.
-    '';
+    description = "This target is met when the time is in sync with upstream servers.";
     requires = [
       "time-syncd.service"
     ];
@@ -59,9 +60,11 @@ with lib;
     };
 
     script = ''
+      echo "Checking for time sync" >&2
       while ! ${timeSyncdScript}; do
         sleep 5
       done
+      echo "Time is in sync" >&2
     '';
   };
 
