@@ -1,30 +1,55 @@
 { config, lib, pkgs, ... }:
+
 let
   calculated = (import ./calculated.nix { inherit config lib; });
+
+  timeSyncdScript = pkgs.writeScript "osd-script" ''
+    #! ${pkgs.stdenv.shell} -e
+    export PATH="${pkgs.chrony}/bin:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin"
+    out="$(chronyc tracking)"
+    echo "$out" >&2
+    chronyc sourcestats
+    if [ "$(echo "$out" | awk -F'[ ]*:[ ]*' '/Stratum/{print $2;}')" -eq "0" ]; then
+      exit 1
+    fi
+    if ! echo "$out" | awk -F'[ ]*:[ ]*' '/System time/{print $2;}' | grep -q '^0.000'; then
+      exit 1
+    fi
+    exit 0
+  '';
 in
 with lib;
 {
   services = {
     ntp = {
-      enable = false;
-      servers = [ ];
+      servers = map ({ server, weight}: server) calculated.myNtpServers;
     };
-    openntpd = {
+    chrony = {
       enable = true;
-      extraOptions = "-s";
       extraConfig = ''
-        ${concatStringsSep "\n" (map ({ server, weight }: "server ${server} weight ${weight}") calculated.myNtpServers)}
+        leapsecmode slew
+        maxslewrate 1000
+        smoothtime 400 0.001
+        leapsectz right/UTC
       '';
     };
   };
 
   networking.firewall.extraCommands = ''
-    ip46tables -A OUTPUT -m owner --uid-owner ntp -p udp --dport ntp -j ACCEPT
+    ip46tables -A OUTPUT -m owner --uid-owner chrony -p udp --dport ntp -j ACCEPT
   '';
 
   systemd.targets.time-syncd = {
-    requires = [ "time-syncd.service" ];
-    after = [ "time-syncd.service" ];
+    description = ''
+      This target is met when the time is in sync
+      with upstream servers.
+    '';
+    requires = [
+      "time-syncd.service"
+    ];
+    after = [
+      "time-syncd.service"
+    ];
   };
 
   systemd.services.time-syncd = {
@@ -33,66 +58,31 @@ with lib;
       TimeoutStartSec = "0";
     };
 
-    path = with pkgs; [ gnugrep openntpd ];
-
     script = ''
-      while true; do
-        if ntpctl -s status | grep -q 'clock synced'; then
-          exit 0
-        fi
-        sleep 30
+      while ! ${timeSyncdScript}; do
+        sleep 5
       done
     '';
   };
 
-  systemd.timers.check-ntpd = {
-    wantedBy = [ "timers.target" ];
-    requires = [ "openntpd.service" ];
-    bindsTo = [ "openntpd.service" ];
-
-    timerConfig = {
-      OnActiveSec = 60;
-      OnUnitActiveSec = 60;
-    };
-  };
-
-  systemd.services.check-ntpd = {
-    requires = [ "openntpd.service" ];
-    after = [ "openntpd.service" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-    };
-
-    path = with pkgs; [ gnugrep openntpd config.systemd.package ];
-
-    script = ''
-      if ntpctl -s all | grep -q 'not resolved'; then
-        systemctl restart openntpd
-      fi
-    '';
-  };
-
-  environment.etc."consul.d/openntpd.json".text = builtins.toJSON {
+  environment.etc."consul.d/chronyd.json".text = builtins.toJSON {
     check = {
-      id = "openntpd";
-      name = "Openntpd Clock Sync";
+      id = "chronyd";
+      name = "Chrony Clock Sync";
       script = ''
-        OUT="$(${pkgs.openntpd}/bin/ntpctl -s all)"
-        echo "$OUT"
-        if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q 'clock synced'; then
-          exit 0
+        if ! ${timeSyncdScript}; then
+          exit 2 # Critical Error
         fi
-        exit 2 # Critical Error
+        exit 0
       '';
-      interval = "60s";
+      interval = "10s";
     };
   };
 
-  systemd.services.openntpd.postStart = lib.optionalString config.services.consul.enable ''
-    while [ ! -e "/run/ntpd.sock" ]; do
+  systemd.services.chronyd.postStart = lib.optionalString config.services.consul.enable ''
+    while [ ! -e "/run/chrony/chronyd.sock" ]; do
       sleep 1
     done
-    ${pkgs.acl}/bin/setfacl -m u:consul:rw /run/ntpd.sock
+    ${pkgs.acl}/bin/setfacl -m u:consul:rw /run/chrony/chronyd.sock
   '';
 }
