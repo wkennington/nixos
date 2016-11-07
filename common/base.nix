@@ -106,16 +106,11 @@ in
   ] ++ stdenv.bootstrappedPackages; # Make sure we never need the bootstrap
   users = {
     mutableUsers = false;
-    extraUsers = {
-      root = {
-        hashedPassword = null;
-        passwordFile = "/conf/pw/root";
-      };
-    } // flip mapAttrs vars.userInfo (user:
-      { uid, description, canRoot, loginMachines, canShareData }:
+    extraUsers = flip mapAttrs vars.userInfo (user:
+      { uid, description, canRoot, loginMachines, canShareData, sshKeys }:
       let
-        canLogin = any (n: n == config.networking.hostName) loginMachines;
-      in {
+        canLogin = if user == "root" then true else any (n: n == config.networking.hostName) loginMachines;
+      in (if user == "root" then { } else {
         inherit uid description;
         createHome = canLogin;
         home = "/home/${user}";
@@ -124,7 +119,10 @@ in
           ++ optional canRoot "wheel"
           ++ optional canShareData "share";
         useDefaultShell = canLogin;
+      }) // {
+        hashedPassword = null;
         passwordFile = if canLogin then "/conf/pw/${user}" else null;
+        openssh.authorizedKeys.keys = if canLogin then sshKeys else [ ];
       });
     extraGroups = {
       share.gid = 1001;
