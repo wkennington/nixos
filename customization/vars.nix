@@ -17,13 +17,18 @@ rec {
     tlan = 5;
   };
 
+  portMap = {
+  };
+
   vpn = {
     # Assumes a prefix of /24
-    subnet = "192.168.17.";
+    subnet4 = "192.168.17.";
+    subnet6 = "fdd5:7d0c:d804::";
     idMap = {
       prodigy = 2;
       atomic = 3;
       legend = 4;
+      nevada = 5;
       newton = 8;
       page = 9;
       quest = 10;

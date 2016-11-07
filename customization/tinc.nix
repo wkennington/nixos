@@ -37,7 +37,6 @@ with lib;
     legend = ''
       Address = legend.wak.io
       Ed25519PublicKey = zSAeyznGvqmaQAOmv9F4LOQGWpGQJNGGzP5DrEK9tAE
-      Subnet = 10.1.0.0/16
     '';
   };
 }

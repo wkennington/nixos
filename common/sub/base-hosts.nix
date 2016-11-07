@@ -17,6 +17,11 @@ let
         { "${calculated.internalIp4 host vlan}" = "${host}.${vlan}.${dc}.${vars.domain}"; }
       ])
     ))
+  )) ++ concatLists (flip mapAttrsToList vars.vpn.idMap (host: id:
+    [
+      { "${calculated.vpnIp6 host}" = "${host}.vpn.${vars.domain}"; }
+      { "${calculated.vpnIp4 host}" = "${host}.vpn.${vars.domain}"; }
+    ]
   ));
 
   ipHosts = foldAttrs (n: a: [ n ] ++ a) [ ] ipHosts';

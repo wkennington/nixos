@@ -10,7 +10,8 @@ rec {
     dcs = flip filterAttrs vars.netMaps (dc: { internalMachineMap, ... }:
       internalMachineMap ? "${name}");
   in if isRemote name then "remote" else head (attrNames dcs);
-  vpnIp4 = name: "${vars.vpn.subnet}${toString vars.vpn.idMap.${name}}";
+  vpnIp4 = name: "${vars.vpn.subnet4}${toString vars.vpn.idMap.${name}}";
+  vpnIp6 = name: "${vars.vpn.subnet6}${toString vars.vpn.idMap.${name}}";
   internalIp4Net = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
   internalIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
@@ -38,6 +39,7 @@ rec {
   myDc = dc host;
   myDomain = domain host;
   myVpnIp4 = vpnIp4 host;
+  myVpnIp6 = vpnIp6 host;
   myInternalIp4 = internalIp4 host (head myNetData.vlans);
   myPublicIp4 = publicIp4 host;
   myPublicIp6 = publicIp6 host;

@@ -1,5 +1,9 @@
 { config, lib, ... }:
+
+with lib;
 let
+  vars = (import ../../customization/vars.nix { inherit lib; });
+
   cores = config.nix.maxJobs;
   pwr = num:
     if num < 2 then
@@ -11,7 +15,6 @@ let
       p2bottom = pwr cores;
     in if p2bottom < cores then p2bottom*2 else p2bottom;
 in
-with lib;
 {
   # Make sure we always use unbound
   networking.hasLocalResolver = true;
@@ -50,6 +53,12 @@ with lib;
         interface: 0.0.0.0
         interface: ::0
         access-control: 0.0.0.0/0 allow
+        local-zone: "vpn.${vars.domain}" refuse
+      ${flip concatMapStrings ([ null ] ++ attrNames vars.netMaps) (dc:
+        flip concatMapStrings (attrNames vars.internalVlanMap) (lan:
+          "  local-zone: \"${lan}.${optionalString (dc != null) "${dc}."}${vars.domain}\" refuse\n"
+        )
+      )}
       remote-control:
         control-enable: yes
         control-use-cert: no
