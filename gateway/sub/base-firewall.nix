@@ -19,6 +19,11 @@ in
       ip46tables -A FORWARD -i ${n} -o ${vars.domain}.vpn -j ACCEPT
     '') (filter (n: n != "${vars.domain}.vpn") config.myNatIfs))}
 
+    # Masquerade all vpn connections
+    # If we hit a node with vpn support we might have asymmetric routing otherwise.
+    iptables -t mangle -A PREROUTING -s "${vars.vpn.subet4}0/24" -j MARK --set-mark 0x11
+    iptables -t nat -A POSTROUTING -m mark --mark 0x11 -j MASQUERADE
+
     # Masquerade all private connections
     iptables -t mangle -A PREROUTING -m set --match-set private src -j MARK --set-mark 0x10
     #iptables -t nat -A POSTROUTING -m mark --mark 0x10 -j MASQUERADE
