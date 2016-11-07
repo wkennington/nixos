@@ -29,6 +29,8 @@ let
     Endpoint = ${endpoint}
   '')));
 
+  confFile = "/dev/shm/wg/${vars.domain}.conf";
+
   wgBuilder = pkgs.writeScript "wg.${vars.domain}.conf-builder" ''
     #! ${pkgs.stdenv.shell} -e
 
@@ -65,7 +67,9 @@ let
       sed -i '/@PSK@/d' "$TMP"
     fi
 
-    mv "$TMP" "/etc/wg.${vars.domain}.conf"
+    mkdir -p "$(dirname "${confFile}")"
+    chmod 0700 "$(dirname "${confFile}")"
+    mv "$TMP" "${confFile}"
   '';
 in
 {
@@ -73,7 +77,7 @@ in
     ./sub/vpn.nix
   ];
   
-  networking.wgs."${vars.domain}.vpn".configFile = "/etc/wg.${vars.domain}.conf";
+  networking.wgs."${vars.domain}.vpn".configFile = confFile;
   
   networking.firewall.extraCommands = ''
     ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
