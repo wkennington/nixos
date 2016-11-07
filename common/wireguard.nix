@@ -25,6 +25,10 @@ let
     PublicKey = ${publicKey}
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
+  '' + optionalString (any (n: n == host) netMap.gateways) ''
+    AllowedIPs = ${vars.netMaps."${calculated.dc host}".priv4}0.0/16
+  '' + optionalString ((calculated.iAmRemote || calculated.iAmGateway) && any (n: n == host) netMap.gateways) ''
+    PersistentKeepalive = 20
   '' + optionalString (endpoint != null) ''
     Endpoint = ${endpoint}
   '')));
