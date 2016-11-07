@@ -31,6 +31,7 @@ rec {
       legend = 4;
       nevada = 5;
       atlas = 6;
+      ferrari = 7;
       newton = 8;
       page = 9;
       quest = 10;
