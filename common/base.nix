@@ -77,6 +77,7 @@ in
     amd.updateMicrocode = true;
   };
   networking.domain = calculated.myDomain;
+  networking.search = [ vars.domain ];
   nix = {
     nrBuildUsers = config.nix.maxJobs * 10;
     buildCores = config.nix.maxJobs;
