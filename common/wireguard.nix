@@ -68,6 +68,7 @@ let
     fi
 
     mkdir -p "$(dirname "${confFile}")"
+    chown root:root "$(dirname "${configFile}")"
     chmod 0700 "$(dirname "${confFile}")"
     mv "$TMP" "${confFile}"
   '';
