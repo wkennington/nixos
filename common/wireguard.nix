@@ -28,6 +28,45 @@ let
   '' + optionalString (endpoint != null) ''
     Endpoint = ${endpoint}
   '')));
+
+  wgBuilder = pkgs.writeScript "wg.${vars.domain}.conf-builder" ''
+    #! ${pkgs.stdenv.shell} -e
+
+    cleanup() {
+      rm -f "$TMP"
+      trap - EXIT
+      exit 0
+    }
+    trap cleanup EXIT ERR INT QUIT PIPE TERM
+    TMP="$(mktemp -p "/dev/shm")"
+    chmod 0600 "$TMP"
+    cat "${confFileIn}" >"$TMP"
+
+    if ! test -e "${keyFile}" || ! wg pubkey <"${keyFile}" >/dev/null 2>&1; then
+      exit 2
+    fi
+    export KEY="$(cat "${keyFile}")"
+    awk -i inplace '
+      {
+        gsub(/@KEY@/, ENVIRON["KEY"]);
+        print;
+      }
+    ' "$TMP"
+
+    if test -e "/conf/wireguard/${vars.domain}.psk"; then
+      export PSK="$(cat "${pskFile}")"
+      awk -i inplace '
+        {
+          gsub(/@PSK@/, ENVIRON["PSK"]);
+          print;
+        }
+      ' "$TMP"
+    else
+      sed -i '/@PSK@/d' "$TMP"
+    fi
+
+    mv "$TMP" "/etc/wg.${vars.domain}.conf"
+  '';
 in
 {
   imports = [
@@ -45,7 +84,19 @@ in
     serviceConfig = {
       Type = "oneshot";
       Restart = "no";
+      RemainAfterExit = true;
+      ExecStart = wgBuilder;
+      ExecReload = wgBuilder;
     };
+
+    unitConfig = {
+      PropagatesReloadTo = "network-dev-${vars.domain}.vpn.service";
+    };
+
+    restartTriggers = [
+      confFileIn
+    ];
+    reloadIfChanged = true;
 
     requiredBy = [
       "network-dev-${vars.domain}.vpn.service"
@@ -60,42 +111,5 @@ in
       pkgs.gnused
       pkgs.wireguard
     ];
-
-    script = ''
-      cleanup() {
-        rm -f "$TMP"
-        trap - EXIT
-        exit 0
-      }
-      trap cleanup EXIT ERR INT QUIT PIPE TERM
-      TMP="$(mktemp -p "/dev/shm")"
-      chmod 0600 "$TMP"
-      cat "${confFileIn}" >"$TMP"
-
-      if ! test -e "${keyFile}" || ! wg pubkey <"${keyFile}" >/dev/null 2>&1; then
-        exit 2
-      fi
-      export KEY="$(cat "${keyFile}")"
-      awk -i inplace '
-        {
-          gsub(/@KEY@/, ENVIRON["KEY"]);
-          print;
-        }
-      ' "$TMP"
-
-      if test -e "/conf/wireguard/${vars.domain}.psk"; then
-        export PSK="$(cat "${pskFile}")"
-        awk -i inplace '
-          {
-            gsub(/@PSK@/, ENVIRON["PSK"]);
-            print;
-          }
-        ' "$TMP"
-      else
-        sed -i '/@PSK@/d' "$TMP"
-      fi
-
-      mv "$TMP" "/etc/wg.${vars.domain}.conf"
-    '';
   };
 }
