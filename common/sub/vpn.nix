@@ -25,9 +25,10 @@ in
       ];
     };
 
-    localCommands = flip concatMapStrings extraRoutes (n: ''
-      ip route del "${n}" dev "${vars.domain}.vpn" >/dev/null 2>&1 || true
-      ip route add "${n}" dev "${vars.domain}.vpn"
-    '');
+    localCommands = optionalString (calculated.iAmGateway || calculated.iAmRemote) (
+      flip concatMapStrings extraRoutes (n: ''
+        ip route del "${n}" dev "${vars.domain}.vpn" >/dev/null 2>&1 || true
+        ip route add "${n}" dev "${vars.domain}.vpn"
+      ''));
   };
 }
