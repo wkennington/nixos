@@ -329,7 +329,6 @@ rec {
 
     "mtv-w" = {
       priv4 = "10.1.";
-      pub6 = "2001:470:810a:000";
       priv6 = "fda4:941a:81b5:100";
 
       pubDnsServers = [
