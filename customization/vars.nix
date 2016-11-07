@@ -30,6 +30,7 @@ rec {
       atomic = 3;
       legend = 4;
       nevada = 5;
+      atlas = 6;
       newton = 8;
       page = 9;
       quest = 10;

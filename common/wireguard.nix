@@ -7,7 +7,7 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
   # Make sure this is only used for wireguard and nothing else
-  port = 655;
+  port = 656;
 
   # Files needed to build the configuration
   secretDir = "/conf/wireguard";
@@ -89,20 +89,15 @@ in
       ExecReload = wgBuilder;
     };
 
-    unitConfig = {
-      PropagatesReloadTo = "network-dev-${vars.domain}.vpn.service";
-    };
-
     restartTriggers = [
       confFileIn
     ];
-    reloadIfChanged = true;
 
     requiredBy = [
-      "network-dev-${vars.domain}.vpn.service"
+      "wg-config-${vars.domain}.vpn.service"
     ];
     before = [
-      "network-dev-${vars.domain}.vpn.service"
+      "wg-config-${vars.domain}.vpn.service"
     ];
 
     path = [
