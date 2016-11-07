@@ -1,6 +1,7 @@
 { config, lib, ... }:
 with lib;
 let
+  vars = (import ../../customization/vars.nix { inherit lib; });
   calculated = (import ../../common/sub/calculated.nix { inherit config lib; });
 
   natval = let
@@ -15,8 +16,8 @@ in
       ip46tables -w -A FORWARD -i ${n} -o wan -j ACCEPT
       ip46tables -w -A FORWARD -i ${n} -o gwan -j ACCEPT
       ip6tables -w -A FORWARD -i ${n} -o hurricane -j ACCEPT
-      ip46tables -A FORWARD -i ${n} -o tinc.vpn -j ACCEPT
-    '') (filter (n: n != "tinc.vpn") config.myNatIfs))}
+      ip46tables -A FORWARD -i ${n} -o ${vars.domain}.vpn -j ACCEPT
+    '') (filter (n: n != "${vars.domain}.vpn") config.myNatIfs))}
 
     # Masquerade all private connections
     iptables -t mangle -A PREROUTING -m set --match-set private src -j MARK --set-mark 0x10
