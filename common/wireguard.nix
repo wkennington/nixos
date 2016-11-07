@@ -19,15 +19,19 @@ let
     PrivateKey = @KEY@
     PresharedKey = @PSK@
     ListenPort = ${toString port}
-  '' + concatStrings (flip mapAttrsToList wgConfig.hosts (host: { publicKey, endpoint ? null }: ''
+  '' + concatStrings (flip mapAttrsToList wgConfig.hosts (host: { publicKey, endpoint ? null }: let
+    netMap = vars.netMaps."${calculated.dc host}";
+    remote = calculated.isRemote host;
+    gateway = !remote && any (n: n == host) netMap.gateways;
+  in ''
     
     [Peer]
     PublicKey = ${publicKey}
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
-  '' + optionalString (any (n: n == host) netMap.gateways) ''
-    AllowedIPs = ${vars.netMaps."${calculated.dc host}".priv4}0.0/16
-  '' + optionalString ((calculated.iAmRemote || calculated.iAmGateway) && any (n: n == host) netMap.gateways) ''
+  '' + optionalString gateway ''
+    AllowedIPs = ${netMap.priv4}0.0/16
+  '' + optionalString ((calculated.iAmRemote || calculated.iAmGateway) && gateway) ''
     PersistentKeepalive = 20
   '' + optionalString (endpoint != null) ''
     Endpoint = ${endpoint}
@@ -72,7 +76,7 @@ let
     fi
 
     mkdir -p "$(dirname "${confFile}")"
-    chown root:root "$(dirname "${configFile}")"
+    chown root:root "$(dirname "${confFile}")"
     chmod 0700 "$(dirname "${confFile}")"
     mv "$TMP" "${confFile}"
   '';
