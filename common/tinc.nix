@@ -16,8 +16,7 @@ in
   ];
 
   environment.systemPackages = [
-  environment.systemPackages = [
-    config.services.tinc.networks.vpn.package
+    config.services.tinc.networks."${vars.domain}.vpn".package
   ];
 
   fileSystems = [
@@ -64,7 +63,8 @@ in
           hostMap = netMap.internalMachineMap.${host};
           gateway = any (n: n == host) netMap.gateways;
         in ''
-          Subnet = ${vars.vpn.subnet}${toString vars.vpn.idMap.${host}}/32
+          Subnet = ${vars.vpn.subnet4}${toString vars.vpn.idMap.${host}}/32
+          Subnet = ${vars.vpn.subnet6}${toString vars.vpn.idMap.${host}}/128
         '' + optionalString (!remote) (
           flip concatMapStrings (hostMap.vlans) (vlan: ''
             Subnet = ${calculated.internalIp4 host vlan}/32
