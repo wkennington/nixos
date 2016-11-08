@@ -7,23 +7,27 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
   # Make sure this is only used for wireguard and nothing else
-  port = 656;
+  ports = {
+    "${vars.domain}" = 656;
+    "gw.${vars.domain}" = 657;
+  };
+  port = name: ports."${name}";
 
   # Files needed to build the configuration
   secretDir = "/conf/wireguard";
-  keyFile = "${secretDir}/${vars.domain}.key";
-  pskFile = "${secretDir}/${vars.domain}.psk";
+  keyFile = name: "${secretDir}/${name}.key";
+  pskFile = name: "${secretDir}/${name}.psk";
 
-  confFileIn = pkgs.writeText "wg.conf.in" (''
+  confFileIn = name: pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
     PrivateKey = @KEY@
     PresharedKey = @PSK@
-    ListenPort = ${toString port}
+    ListenPort = ${toString (port name)}
   '' + concatStrings (flip mapAttrsToList wgConfig.hosts (host: { publicKey, endpoint ? null }: let
     netMap = vars.netMaps."${calculated.dc host}";
     remote = calculated.isRemote host;
     gateway = !remote && any (n: n == host) netMap.gateways;
-  in ''
+k  in ''
     
     [Peer]
     PublicKey = ${publicKey}
@@ -37,9 +41,9 @@ let
     Endpoint = ${endpoint}
   '')));
 
-  confFile = "/dev/shm/wg/${vars.domain}.conf";
+  confFile = name: "/dev/shm/wg/${name}.conf";
 
-  wgBuilder = pkgs.writeScript "wg.${vars.domain}.conf-builder" ''
+  wgBuilder = name: pkgs.writeScript "wg.${name}.conf-builder" ''
     #! ${pkgs.stdenv.shell} -e
 
     cleanup() {
@@ -50,12 +54,12 @@ let
     trap cleanup EXIT ERR INT QUIT PIPE TERM
     TMP="$(mktemp -p "/dev/shm")"
     chmod 0600 "$TMP"
-    cat "${confFileIn}" >"$TMP"
+    cat "${confFileIn name}" >"$TMP"
 
-    if ! test -e "${keyFile}" || ! wg pubkey <"${keyFile}" >/dev/null 2>&1; then
+    if ! test -e "${keyFile name}" || ! wg pubkey <"${keyFile name}" >/dev/null 2>&1; then
       exit 2
     fi
-    export KEY="$(cat "${keyFile}")"
+    export KEY="$(cat "${keyFile name}")"
     awk -i inplace '
       {
         gsub(/@KEY@/, ENVIRON["KEY"]);
@@ -63,8 +67,8 @@ let
       }
     ' "$TMP"
 
-    if test -e "/conf/wireguard/${vars.domain}.psk"; then
-      export PSK="$(cat "${pskFile}")"
+    if test -e "${pskFile name}"; then
+      export PSK="$(cat "${pskFile name}")"
       awk -i inplace '
         {
           gsub(/@PSK@/, ENVIRON["PSK"]);
@@ -75,42 +79,34 @@ let
       sed -i '/@PSK@/d' "$TMP"
     fi
 
-    mkdir -p "$(dirname "${confFile}")"
-    chown root:root "$(dirname "${confFile}")"
-    chmod 0700 "$(dirname "${confFile}")"
-    mv "$TMP" "${confFile}"
-  '';
-in
-{
-  imports = [
-    ./sub/vpn.nix
-  ];
-  
-  networking.wgs."${vars.domain}.vpn".configFile = confFile;
-  
-  networking.firewall.extraCommands = ''
-    ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
-    ip46tables -A OUTPUT -p udp --dport ${toString port} -j ACCEPT
+    mkdir -p "$(dirname "${confFile name}")"
+    chown root:root "$(dirname "${confFile name}")"
+    chmod 0700 "$(dirname "${confFile name}")"
+    mv "$TMP" "${confFile name}"
   '';
 
-  systemd.services."build-wg.${vars.domain}.conf" = {
+  interfaceConfig = name: nameValuePair "${name}.vpn" {
+    configFile = confFile name;
+  };
+
+  confService = name: nameValuePair "build-wg.${name}" {
     serviceConfig = {
       Type = "oneshot";
       Restart = "no";
       RemainAfterExit = true;
-      ExecStart = wgBuilder;
-      ExecReload = wgBuilder;
+      ExecStart = wgBuilder name;
+      ExecReload = wgBuilder name;
     };
 
     restartTriggers = [
-      confFileIn
+      (confFileIn name)
     ];
 
     requiredBy = [
-      "wg-config-${vars.domain}.vpn.service"
+      "wg-config-${name}.vpn.service"
     ];
     before = [
-      "wg-config-${vars.domain}.vpn.service"
+      "wg-config-${name}.vpn.service"
     ];
 
     path = [
@@ -120,4 +116,26 @@ in
       pkgs.wireguard
     ];
   };
+in
+{
+  imports = [
+    ./sub/vpn.nix
+  ];
+
+  networking.wgs = [
+    (interfaceConfig vars.domain)
+  ] ++ optionals calculated.iAmGateway [
+    #(interfaceConfig "gw.${vars.domain}")
+  ];
+
+  networking.firewall.extraCommands = flip concatMapStrings (attrValues ports) (port: ''
+    ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
+    ip46tables -A OUTPUT -p udp --dport ${toString port} -j ACCEPT
+  '');
+
+  systemd.services = [
+    (confService vars.domain)
+  ] ++ optionals calculated.iAmGateway [
+    #(confService "gw.${vars.domain}")
+  ];
 }
