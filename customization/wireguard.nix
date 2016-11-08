@@ -3,7 +3,7 @@
 {
   hosts = {
     atomic = {
-      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+      publicKey = "xGvYSdT2MoC5wfAvzt7a6tJVgaL2a+GMD5Q9CxjSHHY=";
     };
     lotus = {
       publicKey = "paUDH9FOPba+bo0EPUZmTphiv5xciRDp0uJtVvvZWj8=";
@@ -33,14 +33,14 @@
       endpoint = "nevada.slan.wak.io:656";
     };
     "gw.abe-p" = {
-      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+      publicKey = "b7ruLsagWoGsbeDWkJv3Bh5dX7y5ZjucGMfPt0qiJmA=";
     };
     "gw.fmt-1" = {
-      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+      publicKey = "u6nP9Wro9rJNTs+NhFPEbgfsxE/rd/L0BDz4PRODAFw=";
       endpoint = "gw.fmt-1.wak.io:657";
     };
     "gw.mtv-w" = {
-      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+      publicKey = "hMfv4egRIsdNgwvxfLshGdpkOcqcOKyGNFfEAvzgsTQ=";
     };
   };
 }

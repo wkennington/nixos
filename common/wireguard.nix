@@ -29,11 +29,11 @@ let
     host' = splitString "." host;
     hostIsGateway = "gw" == head host';
     netMap = vars.netMaps."${head (tail host')}";
-k  in ''
+  in ''
     
     [Peer]
     PublicKey = ${publicKey}
-  '' + optionalString (!gateway) ''
+  '' + optionalString (!hostIsGateway) ''
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
   '' + optionalString hostIsGateway ''
@@ -129,20 +129,20 @@ in
     "gw.${vars.domain}.vpn"
   ];
 
-  networking.wgs = [
+  networking.wgs = listToAttrs ([
     (interfaceConfig vars.domain)
   ] ++ optionals calculated.iAmGateway [
     (interfaceConfig "gw.${vars.domain}")
-  ];
+  ]);
 
   networking.firewall.extraCommands = flip concatMapStrings (attrValues ports) (port: ''
     ip46tables -A INPUT -p udp --dport ${toString port} -j ACCEPT
     ip46tables -A OUTPUT -p udp --dport ${toString port} -j ACCEPT
   '');
 
-  systemd.services = [
+  systemd.services = listToAttrs ([
     (confService vars.domain)
   ] ++ optionals calculated.iAmGateway [
     (confService "gw.${vars.domain}")
-  ];
+  ]);
 }
