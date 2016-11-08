@@ -19,7 +19,8 @@ let
   pskFile = name: "${secretDir}/${vars.domain}.psk";
 
   confFileIn = name: let
-    iAmGateway = "gw" == head (splitString "." name);
+    name' = splitString "." name;
+    iAmGateway = "gw" == head name';
   in pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
     PrivateKey = @KEY@
@@ -29,6 +30,9 @@ let
     host' = splitString "." host;
     hostIsGateway = "gw" == head host';
     netMap = vars.netMaps."${head (tail host')}";
+    sendKeepalive = hostIsGateway && (calculated.iAmRemote ||
+      (iAmGateway && ! calculated.myNetMap ? pub4)
+    );
   in ''
     
     [Peer]
@@ -38,7 +42,7 @@ let
     AllowedIPs = ${calculated.vpnIp6 host}/128
   '' + optionalString hostIsGateway ''
     AllowedIPs = ${netMap.priv4}0.0/16
-  '' + optionalString ((calculated.iAmRemote || iAmGateway) && hostIsGateway) ''
+  '' + optionalString sendKeepalive ''
     PersistentKeepalive = 20
   '' + optionalString (endpoint != null) ''
     Endpoint = ${endpoint}
@@ -125,9 +129,13 @@ in
     ./sub/vpn.nix
   ];
 
-  myNatIfs = [
+  myNatIfs = mkIf (calculated.iAmGateway) [
     "gw.${vars.domain}.vpn"
   ];
+
+  networking.interfaces = mkIf calculated.iAmGateway {
+    "gw.${vars.domain}.vpn" = { };
+  };
 
   networking.wgs = listToAttrs ([
     (interfaceConfig vars.domain)
