@@ -13,8 +13,6 @@ let
   extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 in
 {
-  myNatIfs = [ "${vars.domain}.vpn" ];
-  
   networking = {
     interfaces."${vars.domain}.vpn" = {
       ip4 = optionals (vars.vpn ? subnet4) [

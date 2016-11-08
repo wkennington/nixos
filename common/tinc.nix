@@ -11,6 +11,11 @@ in
     ./sub/vpn.nix
   ];
 
+  myNatIfs = [
+    "${vars.domain}.vpn"
+  ];
+
+  environment.systemPackages = [
   environment.systemPackages = [
     config.services.tinc.networks.vpn.package
   ];

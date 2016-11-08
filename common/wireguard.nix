@@ -18,24 +18,27 @@ let
   keyFile = name: "${secretDir}/${name}.key";
   pskFile = name: "${secretDir}/${name}.psk";
 
-  confFileIn = name: pkgs.writeText "wg.${name}.conf.in" (''
+  confFileIn = name: let
+    iAmGateway = "gw" == head (splitString "." name);
+  in pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
     PrivateKey = @KEY@
     PresharedKey = @PSK@
     ListenPort = ${toString (port name)}
   '' + concatStrings (flip mapAttrsToList wgConfig.hosts (host: { publicKey, endpoint ? null }: let
-    netMap = vars.netMaps."${calculated.dc host}";
-    remote = calculated.isRemote host;
-    gateway = !remote && any (n: n == host) netMap.gateways;
+    host' = splitString "." host;
+    hostIsGateway = "gw" == head host';
+    netMap = vars.netMaps."${head (tail host')}";
 k  in ''
     
     [Peer]
     PublicKey = ${publicKey}
+  '' + optionalString (!gateway) ''
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
-  '' + optionalString gateway ''
+  '' + optionalString hostIsGateway ''
     AllowedIPs = ${netMap.priv4}0.0/16
-  '' + optionalString ((calculated.iAmRemote || calculated.iAmGateway) && gateway) ''
+  '' + optionalString ((calculated.iAmRemote || iAmGateway) && hostIsGateway) ''
     PersistentKeepalive = 20
   '' + optionalString (endpoint != null) ''
     Endpoint = ${endpoint}
@@ -122,10 +125,14 @@ in
     ./sub/vpn.nix
   ];
 
+  myNatIfs = [
+    "gw.${vars.domain}.vpn"
+  ];
+
   networking.wgs = [
     (interfaceConfig vars.domain)
   ] ++ optionals calculated.iAmGateway [
-    #(interfaceConfig "gw.${vars.domain}")
+    (interfaceConfig "gw.${vars.domain}")
   ];
 
   networking.firewall.extraCommands = flip concatMapStrings (attrValues ports) (port: ''
@@ -136,6 +143,6 @@ in
   systemd.services = [
     (confService vars.domain)
   ] ++ optionals calculated.iAmGateway [
-    #(confService "gw.${vars.domain}")
+    (confService "gw.${vars.domain}")
   ];
 }

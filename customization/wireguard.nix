@@ -32,5 +32,15 @@
       publicKey = "f7m+rqpaUOHDvH/Wwb2SXBm0HGG0ET1pifUmEvnCvnI=";
       endpoint = "nevada.slan.wak.io:656";
     };
+    "gw.abe-p" = {
+      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+    };
+    "gw.fmt-1" = {
+      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+      endpoint = "gw.fmt-1.wak.io:657";
+    };
+    "gw.mtv-w" = {
+      publicKey = "nSo/TBiHE+TQ6I1XyU7Pa7Oit9/eQQTDm1LxxDT0DUE=";
+    };
   };
 }
