@@ -36,7 +36,7 @@
       publicKey = "b7ruLsagWoGsbeDWkJv3Bh5dX7y5ZjucGMfPt0qiJmA=";
     };
     "gw.fmt-1" = {
-      publicKey = "u6nP9Wro9rJNTs+NhFPEbgfsxE/rd/L0BDz4PRODAFw=";
+      publicKey = "mKvSVqiig7zRgacHBvTAAWzgB390XgxnANhCbCyPLGA=";
       endpoint = "gw.fmt-1.wak.io:657";
     };
     "gw.mtv-w" = {
