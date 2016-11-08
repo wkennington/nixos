@@ -16,7 +16,7 @@ let
   # Files needed to build the configuration
   secretDir = "/conf/wireguard";
   keyFile = name: "${secretDir}/${name}.key";
-  pskFile = name: "${secretDir}/${name}.psk";
+  pskFile = name: "${secretDir}/${vars.domain}.psk";
 
   confFileIn = name: let
     iAmGateway = "gw" == head (splitString "." name);
