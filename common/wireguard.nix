@@ -93,6 +93,7 @@ let
   '';
 
   interfaceConfig = name: nameValuePair "${name}.vpn" {
+    port = port name;
     configFile = confFile name;
   };
 
