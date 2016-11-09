@@ -50,7 +50,7 @@ rec {
   myInternalIp4Net = internalIp4Net host (head myNetData.vlans);
   myNetMap = vars.netMaps.${myDc};
   myNetData = myNetMap.internalMachineMap.${host};
-  iAmGateway = any (n: host == n) myNetMap.gateways;
+  iAmGateway = !iAmRemote && any (n: host == n) myNetMap.gateways;
   iAmOnlyGateway = iAmGateway && length (myNetMap.gateways) == 1;
   myTimeZone = if iAmRemote then "UTC" else myNetMap.timeZone;
 
