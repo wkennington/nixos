@@ -22,11 +22,13 @@ let
 
   confFileIn = name: let
     isGateway = host: "gw" == head (splitString "." host);
-    hosts = flip filter wgConfig.hosts (host:
-      if isGateway name then
+    hosts = flip filterAttrs wgConfig.hosts (host: { ... }:
+      if host == config.networking.hostName then
+        false
+      else if isGateway name then
         calculated.isRemote host || isGateway host
       else
-        ! (isGateway host)
+        ! isGateway host
     );
   in pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
@@ -41,25 +43,28 @@ let
     vlans = vars.netMaps."${calculated.dc host}".internalMachineMap."${host}".vlans;
     vlans' = listToAttrs (map (vlan: nameValuePair (vlan) (true)) vlans);
     matchingVlans = filter (vlan: vlans' ? "${vlan}") calculated.myNetData.vlans;
-    matchingVlan = if matchingVlans == [ ] then head vlans else head matchingVlans;
+    matchingVlan = if calculated.iAmRemote || matchingVlans == [ ] then head vlans else head matchingVlans;
     endpoint' =
       if endpoint != null then
         endpoint
-      else if !(isGatway name) then
+      else if ! isGateway name then
         if calculated.isRemote host then
-          "${vars.vpn.remote4}${vars.vpn.idMap."${host}"}:${port name}"
+          "${vars.vpn.remote4}${toString vars.vpn.idMap."${host}"}:${toString (port name)}"
         else
-          "${calculated.internalIp4 host matchingVlan}:${port name}"
+          "${calculated.internalIp4 host matchingVlan}:${toString (port name)}"
       else
         null;
   in ''
     
     [Peer]
     PublicKey = ${publicKey}
-  '' + optionalString (!isGateway && !hostIsGateway) ''
+  '' + optionalString (!isGateway name) ''
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
-  '' + optionalString (isGateway && hostIsGateway) ''
+  '' + optionalString (isGateway name && !isGateway host) ''
+    AllowedIPs = ${calculated.vpnGwIp4 host}/32
+    AllowedIPs = ${calculated.vpnGwIp6 host}/128
+  '' + optionalString (isGateway name && isGateway host) ''
     AllowedIPs = ${netMap.priv4}0.0/16
   '' + optionalString sendKeepalive ''
     PersistentKeepalive = 20
@@ -152,6 +157,8 @@ let
         (n: { priv4, ... }: priv4 != calculated.myNetMap.priv4);
 
   extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
+
+  myId = vars.vpn.idMap.${config.networking.hostName};
 in
 {
   myNatIfs = mkIf calculated.iAmGateway [
@@ -163,20 +170,20 @@ in
       ({
         "${vars.domain}.vpn" = {
           ip4 = optionals (vars.vpn ? subnet4) [
-            { address = "${vars.vpn.subnet4}${toString id}"; prefixLength = 24; }
+            { address = "${vars.vpn.subnet4}${toString myId}"; prefixLength = 24; }
           ];
           ip6 = optionals (vars.vpn ? subnet6) [
-            { address = "${vars.vpn.subnet6}${toString id}"; prefixLength = 64; }
+            { address = "${vars.vpn.subnet6}${toString myId}"; prefixLength = 64; }
           ];
         };
       })
       (mkIf haveGatewayInterface {
         "gw.${vars.domain}.vpn" = {
           ip4 = optionals (vars.vpn ? remote4) [
-            { address = "${vars.vpn.remote4}${toString id}"; prefixLength = 24; }
+            { address = "${vars.vpn.remote4}${toString myId}"; prefixLength = 24; }
           ];
           ip6 = optionals (vars.vpn ? remote6) [
-            { address = "${vars.vpn.remote6}${toString id}"; prefixLength = 64; }
+            { address = "${vars.vpn.remote6}${toString myId}"; prefixLength = 64; }
           ];
         };
       })

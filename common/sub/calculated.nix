@@ -12,6 +12,8 @@ rec {
   in if isRemote name then "remote" else head (attrNames dcs);
   vpnIp4 = name: "${vars.vpn.subnet4}${toString vars.vpn.idMap.${name}}";
   vpnIp6 = name: "${vars.vpn.subnet6}${toString vars.vpn.idMap.${name}}";
+  vpnGwIp4 = name: "${vars.vpn.remote4}${toString vars.vpn.idMap.${name}}";
+  vpnGwIp6 = name: "${vars.vpn.remote6}${toString vars.vpn.idMap.${name}}";
   internalIp4Net = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
     "${net.priv4}${toString vars.internalVlanMap.${lan}}.0/24";
   internalIp4 = name: lan: let ndc = dc name; net = vars.netMaps.${ndc}; in
