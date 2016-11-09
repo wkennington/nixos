@@ -23,7 +23,7 @@ let
   confFileIn = name: let
     isGateway = host: "gw" == head (splitString "." host);
     hosts = flip filterAttrs wgConfig.hosts (host: { ... }:
-      if host == config.networking.hostName then
+      if host == config.networking.hostName || host == "gw.${calculated.myDc}" then
         false
       else if isGateway name then
         calculated.isRemote host || isGateway host
@@ -178,7 +178,7 @@ in
         };
       })
       (mkIf haveGatewayInterface {
-        "gw.${vars.domain}.vpn" = {
+        "gw.${vars.domain}.vpn" = if ! calculated.iAmRemote then { } else {
           ip4 = optionals (vars.vpn ? remote4) [
             { address = "${vars.vpn.remote4}${toString myId}"; prefixLength = 24; }
           ];
