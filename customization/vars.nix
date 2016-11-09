@@ -23,8 +23,12 @@ rec {
   vpn = {
     # Assumes a prefix of /24
     subnet4 = "192.168.17.";
+    remote4 = "192.168.18.";
+
     # Assumes a prefix of /64
     subnet6 = "fdd5:7d0c:d804::";
+    remote6 = "fdd8:ce9d:52a5::";
+
     idMap = {
       prodigy = 2;
       atomic = 3;

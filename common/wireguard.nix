@@ -18,34 +18,53 @@ let
   keyFile = name: "${secretDir}/${name}.key";
   pskFile = name: "${secretDir}/${vars.domain}.psk";
 
+  haveGatewayInterface = calculated.iAmRemote || calculated.iAmGateway;
+
   confFileIn = name: let
-    name' = splitString "." name;
-    iAmGateway = "gw" == head name';
+    isGateway = host: "gw" == head (splitString "." host);
+    hosts = flip filter wgConfig.hosts (host:
+      if isGateway name then
+        calculated.isRemote host || isGateway host
+      else
+        ! (isGateway host)
+    );
   in pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
     PrivateKey = @KEY@
     PresharedKey = @PSK@
     ListenPort = ${toString (port name)}
-  '' + concatStrings (flip mapAttrsToList wgConfig.hosts (host: { publicKey, endpoint ? null }: let
-    host' = splitString "." host;
-    hostIsGateway = "gw" == head host';
-    netMap = vars.netMaps."${head (tail host')}";
-    sendKeepalive = hostIsGateway && (calculated.iAmRemote ||
-      (iAmGateway && ! calculated.myNetMap ? pub4)
+  '' + concatStrings (flip mapAttrsToList hosts (host: { publicKey, endpoint ? null }: let
+    netMap = vars.netMaps."${elemAt (splitString "." host) 1}";
+    sendKeepalive = isGateway host && (calculated.iAmRemote ||
+      !(calculated.myNetMap ? pub4)
     );
+    vlans = vars.netMaps."${calculated.dc host}".internalMachineMap."${host}".vlans;
+    vlans' = listToAttrs (map (vlan: nameValuePair (vlan) (true)) vlans);
+    matchingVlans = filter (vlan: vlans' ? "${vlan}") calculated.myNetData.vlans;
+    matchingVlan = if matchingVlans == [ ] then head vlans else head matchingVlans;
+    endpoint' =
+      if endpoint != null then
+        endpoint
+      else if !(isGatway name) then
+        if calculated.isRemote host then
+          "${vars.vpn.remote4}${vars.vpn.idMap."${host}"}:${port name}"
+        else
+          "${calculated.internalIp4 host matchingVlan}:${port name}"
+      else
+        null;
   in ''
     
     [Peer]
     PublicKey = ${publicKey}
-  '' + optionalString (!hostIsGateway) ''
+  '' + optionalString (!isGateway && !hostIsGateway) ''
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
-  '' + optionalString hostIsGateway ''
+  '' + optionalString (isGateway && hostIsGateway) ''
     AllowedIPs = ${netMap.priv4}0.0/16
   '' + optionalString sendKeepalive ''
     PersistentKeepalive = 20
-  '' + optionalString (endpoint != null) ''
-    Endpoint = ${endpoint}
+  '' + optionalString (endpoint' != null) ''
+    Endpoint = ${endpoint'}
   '')));
 
   confFile = name: "/dev/shm/wg/${name}.conf";
@@ -124,23 +143,56 @@ let
       pkgs.wireguard
     ];
   };
+
+  remoteNets =
+    if calculated.iAmRemote then
+      vars.netMaps
+    else
+      flip filterAttrs vars.netMaps
+        (n: { priv4, ... }: priv4 != calculated.myNetMap.priv4);
+
+  extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 in
 {
-  imports = [
-    ./sub/vpn.nix
-  ];
-
-  myNatIfs = mkIf (calculated.iAmGateway) [
+  myNatIfs = mkIf calculated.iAmGateway [
     "gw.${vars.domain}.vpn"
   ];
 
-  networking.interfaces = mkIf calculated.iAmGateway {
-    "gw.${vars.domain}.vpn" = { };
+  networking = {
+    interfaces = mkMerge [
+      ({
+        "${vars.domain}.vpn" = {
+          ip4 = optionals (vars.vpn ? subnet4) [
+            { address = "${vars.vpn.subnet4}${toString id}"; prefixLength = 24; }
+          ];
+          ip6 = optionals (vars.vpn ? subnet6) [
+            { address = "${vars.vpn.subnet6}${toString id}"; prefixLength = 64; }
+          ];
+        };
+      })
+      (mkIf haveGatewayInterface {
+        "gw.${vars.domain}.vpn" = {
+          ip4 = optionals (vars.vpn ? remote4) [
+            { address = "${vars.vpn.remote4}${toString id}"; prefixLength = 24; }
+          ];
+          ip6 = optionals (vars.vpn ? remote6) [
+            { address = "${vars.vpn.remote6}${toString id}"; prefixLength = 64; }
+          ];
+        };
+      })
+    ];
+
+    localCommands = optionalString haveGatewayInterface (
+      flip concatMapStrings extraRoutes (n: ''
+        ip route del "${n}" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
+        ip route add "${n}" dev "gw.${vars.domain}.vpn"
+      '')
+    );
   };
 
   networking.wgs = listToAttrs ([
     (interfaceConfig vars.domain)
-  ] ++ optionals calculated.iAmGateway [
+  ] ++ optionals haveGatewayInterface [
     (interfaceConfig "gw.${vars.domain}")
   ]);
 
@@ -151,7 +203,7 @@ in
 
   systemd.services = listToAttrs ([
     (confService vars.domain)
-  ] ++ optionals calculated.iAmGateway [
+  ] ++ optionals haveGatewayInterface [
     (confService "gw.${vars.domain}")
   ]);
 }
