@@ -78,9 +78,10 @@ let
     #! ${pkgs.stdenv.shell} -e
 
     cleanup() {
+      ret=$?
       rm -f "$TMP"
       trap - EXIT
-      exit 0
+      exit $ret
     }
     trap cleanup EXIT ERR INT QUIT PIPE TERM
     TMP="$(mktemp -p "/dev/shm")"
