@@ -12,9 +12,9 @@ in
     where = "/ceph";
   } ];
   systemd.mounts = [ {
-    wants = [ "ip-up.target" ];
+    wants = [ "network-online.target" ];
     wantedBy = [ "remote-fs.target" ];
-    after = [ "network.target" "network-interfaces.target" "ip-up.target" "ceph-mds.service" "ceph-mon.service" ];
+    after = [ "network.target" "network-interfaces.target" "network-online.target" "ceph-mds.service" "ceph-mon.service" ];
     type = "ceph";
     what = "${concatStringsSep "," calculated.myCeph.monIps}:/";
     where = "/ceph";
