@@ -196,8 +196,8 @@ in
         ip route add "${n}" dev "gw.${vars.domain}.vpn"
       '')
     ) + optionalString calculated.iAmGateway ''
-      ip route del "${vars.vpn.route4}0/24" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
-      ip route add "${vars.vpn.route4}0/24" dev "gw.${vars.domain}.vpn" via "${calcuated.myInternalIp4}"
+      ip route del "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
+      ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" via "${calculated.myInternalIp4}"
     '';
   };
 
