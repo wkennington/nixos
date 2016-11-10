@@ -17,6 +17,7 @@ in
       ip46tables -w -A FORWARD -i ${n} -o gwan -j ACCEPT
       ip6tables -w -A FORWARD -i ${n} -o hurricane -j ACCEPT
       ip46tables -A FORWARD -i ${n} -o ${vars.domain}.vpn -j ACCEPT
+      ip46tables -A FORWARD -i ${n} -o gw.${vars.domain}.vpn -j ACCEPT
     '') (filter (n: n != "${vars.domain}.vpn") config.myNatIfs))}
 
     # Masquerade all vpn connections
