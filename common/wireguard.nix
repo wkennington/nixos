@@ -189,16 +189,6 @@ in
         };
       })
     ];
-
-    localCommands = optionalString haveGatewayInterface (
-      flip concatMapStrings extraRoutes (n: ''
-        ip route del "${n}" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
-        ip route add "${n}" dev "gw.${vars.domain}.vpn"
-      '')
-    ) + optionalString calculated.iAmGateway ''
-      ip route del "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
-      ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" src "${calculated.myInternalIp4}"
-    '';
   };
 
   networking.wgs = listToAttrs ([
@@ -216,5 +206,20 @@ in
     (confService vars.domain)
   ] ++ optionals haveGatewayInterface [
     (confService "gw.${vars.domain}")
+    (nameValuePair "network-link-up-gw.${vars.domain}.vpn" {
+      postStart = flip concatMapStrings extraRoutes (n: ''
+        ip route add "${n}" dev "gw.${vars.domain}.vpn"
+      '');
+    })
+  ] ++ optionals calculated.iAmGateway [
+    (nameValuePair "network-link-up-gw.${vars.domain}.vpn" (let
+      dependency = "network-addresses-${head calculated.myNetData.vlans}.service";
+    in {
+      requires = [ dependency ];
+      after = [ dependency ];
+      postStart = ''
+        ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" src "${calculated.myInternalIp4}"
+      '';
+    }))
   ]);
 }
