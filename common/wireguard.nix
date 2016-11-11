@@ -202,24 +202,29 @@ in
     ip46tables -A OUTPUT -p udp --dport ${toString port} -j ACCEPT
   '');
 
-  systemd.services = listToAttrs ([
-    (confService vars.domain)
-  ] ++ optionals haveGatewayInterface [
-    (confService "gw.${vars.domain}")
-    (nameValuePair "network-link-up-gw.${vars.domain}.vpn" {
-      postStart = flip concatMapStrings extraRoutes (n: ''
-        ip route add "${n}" dev "gw.${vars.domain}.vpn"
-      '');
+  systemd.services = mkMerge [
+    (listToAttrs ([
+      (confService vars.domain)
+    ] ++ optionals haveGatewayInterface [
+      (confService "gw.${vars.domain}")
+    ]))
+    (mkIf haveGatewayInterface {
+      "network-link-up-gw.${vars.domain}.vpn" = {
+        postStart = flip concatMapStrings extraRoutes (n: ''
+          ip route add "${n}" dev "gw.${vars.domain}.vpn"
+        '');
+      };
     })
-  ] ++ optionals calculated.iAmGateway [
-    (nameValuePair "network-link-up-gw.${vars.domain}.vpn" (let
-      dependency = "network-addresses-${head calculated.myNetData.vlans}.service";
-    in {
-      requires = [ dependency ];
-      after = [ dependency ];
-      postStart = ''
-        ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" src "${calculated.myInternalIp4}"
-      '';
-    }))
-  ]);
+    (mkIf calculated.iAmGateway {
+      "network-link-up-gw.${vars.domain}.vpn" = let
+        dependency = "network-addresses-${head calculated.myNetData.vlans}.service";
+      in {
+        requires = [ dependency ];
+        after = [ dependency ];
+        postStart = ''
+          ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" src "${calculated.myInternalIp4}"
+        '';
+      };
+    })
+  ];
 }
