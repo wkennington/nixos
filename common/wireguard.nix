@@ -197,7 +197,7 @@ in
       '')
     ) + optionalString calculated.iAmGateway ''
       ip route del "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" >/dev/null 2>&1 || true
-      ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" via "${calculated.myInternalIp4}"
+      ip route add "${vars.vpn.remote4}0/24" dev "gw.${vars.domain}.vpn" src "${calculated.myInternalIp4}"
     '';
   };
 
