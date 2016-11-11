@@ -103,7 +103,11 @@ rec {
     };
   };
 
-  remotes = [ "nixos" "prodigy" "lotus" ];
+  remotes = [
+    "nixos"
+    "prodigy"
+    "lotus"
+  ];
 
   pubDnsServers = [
     "8.8.8.8"

@@ -22,6 +22,11 @@ let
       { "${calculated.vpnIp6 host}" = "${host}.vpn.${vars.domain}"; }
       { "${calculated.vpnIp4 host}" = "${host}.vpn.${vars.domain}"; }
     ]
+  )) ++ concatLists (flip map (filter (n: vars.vpn.idMap ? "${n}") vars.remotes) (host:
+    [
+      { "${calculated.vpnGwIp6 host}" = "${host}.remote.${vars.domain}"; }
+      { "${calculated.vpnGwIp4 host}" = "${host}.remote.${vars.domain}"; }
+    ]
   ));
 
   ipHosts = foldAttrs (n: a: [ n ] ++ a) [ ] ipHosts';
