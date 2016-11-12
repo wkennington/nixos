@@ -12,6 +12,7 @@ in
     ./sub/base-hosts.nix
     ./sub/base-networking.nix
     ./sub/base-ntpd.nix
+    ./sub/base-ssh.nix
     ./sub/base-unbound.nix
   ];
   require = [
@@ -89,7 +90,6 @@ in
       enableCompletion = true;
       promptInit = "PS1=\"[\\u@\\h:\\w]\\\\$ \"\n";
     };
-    ssh.package = pkgs.openssh;
   };
   services = {
     journald.extraConfig = "SystemMaxUse=1G";

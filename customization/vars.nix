@@ -121,6 +121,16 @@ rec {
     { server = "3.pool.ntp.org"; weight = "1"; }
   ];
 
+  sshHostKeys = {
+    "atlas" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDEm1t3sNOBfXF7lupeNvZ50M5hT0DYiOiIAx0f+ZLmN";
+    "ferrari" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5Q2HxW5RGFr9yi+UrrdfFh5oR7b6DdWbkYdoWoERM8";
+    "lotus" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2O9Sxkqo36cJJn+qn1I+0z3OayNC5M41ZFpuPfLsr2";
+    "nevada" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDG8rNK9ZRJl8brPEytBF7sCh2FBejt+V5u3TB3BwiG4";
+    "newton" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALFIS2Hu2bLEHzxcXpNa9JTRBwt/h1S7yjMdHK1FE4f";
+    "page" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBv3UkLvr3OcB4fNXJlpNVDnAFgK1Sfgn8wyXoL+EiiS";
+    "quest" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKooOFrPAREfP00RT5SM7EI0Y4bOKG07zu+o2vCNEeyJ";
+  };
+
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
   # ip processing in nix is hard :/
   netMaps = {
