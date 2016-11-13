@@ -41,6 +41,7 @@ rec {
       quest = 10;
       elite = 11;
       lotus = 12;
+      exodus = 13;
     };
   };
 
@@ -123,6 +124,7 @@ rec {
 
   sshHostKeys = {
     "atlas" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDEm1t3sNOBfXF7lupeNvZ50M5hT0DYiOiIAx0f+ZLmN";
+    "exodus" = "sh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPriEVGsGu7DnUVa/aPFj+BccNP8KUmM9836My9YYemG";
     "ferrari" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5Q2HxW5RGFr9yi+UrrdfFh5oR7b6DdWbkYdoWoERM8";
     "lotus" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2O9Sxkqo36cJJn+qn1I+0z3OayNC5M41ZFpuPfLsr2";
     "nevada" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDG8rNK9ZRJl8brPEytBF7sCh2FBejt+V5u3TB3BwiG4";
@@ -385,9 +387,19 @@ rec {
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
-        lazarus = { id = 1; vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ]; };
-        exodus = { id = 32; vlans = [ "slan" ]; };
-        legend = { id = 33; vlans = [ "slan" ]; };
+        lazarus = {
+          id = 1;
+          vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
+        };
+        exodus = {
+          id = 31;
+          vlans = [ "slan" ];
+          bmcMac = "";
+        };
+        legend = {
+          id = 34;
+          vlans = [ "slan" ];
+        };
       };
 
     };

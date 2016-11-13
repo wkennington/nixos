@@ -29,6 +29,9 @@
     nevada = {
       publicKey = "f7m+rqpaUOHDvH/Wwb2SXBm0HGG0ET1pifUmEvnCvnI=";
     };
+    exodus = {
+      publicKey = "14tgyEgxQUzndg12uB95iIgPdkqvmq0hEEMNI/Gib1w=";
+    };
     "gw.abe-p" = {
       publicKey = "b7ruLsagWoGsbeDWkJv3Bh5dX7y5ZjucGMfPt0qiJmA=";
     };
@@ -37,7 +40,7 @@
       endpoint = "gw.fmt-1.wak.io:657";
     };
     "gw.mtv-w" = {
-      publicKey = "hMfv4egRIsdNgwvxfLshGdpkOcqcOKyGNFfEAvzgsTQ=";
+      publicKey = "OzHYvVZ1giTFZ4wfONtRjNVhXe5JvDR7EmdMkeWc4H4=";
     };
   };
 }
