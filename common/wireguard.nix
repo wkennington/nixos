@@ -37,7 +37,7 @@ let
     ListenPort = ${toString (port name)}
   '' + concatStrings (flip mapAttrsToList hosts (host: { publicKey, endpoint ? null }: let
     netMap = vars.netMaps."${elemAt (splitString "." host) 1}";
-    sendKeepalive = isGateway host && (calculated.iAmRemote ||
+    sendKeepalive = endpoint' != null && isGateway host && (calculated.iAmRemote ||
       !(calculated.myNetMap ? pub4)
     );
     vlans = vars.netMaps."${calculated.dc host}".internalMachineMap."${host}".vlans;
