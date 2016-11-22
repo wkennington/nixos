@@ -35,6 +35,7 @@ in
       "net.ipv6.conf.default.use_tempaddr" = 2;
     };
   };
+  environment.etc."ssl/openssl.cnf".source = "${pkgs.openssl}/etc/ssl/openssl.cnf";
   environment.systemPackages = with pkgs; [
     acme-client
     acpi

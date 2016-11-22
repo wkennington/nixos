@@ -9,7 +9,9 @@ let
 in
 with lib;
 {
-  imports = [ ./base.nix ];
+  imports = [
+    ./base.nix
+  ];
 
   networking.extraHosts = ''
     ${host} ${domain}
