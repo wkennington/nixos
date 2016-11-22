@@ -1,6 +1,12 @@
 { config, lib, ... }:
 let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
+
+  serverIps =
+    if calculated.iAmRemote then
+      null
+    else
+      calculated.myMongodb.serverIps;
 in
 with lib;
 {
@@ -13,10 +19,10 @@ with lib;
         iptables -X mongodb || true
         ipset destroy mongodb || true
       '')
-      (''
+      (mkIf (serverIps != null) ''
         # Allow remote mongodb replicas to communicate
         ipset create mongodb hash:ip family inet
-        ${flip concatMapStrings calculated.myMongodb.serverIps (n: ''
+        ${flip concatMapStrings serverIps (n: ''
           ipset add mongodb "${n}"
         '')}
         iptables -N mongodb
@@ -38,8 +44,8 @@ with lib;
   services.mongodb = {
     enable = true;
     bind_ip = "0.0.0.0";
-    replSetName = calculated.myDomain;
-    extraConfig = ''
+    replSetName = mkIf (serverIps != null) calculated.myDomain;
+    extraConfig = mkIf (serverIps != null) ''
       keyFile = /conf/mongodb/keyfile
     '';
   };
