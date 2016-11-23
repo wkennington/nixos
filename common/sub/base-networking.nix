@@ -64,7 +64,7 @@ in
         }
       ));
 
-      useDHCP = false;
+      useDHCP = calculated.iAmGateway && ! (calculated.myNetMap ? pub4);
 
       nameservers = calculated.myDnsServers;
     })
