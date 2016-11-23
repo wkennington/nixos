@@ -370,31 +370,27 @@ rec {
       timeZone = "America/Los_Angeles";
 
       gateways = [
-        "lazarus"
+        "exodus"
       ];
 
       dhcpServers = [
-        "lazarus"
+        "exodus"
       ];
 
       dnsServers = [
-        "lazarus"
+        "exodus"
       ];
 
       ntpServers = [
-        { server = "lazarus"; weight = "1"; }
+        { server = "exodus"; weight = "1"; }
       ];
 
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
-        lazarus = {
-          id = 1;
-          vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
-        };
         exodus = {
           id = 31;
-          vlans = [ "slan" ];
-          bmcMac = "";
+          vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
+          bmcMac = "0c:c4:7a:dd:00:42";
         };
         legend = {
           id = 34;
