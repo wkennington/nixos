@@ -32,6 +32,9 @@
     exodus = {
       publicKey = "14tgyEgxQUzndg12uB95iIgPdkqvmq0hEEMNI/Gib1w=";
     };
+    elite = {
+      publicKey = "9acg1dC1O5jASDh0lcDv0LSFqEJzQjs77PpGGNgNsmg=";
+    };
     "gw.abe-p" = {
       publicKey = "LAu3WEjMqBtasw/8SlHWy0PalyM+09A/1n3ehktuP2Y=";
     };
