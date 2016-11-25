@@ -3,7 +3,7 @@
 {
   hosts = {
     atomic = {
-      publicKey = "xGvYSdT2MoC5wfAvzt7a6tJVgaL2a+GMD5Q9CxjSHHY=";
+      publicKey = "/g922UUoQ+Y9jwcZcJ1d98eI6K3lBks4+gE1YCV9Rjk=";
     };
     lotus = {
       publicKey = "paUDH9FOPba+bo0EPUZmTphiv5xciRDp0uJtVvvZWj8=";
@@ -33,7 +33,7 @@
       publicKey = "14tgyEgxQUzndg12uB95iIgPdkqvmq0hEEMNI/Gib1w=";
     };
     "gw.abe-p" = {
-      publicKey = "b7ruLsagWoGsbeDWkJv3Bh5dX7y5ZjucGMfPt0qiJmA=";
+      publicKey = "LAu3WEjMqBtasw/8SlHWy0PalyM+09A/1n3ehktuP2Y=";
     };
     "gw.fmt-1" = {
       publicKey = "mKvSVqiig7zRgacHBvTAAWzgB390XgxnANhCbCyPLGA=";
