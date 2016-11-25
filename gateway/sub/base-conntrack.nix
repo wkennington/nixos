@@ -2,12 +2,14 @@
 
 let
   inherit (lib)
-    filter;
+    filter
+    length
+    mkIf;
 
   calculated = import ../../common/sub/calculated.nix { inherit config lib; };
   otherGateways = filter (n: config.networking.hostName != n) calculated.myNetMap.gateways;
 in
-{
+mkIf (length calculated.myNetMap.gateways >= 2) {
   environment.systemPackages = [ pkgs.conntrack-tools ];
 
   networking.firewall.extraCommands = ''

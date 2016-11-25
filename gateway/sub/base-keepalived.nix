@@ -1,6 +1,16 @@
 { config, lib, pkgs, ... }:
-with lib;
+
 let
+  inherit (lib)
+    attrNames
+    concatMap
+    flip
+    length
+    listToAttrs
+    mapAttrs'
+    mkIf
+    nameValuePair;
+
   vars = (import ../../customization/vars.nix { inherit lib; });
   calculated = (import ../../common/sub/calculated.nix { inherit config lib; });
 
@@ -8,7 +18,7 @@ let
     nameValuePair v vars.internalVlanMap.${v}
   ));
 in
-{
+mkIf (length calculated.myNetMap.gateways >= 2) {
   systemd.services.keepalived = {
     path = [ pkgs.iputils pkgs.iproute pkgs.gnugrep pkgs.gnused ];
     preStart = ''
