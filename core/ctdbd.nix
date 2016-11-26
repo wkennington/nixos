@@ -64,8 +64,12 @@ let
   };
 in
 {
+  require = [
+    ./sub/ctdbd.module.nix
+  ];
+
   networking.firewall = {
-    extraCommands = mkMerge [
+    extraCommands = mkIf config.myCtdbd.enable (mkMerge [
       (mkOrder 0 ''
         # Cleanup if we haven't already
         iptables -D INPUT -p tcp --dport 4379 -j ctdb || true
@@ -84,8 +88,9 @@ in
         # Allow ctdb to connect to itself and other nodes
         ip46tables -A OUTPUT -p tcp --dport 4379 -m owner --uid-owner root -j ACCEPT
       '')
-    ];
-    extraStopCommands = ''
+    ]);
+
+    extraStopCommands = mkIf config.myCtdbd.enable ''
       iptables -D INPUT -p tcp --dport 4379 -j ctdb || true
       iptables -F ctdb || true
       iptables -X ctdb || true
@@ -93,9 +98,9 @@ in
     '';
   };
 
-  environment.etc = files;
+  environment.etc = mkIf config.myCtdbd.enable files;
 
-  systemd.services.ctdbd = {
+  systemd.services.ctdbd = mkIf config.myCtdbd.enable {
     description = "CTDB Daemon";
     wantedBy = [ "multi-user.target" ];
     requires = [ "ceph.mount" "network.target" ];

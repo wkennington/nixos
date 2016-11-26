@@ -1,12 +1,29 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
+  inherit (lib)
+    concatMapStrings
+    flip
+    length
+    mkAfter
+    mkIf
+    mkMerge
+    optionalAttrs
+    optionalString;
+
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   net = calculated.myNasIps;
+
+  clustered = length calculated.myNetMap.nases < 2;
+
+  vfsObjects = optionalString clustered "fileid " + "aio_linux";
 in
 {
-  imports = [ ../core/ctdbd.nix ];
+  imports = [
+    ../core/ctdbd.nix
+  ];
+
+  myCtdbd.enable = clustered;
 
   networking.firewall.extraCommands = mkMerge [
     (flip concatMapStrings [ "mlan" "dlan" ] (n: ''
@@ -17,24 +34,26 @@ in
       ip46tables -A INPUT -i ${n} -p udp --dport 137 -j ACCEPT
       ip46tables -A INPUT -i ${n} -p udp --dport 138 -j ACCEPT
     ''))
-    (mkAfter (flip concatMapStrings calculated.myNetMap.nases (n: ''
-      ipset add ctdb "${calculated.vpnIp4 n}"
-    '')))
+    (mkIf clustered (mkAfter (
+      flip concatMapStrings calculated.myNetMap.nases (n: ''
+        ipset add ctdb "${calculated.vpnIp4 n}"
+      '')
+    )))
   ];
-
-  environment.etc."ctdb/public_addresses".text =
-    flip concatMapStrings calculated.myNasIp4s (n: ''
-      ${n}/24 dlan
-    '');
-
-  environment.etc."ctdb/nodes".text =
-    flip concatMapStrings calculated.myNetMap.nases (n: ''
-      ${calculated.vpnIp4 n}
-    '');
 
   environment.systemPackages = with pkgs; [
     samba_full
   ];
+
+  environment.etc."ctdb/public_addresses".text = mkIf clustered
+    (flip concatMapStrings calculated.myNasIp4s (n: ''
+      ${n}/24 dlan
+    ''));
+
+  environment.etc."ctdb/nodes".text = mkIf clustered
+    (flip concatMapStrings calculated.myNetMap.nases (n: ''
+      ${calculated.vpnIp4 n}
+    ''));
 
   services.samba = {
     enable = true;
@@ -65,9 +84,11 @@ in
 
       # Clustered storage setup
       netbios name = ${calculated.myDomain}
-      clustering = yes
-      idmap config * : backend = tdb2
-      fileid : algorithm = fsid
+      ${optionalString clustered ''
+        clustering = yes
+        idmap config * : backend = tdb2
+        fileid : algorithm = fsid
+      ''}
 
       # Performance
       socket options = TCP_NODELAY SO_SNDBUF=131072 SO_RCVBUF=131072
@@ -77,7 +98,7 @@ in
       aio write size = 16384
 
       [Private]
-        vfs objects = acl_xattr fileid aio_linux
+        vfs objects = ${vfsObjects}
         path = /ceph/share/private/%u
         guest ok = no
         public = no
@@ -89,7 +110,7 @@ in
         force directory mode = 0700
         force group = share
       [Public]
-        vfs objects = acl_xattr fileid aio_linux
+        vfs objects = ${vfsObjects}
         path = /ceph/share/public
         guest ok = no
         writable = yes
@@ -101,7 +122,7 @@ in
         force group = share
         force user = nobody
       [Read Only]
-        vfs objects = acl_xattr fileid aio_linux
+        vfs objects = ${vfsObjects}
         path = /ceph/share/ro
         guest ok = no
         writable = yes
@@ -114,6 +135,11 @@ in
     '';
   };
 
-  systemd.services.samba-smbd.after = [ "ctdbd.service" ];
-  systemd.services.samba-nmbd.after = [ "ctdbd.service" ];
+  systemd.services.samba-smbd.after = [
+    "ctdbd.service"
+  ];
+
+  systemd.services.samba-nmbd.after = [
+    "ctdbd.service"
+  ];
 }
