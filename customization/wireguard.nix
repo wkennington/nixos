@@ -37,6 +37,7 @@
     };
     "gw.abe-p" = {
       publicKey = "LAu3WEjMqBtasw/8SlHWy0PalyM+09A/1n3ehktuP2Y=";
+      endpoint = "gw.abe-p.wak.io:657";
     };
     "gw.fmt-1" = {
       publicKey = "mKvSVqiig7zRgacHBvTAAWzgB390XgxnANhCbCyPLGA=";
@@ -44,6 +45,7 @@
     };
     "gw.mtv-w" = {
       publicKey = "OzHYvVZ1giTFZ4wfONtRjNVhXe5JvDR7EmdMkeWc4H4=";
+      endpoint = "gw.mtv-w.wak.io:657";
     };
   };
 }
