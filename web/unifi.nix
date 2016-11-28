@@ -64,4 +64,6 @@ with lib;
 
     unifi.enable = true;
   };
+
+  systemd.services.unifi.wantedBy = mkOverride 10 [ ];
 }
