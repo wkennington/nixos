@@ -77,8 +77,7 @@ in
     };
   };
 
-  users.extraUsers = singleton {
-    name = "ddclient";
+  users.extraUsers.ddclient = {
     uid = config.ids.uids.ddclient;
     description = "ddclient daemon user";
     home = stateDir;
