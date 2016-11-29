@@ -62,8 +62,8 @@ in
       commands+="ttl 300\n"
       commands+="zone ${host}.\n"
       commands+="origin ${host}.\n"
-      commands+="del @ A\n"
-      commands+="add @ A $ip4\n"
+      commands+="del ${host}.\n"
+      commands+="add ${host}. A $ip4\n"
       commands+="send\n"
       echo -n -e "$commands" | knsupdate -t 10 -r 3 -k "/conf/ddns/${host}.key"
     '';
