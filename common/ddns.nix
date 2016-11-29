@@ -7,6 +7,8 @@ let
   vars = (import ../customization/vars.nix { inherit lib; });
 
   host = "${config.networking.hostName}.${vars.domain}";
+
+  stateDir = "/var/lib/ddclient";
 in
 {
   systemd.services."${host}-update" = {
@@ -24,6 +26,8 @@ in
       Type = "simple";
       Restart = "on-failure";
       RestartSec = "5s";
+      RestartPreventExitStatus = "80";
+      User = "ddclient";
     };
     
     path = [
@@ -39,6 +43,9 @@ in
       set -e
       set -o pipefail
 
+      # Make sure we can open our key file
+      cat "/conf/ddns/${host}.key" >/dev/null || exit 80
+
       ip4="$(curl -4 -s "https://ifconfig.co")"
       if echo "$ip4" | grep -q 'Too Many Requests'; then
         echo "Too many attempts, waiting 60 seconds"
@@ -49,13 +56,15 @@ in
       echo "$ip4" | grep -q '^[0-9]\{1,3\}\(\.[0-9]\{1,3\}\)\{3\}''$'
 
       nameserver="$(dig NS wak.io | grep 'IN\s\+NS\s\+' | awk '{print $5}' | head -n 1)"
+      echo "Using nameserver: $nameserver" >&2
 
       commands="server $nameserver\n"
       commands+="ttl 300\n"
-      commands+="zone ${host}\n"
-      commands+="origin ${host}\n"
+      commands+="zone ${host}.\n"
+      commands+="origin ${host}.\n"
       commands+="del @ A\n"
       commands+="add @ A $ip4\n"
+      commands+="send\n"
       echo -n -e "$commands" | knsupdate -t 10 -r 3 -k "/conf/ddns/${host}.key"
     '';
   };
@@ -66,5 +75,12 @@ in
     timerConfig = {
       OnUnitActiveSec = "5m";
     };
+  };
+
+  users.extraUsers = singleton {
+    name = "ddclient";
+    uid = config.ids.uids.ddclient;
+    description = "ddclient daemon user";
+    home = stateDir;
   };
 }
