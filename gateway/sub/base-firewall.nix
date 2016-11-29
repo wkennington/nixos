@@ -26,9 +26,9 @@ in
 
     # Masquerade all vpn connections
     # If we hit a node with vpn support we might have asymmetric routing otherwise.
-    iptables -t mangle -A PREROUTING -s "${vars.vpn.subnet4}0/24" -j MARK --set-mark 0x11
-    iptables -t mangle -A PREROUTING -s "${vars.vpn.remote4}0/24" -j MARK --set-mark 0x11
-    iptables -t nat -A POSTROUTING -m mark --mark 0x11 -j MASQUERADE
+    #iptables -t mangle -A PREROUTING -s "${vars.vpn.subnet4}0/24" -j MARK --set-mark 0x11
+    #iptables -t mangle -A PREROUTING -s "${vars.vpn.remote4}0/24" -j MARK --set-mark 0x11
+    #iptables -t nat -A POSTROUTING -m mark --mark 0x11 -j MASQUERADE
 
     # Masquerade all public connections
     iptables -t nat -A POSTROUTING -o wan -m mark --mark 0x10 -j ${natval}
