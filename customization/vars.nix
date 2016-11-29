@@ -395,13 +395,18 @@ rec {
       # Cannot use 1 as this is reserved for the default gateway
       internalMachineMap = {
         exodus = {
-          id = 31;
+          id = 30;
           vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
           bmcMac = "0c:c4:7a:dd:00:42";
         };
         legend = {
-          id = 34;
+          id = 33;
           vlans = [ "slan" ];
+        };
+        eagle = {
+          id = 34;
+          vlans = [ "dlan" ];
+          bmcMac = "0c:c4:7a:dd:6e:be";
         };
       };
 
