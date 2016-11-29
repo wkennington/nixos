@@ -383,6 +383,11 @@ rec {
         "exodus"
       ];
 
+      consul = {
+        servers = [ "exodus" ];
+      };
+
+
       ntpServers = [
         { server = "exodus"; weight = "1"; }
       ];
