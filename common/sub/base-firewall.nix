@@ -12,10 +12,7 @@ with lib;
   };
   networking.firewall = {
     enable = true;
-    rejectPackets = false;
-    allowPing = true;
-    logRefusedConnections = false;
-    checkReversePath = false;
+    checkReversePath = true;
     extraPackages = [
       pkgs.ipset
     ];
