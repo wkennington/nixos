@@ -38,14 +38,22 @@ let
     }
   '';
 
+  notifyScript = lines: pkgs.writeScript "notify-script" ''
+    #! ${pkgs.stdenv.shell}
+    set -e
+    set -o pipefail
+
+    ${lines}
+  '';
+
   vrrpSyncGroup = name: config: ''
     vrrp_sync_group ${name} {
       group {
         ${concatMapStrings (n: "    ${n}\n") config.group}
       }
-      ${optionalString (config.notifyMaster != null) "notify_master \"${config.notifyMaster}\""}
-      ${optionalString (config.notifyBackup != null) "notify_backup \"${config.notifyBackup}\""}
-      ${optionalString (config.notifyFault != null) "notify_fault \"${config.notifyFault}\""}
+      ${optionalString (config.notifyMaster != null) "notify_master \"${notifyScript config.notifyMaster}\""}
+      ${optionalString (config.notifyBackup != null) "notify_backup \"${notifyScript config.notifyBackup}\""}
+      ${optionalString (config.notifyFault != null) "notify_fault \"${notifyScript config.notifyFault}\""}
     }
   '';
 
@@ -100,7 +108,7 @@ in
           };
 
           notifyMaster = mkOption {
-            type = types.nullOr types.str;
+            type = types.nullOr types.lines;
             default = null;
             description = ''
               Add a notify_master script to run when this node becomes the master.
@@ -108,7 +116,7 @@ in
           };
 
           notifyBackup = mkOption {
-            type = types.nullOr types.str;
+            type = types.nullOr types.lines;
             default = null;
             description = ''
               Add a notify_backup script to run when this node becomes the backup.
@@ -116,7 +124,7 @@ in
           };
 
           notifyFault = mkOption {
-            type = types.nullOr types.str;
+            type = types.nullOr types.lines;
             default = null;
             description = ''
               Add a notify_fault script to run when a node faults.
