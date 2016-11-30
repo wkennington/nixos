@@ -35,6 +35,9 @@
     elite = {
       publicKey = "9acg1dC1O5jASDh0lcDv0LSFqEJzQjs77PpGGNgNsmg=";
     };
+    legend = {
+      publicKey = "97NWxPo82wuChdJZYEbMsD/nQm4yo5TnOEM3NyfsTSQ=";
+    };
     "gw.abe-p" = {
       publicKey = "LAu3WEjMqBtasw/8SlHWy0PalyM+09A/1n3ehktuP2Y=";
       endpoint = "gw.abe-p.wak.io:657";
