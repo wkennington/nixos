@@ -83,6 +83,7 @@ in
     enable = true;
     extraConfig = {
       acl_datacenter = vars.consulAclDc;
+      acl_default = "anonymous";
       acl_default_policy = "deny";
       acl_down_policy = "deny";
       acl_token = "anonymous";
@@ -104,7 +105,7 @@ in
       bootstrap_expect = length calculated.myConsul.serverIps;
     });
     dropPrivileges = true;
-    extraConfigFiles =  [ "/conf/consul/acl-default-1.json" ]
+    extraConfigFiles =  [ ]
       ++ optional isAclMaster "/conf/consul/acl-master-1.json";
     forceIpv4 = true;
   };
