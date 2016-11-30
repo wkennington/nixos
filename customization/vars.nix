@@ -402,7 +402,7 @@ rec {
         };
         legend = {
           id = 33;
-          vlans = [ "slan" ];
+          vlans = [ "slan" "mlan" "dlan" ];
         };
         eagle = {
           id = 34;
