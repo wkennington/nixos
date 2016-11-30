@@ -72,4 +72,20 @@ in
       useDHCP = true;
     })
   ];
+
+  # Make sure that all of our local networks are routed internally
+  systemd.services = mkIf (!calculated.iAmRemote && !calculated.iAmGateway) {
+    "network-link-up-${head calculated.myNetData.vlans}" = let
+      intf = head calculated.myNetData.vlans;
+      dependency = "network-addresses-${intf}.service";
+    in {
+      requires = [ dependency ];
+      after = [ dependency ];
+      postStart = concatStrings (flip mapAttrsToList vars.netMaps (dc: { priv4, ...}: ''
+        ip route add "${priv4}0.0/16" dev "${intf}" via "${calculated.myGatewayIp4}" src "${calculated.myInternalIp4}"
+      '')) + ''
+        ip route add "${vars.vpn.remote4}0/24" dev "${intf}" via "${calculated.myGatewayIp4}" src "${calculated.myInternalIp4}"
+      '';
+    };
+  };
 }
