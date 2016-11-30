@@ -157,6 +157,8 @@ let
       flip filterAttrs vars.netMaps
         (n: { priv4, ... }: priv4 != calculated.myNetMap.priv4);
 
+  haveMultipleGateways = !calculated.iAmRemote && length calculated.myNetMap.gateways >= 2;
+
   extraRoutes = mapAttrsToList (n: { priv4, ... }: "${priv4}0.0/16") remoteNets;
 
   myId = vars.vpn.idMap.${config.networking.hostName};
@@ -208,7 +210,7 @@ in
     ] ++ optionals haveGatewayInterface [
       (confService "gw.${vars.domain}")
     ]))
-    (mkIf haveGatewayInterface {
+    (mkIf (haveGatewayInterface && !haveMultipleGateways) {
       "network-link-up-gw.${vars.domain}.vpn" = {
         postStart = flip concatMapStrings extraRoutes (n: ''
           ip route add "${n}" dev "gw.${vars.domain}.vpn" \
@@ -216,7 +218,7 @@ in
         '');
       };
     })
-    (mkIf calculated.iAmGateway {
+    (mkIf (calculated.iAmGateway && !haveMultipleGateways) {
       "network-link-up-gw.${vars.domain}.vpn" = let
         dependency = "network-addresses-${head calculated.myNetData.vlans}.service";
       in {
