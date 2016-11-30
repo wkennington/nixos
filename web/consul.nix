@@ -47,9 +47,9 @@ with lib;
           proxy_set_header Front-End-Https on;
           proxy_redirect off;
 
-          limit_except GET {
-            deny all;
-          }
+          #limit_except GET {
+          #  deny all;
+          #}
         }
 
         location /.well-known/acme-challenge {
