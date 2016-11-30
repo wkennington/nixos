@@ -83,7 +83,6 @@ in
     enable = true;
     extraConfig = {
       acl_datacenter = vars.consulAclDc;
-      acl_default = "anonymous";
       acl_default_policy = "deny";
       acl_down_policy = "deny";
       acl_token = "anonymous";
