@@ -5,10 +5,10 @@ let
 
   timeSyncdScript = pkgs.writeScript "time-syncd-script" ''
     #! ${pkgs.stdenv.shell} -e
-    export PATH="${pkgs.chrony}/bin:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin"
-    out="$(chronyc tracking)" || exit 1
+    export PATH="/var/setuid-wrappers:${pkgs.chrony}/bin:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin"
+    out="$(sudo chronyc tracking)" || exit 1
     echo "$out" >&2
-    chronyc sourcestats
+    sudo chronyc sourcestats
     if [ "$(echo "$out" | awk -F'[ ]*:[ ]*' '/Stratum/{print $2;}')" -eq "0" ]; then
       exit 1
     fi
@@ -42,6 +42,14 @@ with lib;
   networking.firewall.extraCommands = ''
     ip46tables -A OUTPUT -m owner --uid-owner chrony -p udp --dport ntp -j ACCEPT
   '';
+
+  security.sudo = {
+    enable = true;
+    extraConfig = ''
+      ALL ALL=(root) NOPASSWD: ${pkgs.chrony}/bin/chronyc tracking
+      ALL ALL=(root) NOPASSWD: ${pkgs.chrony}/bin/chronyc sourcestats
+    '';
+  };
 
   systemd.targets.time-syncd = {
     description = "This target is met when the time is in sync with upstream servers.";
