@@ -133,6 +133,7 @@ rec {
     "newton" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALFIS2Hu2bLEHzxcXpNa9JTRBwt/h1S7yjMdHK1FE4f";
     "page" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBv3UkLvr3OcB4fNXJlpNVDnAFgK1Sfgn8wyXoL+EiiS";
     "quest" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKooOFrPAREfP00RT5SM7EI0Y4bOKG07zu+o2vCNEeyJ";
+    "legend" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmQ0vQjgxQ2Id4H6pTPyTbe6HvOfAP7NOabwgv8k0nh";
   };
 
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
