@@ -14,7 +14,7 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   net = calculated.myNasIps;
 
-  clustered = length calculated.myNetMap.nases < 2;
+  clustered = length calculated.myNetMap.nases >= 2;
 
   vfsObjects = optionalString clustered "fileid " + "aio_linux";
 in
@@ -45,15 +45,17 @@ in
     samba_full
   ];
 
-  environment.etc."ctdb/public_addresses".text = mkIf clustered
-    (flip concatMapStrings calculated.myNasIp4s (n: ''
-      ${n}/24 dlan
-    ''));
+  environment.etc = mkIf clustered {
+    "ctdb/public_addresses".text =
+      flip concatMapStrings calculated.myNasIp4s (n: ''
+        ${n}/24 dlan
+      '');
 
-  environment.etc."ctdb/nodes".text = mkIf clustered
-    (flip concatMapStrings calculated.myNetMap.nases (n: ''
-      ${calculated.vpnIp4 n}
-    ''));
+    "ctdb/nodes".text =
+      flip concatMapStrings calculated.myNetMap.nases (n: ''
+        ${calculated.vpnIp4 n}
+      '');
+  };
 
   services.samba = {
     enable = true;
