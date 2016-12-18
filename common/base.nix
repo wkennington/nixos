@@ -57,6 +57,7 @@ in
     ipmitool
     ipset
     iptables
+    jq
     ldns
     lm-sensors
     mcelog
