@@ -3,26 +3,37 @@ let
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   vars = (import ../customization/vars.nix { inherit lib; });
 
-  domain = "cache.nixos.${vars.domain}";
-  consulService = "nixos-cache";
+  domain = "cache.triton.${calculated.myDomain}";
+  topDomain = "cache.triton.${vars.domain}";
+  consulService = "triton-cache";
   consulDomain = "${consulService}.service.consul.${vars.domain}";
   checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
 
-  path = "/ceph/nixos-cache";
+  path = "/ceph/triton-cache";
 in
 {
   imports = [ ./base.nix ];
+
   services.nginx.config = ''
     server {
       listen 443 ssl http2;
       server_name ${domain};
+      server_name ${topDomain};
       server_name ${consulDomain};
       server_name ${checkDomain};
 
       location / {
         root ${path};
+        autoindex off;
+        autoindex_exact_size off;
+      }
+
+      location /.well-known/acme-challenge {
+        alias /var/lib/acme;
+        expires -1;
         autoindex on;
       }
+
       error_page 500 502 503 504 /50x.html;
 
       ${import sub/ssl-settings.nix { inherit domain; }}
@@ -31,10 +42,19 @@ in
     server {
       listen 80;
       server_name ${domain};
+      server_name ${topDomain};
       server_name ${consulDomain};
+      server_name ${checkDomain};
 
       location / {
         root ${path};
+        autoindex off;
+        autoindex_exact_size off;
+      }
+
+      location /.well-known/acme-challenge {
+        alias /var/lib/acme;
+        expires -1;
         autoindex on;
       }
 
