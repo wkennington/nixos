@@ -384,6 +384,15 @@ rec {
         "exodus"
       ];
 
+      nases = [
+        "exodus"
+      ];
+
+      nasIds = [
+        8
+        9
+      ];
+
       consul = {
         servers = [ "exodus" ];
       };
