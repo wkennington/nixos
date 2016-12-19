@@ -9,7 +9,7 @@ let
   consulDomain = "${consulService}.service.consul.${vars.domain}";
   checkDomain = "${consulService}.${config.networking.hostName}.${vars.domain}";
 
-  path = "/ceph/www-mumble;
+  path = "/ceph/www-mumble";
 in
 {
   imports = [ ./base.nix ];
