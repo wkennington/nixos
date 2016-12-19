@@ -1,5 +1,6 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
+  calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   vars = (import ../customization/vars.nix { inherit lib; });
 
   varDir = "/var/lib/murmur";
@@ -9,8 +10,8 @@ let
   murmurUser = "murmur";
   murmurUid = 200000;
 
-  sslCert = "/conf/ssl/mumble.${vars.domain}.crt";
-  sslKey = "/conf/ssl/mumble.${vars.domain}.key";
+  sslCert = "/conf/ssl/mumble.${calculated.myDomain}.crt";
+  sslKey = "/conf/ssl/mumble.${calculated.myDomain}.key";
 
   configFile = pkgs.writeText "murmur.ini" ''
     database=${varDir}/murmur.sqlite
