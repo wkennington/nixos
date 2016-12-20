@@ -6,7 +6,6 @@ let
 in
 {
   imports = [
-    ./sub/base-bcachefs.nix
     # ./sub/base-dnsmasq.nix  # We are using unbound now
     ./sub/base-firewall.nix
     ./sub/base-hosts.nix
@@ -24,7 +23,7 @@ in
   boot = {
     kernelPackages = if lib.versionAtLeast (pkgs.linuxPackages_latest.kernel.version) "4.0"
       then pkgs.linuxPackages_latest else pkgs.linuxPackages_testing;
-    supportedFilesystems = [ "ext4" "xfs" "btrfs" "bcache" "zfs" "vfat" "ntfs" ];
+    supportedFilesystems = [ "ext4" "xfs" "btrfs" "zfs" "vfat" "ntfs" ];
     extraModprobeConfig = ''
       options kvm-amd nested=1
       options kvm-intel nested=1

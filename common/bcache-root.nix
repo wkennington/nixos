@@ -1,8 +1,13 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 {
   imports = [ ./fs-root.nix ];
-  boot.initrd.supportedFilesystems = [ "bcache" ];
+
+  boot = {
+    initrd.supportedFilesystems = [ "bcache" ];
+    kernelPackages = lib.mkOverride 0 pkgs.linuxPackages_bcache-testing;
+  };
+
   fileSystems = mkMerge [
     (mkOrder 0 [
       {
