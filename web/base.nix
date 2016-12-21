@@ -16,8 +16,10 @@ with lib;
         http {
           include ${config.services.nginx.package}/etc/nginx/mime.types;
           default_type application/octet-stream;
-          sendfile off;
-          aio on;
+          sendfile on;
+          tcp_nopush on;
+          aio threads;
+          directio 4m;
           output_buffers 1 64k;
           keepalive_timeout 60;
           server {
