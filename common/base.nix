@@ -97,16 +97,11 @@ in
     logind.extraConfig = "HandleLidSwitch=suspend";
   };
   system.extraDependencies = with pkgs; [
-    # Extra compilers take a long time to compile so keep them always
-    #go
-    #rustc
-    stdenv
-
     # We always want to keep small trust roots
     cacert
     dnssec-root
     root-nameservers
-  ] ++ stdenv.bootstrappedPackages; # Make sure we never need the bootstrap
+  ];
   users = {
     mutableUsers = false;
     extraUsers = flip mapAttrs vars.userInfo (user:
