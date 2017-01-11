@@ -20,7 +20,7 @@
       UseDNS no
 
       Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
-      KexAlgorithms curve25519-sha256@libssh.org
+      KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org
       MACs hmac-sha2-512-etm@openssh.com
 
       Match User root
