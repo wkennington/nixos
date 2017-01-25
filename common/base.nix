@@ -44,6 +44,7 @@ in
     curl
     edac-utils
     efibootmgr
+    fio
     fish
     git
     gnupg
