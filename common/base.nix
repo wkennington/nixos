@@ -58,6 +58,7 @@ in
     iptables
     jq
     ldns
+    lftp
     lm-sensors
     mcelog
     mtr
