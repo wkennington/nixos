@@ -141,6 +141,9 @@ let
     before = [
       "wg-config-${name}.vpn.service"
     ];
+    after = [
+      "time-syncd.target"
+    ];
 
     path = [
       pkgs.coreutils
