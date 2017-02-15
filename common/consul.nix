@@ -94,9 +94,10 @@ in
       disable_remote_exec = true;
       domain = "${domain}";
       key_file = "/conf/consul/${certName}.key";
-      server = isServer;
       retry_join = flip filter calculated.myConsul.serverIps
         (ip: ip != calculated.myInternalIp4);
+      server = isServer;
+      tls_min_version = "1.2";
       verify_incoming = true;
       verify_outgoing = true;
       verify_server_hostname = true;
