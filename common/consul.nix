@@ -97,7 +97,7 @@ in
       retry_join = flip filter calculated.myConsul.serverIps
         (ip: ip != calculated.myInternalIp4);
       server = isServer;
-      tls_min_version = "1.2";
+      tls_min_version = "tls12";
       verify_incoming = true;
       verify_outgoing = true;
       verify_server_hostname = true;
