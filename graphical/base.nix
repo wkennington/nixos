@@ -7,7 +7,10 @@ with lib;
   security.pam.services.su.forwardXAuth = true;
   sound.enable = true;
 
-  environment.systemPackages = [ pkgs.slock ];
+  environment.systemPackages = [
+    pkgs.flashrom
+    pkgs.slock
+  ];
   security.sudo.enable = true;
   services = {
     kmscon.hwRender = true;
