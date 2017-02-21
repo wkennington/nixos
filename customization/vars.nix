@@ -338,7 +338,7 @@ rec {
         ferrari = {
           id = 35;
           vlans = [ "slan" ];
-          bmcMac = "bc:5f:f4:c9:a0:70";
+          bmcMac = "00:25:90:9d:df:e6";
         };
         atlas = {
           id = 36;
@@ -349,6 +349,11 @@ rec {
           id = 37;
           vlans = [ "slan" ];
           bmcMac = "00:C0:A8:12:34:56";
+        };
+        athena = {
+          id = 38;
+          vlans = [ "slan" ];
+          bmcMac = "BC:5F:F4:C9:A0:70";
         };
       };
     };
