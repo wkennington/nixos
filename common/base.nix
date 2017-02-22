@@ -77,6 +77,7 @@ in
     time
     tmux
     vim
+    unzip
   ];
   hardware.cpu = {
     intel.updateMicrocode = true;
