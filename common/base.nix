@@ -68,6 +68,7 @@ in
     nmap
     config.programs.ssh.package
     openssl
+    pinentry
     powertop
     psmisc
     rsync
