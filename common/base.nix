@@ -42,6 +42,7 @@ in
     bind_tools
     borgbackup
     curl
+    dmidecode
     edac-utils
     efibootmgr
     efivar
