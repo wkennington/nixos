@@ -56,6 +56,6 @@
   ];
 
   system.extraDependencies = with pkgs; [
-    grub2 grub2_efi
+    grub_bios-i386 grub_efi-x86_64 grub_efi-i386
   ];
 }
