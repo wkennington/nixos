@@ -8,5 +8,6 @@ in
   ];
   networking.firewall.extraCommands = ''
     iptables -A INPUT -p tcp --dport 24007 -s ${calculated.myInternalIp4Net} -j ACCEPT
+    iptables -A INPUT -p tcp --dport 49152 -s ${calculated.myInternalIp4Net} -j ACCEPT
   '';
 }
