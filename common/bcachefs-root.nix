@@ -4,15 +4,15 @@ with lib;
   imports = [ ./fs-root.nix ];
 
   boot = {
-    initrd.supportedFilesystems = [ "bcache" ];
-    kernelPackages = lib.mkOverride 0 pkgs.linuxPackages_bcache-testing;
+    initrd.supportedFilesystems = [ "bcachefs" ];
+    kernelPackages = lib.mkOverride 0 pkgs.linuxPackages_bcachefs;
   };
 
   fileSystems = mkMerge [
     (mkOrder 0 [
       {
         mountPoint = "/";
-        fsType = "bcache";
+        fsType = "bcachefs";
         device = "/dev/disk/by-uuid/${config.rootUUID}";
         options = [
           "defaults"
