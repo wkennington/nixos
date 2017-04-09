@@ -35,6 +35,9 @@
     elite = {
       publicKey = "9acg1dC1O5jASDh0lcDv0LSFqEJzQjs77PpGGNgNsmg=";
     };
+    delta = {
+      publicKey = "ZWzGAxNhG/qXOuCiFhtbh2vlpQ4QKUINiyxfVuJHdHk=";
+    };
     legend = {
       publicKey = "97NWxPo82wuChdJZYEbMsD/nQm4yo5TnOEM3NyfsTSQ=";
     };

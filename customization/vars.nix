@@ -42,6 +42,7 @@ rec {
       elite = 11;
       lotus = 12;
       exodus = 13;
+      delta = 14;
     };
   };
 
