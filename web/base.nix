@@ -23,7 +23,7 @@ with lib;
           output_buffers 1 64k;
           keepalive_timeout 60;
           server {
-            listen 80;
+            listen [::]:80;
             server_name default;
             location / {
               root ${config.services.nginx.package}/share/nginx/html;
@@ -32,7 +32,7 @@ with lib;
             error_page 500 502 503 504 /50x.html;
           }
           server {
-            listen 443 ssl http2;
+            listen [::]:443 ssl http2;
             server_name default;
             location / {
               root ${config.services.nginx.package}/share/nginx/html;
