@@ -23,7 +23,7 @@ with lib;
   services = {
     nginx.config = ''
       server {
-        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
         server_name ${domain};
         server_name ${topDomain};
         server_name ${consulDomain};
@@ -55,7 +55,7 @@ with lib;
       }
 
       server {
-        listen 80;
+        listen [::]:80;
         server_name ${domain};
 
         location / {
@@ -70,7 +70,7 @@ with lib;
       }
 
       server {
-        listen 80;
+        listen [::]:80;
         server_name ${consulDomain};
         location / {
           rewrite ^(.*) https://${consulDomain}$1 permanent;
@@ -84,7 +84,7 @@ with lib;
       }
 
       server {
-        listen 80;
+        listen [::]:80;
         server_name ${topDomain};
         location / {
           rewrite ^(.*) https://${topDomain}$1 permanent;
