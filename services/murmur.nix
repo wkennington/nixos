@@ -21,7 +21,7 @@ let
     pidfile=/run/murmur.pid
     welcometext="<br />Welcome to <b>mumble.${vars.domain}</b>"
     port=64738
-    host=0.0.0.0
+    host=0.0.0.0 ::
     serverpassword=
     bandwidth=192000
     users=100
