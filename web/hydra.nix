@@ -8,6 +8,7 @@ in
 {
   services.nginx.config = ''
     server {
+      listen *:443 ssl http2;
       listen [::]:443 ssl http2;
       server_name ${domain};
       location / {
@@ -26,6 +27,7 @@ in
     }
 
     server {
+      listen *:80;
       listen [::]:80;
       server_name ${domain};
       rewrite ^(.*) https://${domain}$1 permanent;

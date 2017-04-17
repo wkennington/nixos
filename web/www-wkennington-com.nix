@@ -30,6 +30,7 @@ in
 
   services.nginx.config = ''
     server {
+      listen *:443 ssl http2;
       listen [::]:443 ssl http2;
   '' + flip concatMapStrings domains (n: ''
       server_name ${n};
@@ -53,6 +54,7 @@ in
 
   '' + flip concatMapStrings domains (n: ''
     server {
+      listen *:80;
       listen [::]:80;
       server_name ${n};
 

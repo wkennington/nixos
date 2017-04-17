@@ -23,6 +23,7 @@ with lib;
   services = {
     nginx.config = ''
       server {
+        listen *:443 ssl http2;
         listen [::]:443 ssl http2;
         server_name ${domain};
         server_name ${topDomain};
@@ -55,6 +56,7 @@ with lib;
       }
 
       server {
+        listen *:80;
         listen [::]:80;
         server_name ${domain};
 
@@ -70,6 +72,7 @@ with lib;
       }
 
       server {
+        listen *:80;
         listen [::]:80;
         server_name ${consulDomain};
         location / {
@@ -84,6 +87,7 @@ with lib;
       }
 
       server {
+        listen *:80;
         listen [::]:80;
         server_name ${topDomain};
         location / {
