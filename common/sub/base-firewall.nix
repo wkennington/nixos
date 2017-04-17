@@ -52,9 +52,9 @@ with lib;
         # Allow root to make local connections
         ip46tables -A OUTPUT -m owner --uid-owner root -j ACCEPT
 
-        # Allow ping
+        # Allow ping + icmpv6
         iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
-        ip6tables -A OUTPUT -p icmpv6 --icmpv6-type echo-request -j ACCEPT
+        ip6tables -A OUTPUT -p icmpv6 -j ACCEPT
 
         # Allow ssh
         ip46tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
