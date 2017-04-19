@@ -22,7 +22,7 @@ in
       defaultGateway = mkDefault (if !hasWanIf then calculated.myGatewayIp4
         else if calculated.myPublicIp4 != null then net.pub4Gateway else null);
 
-      defaultGateway6 = mkDefault (if !hasWanIf && net ? pub6Routed then calculated.myGatewayIp6
+      defaultGateway6 = mkDefault (if !hasWanIf then calculated.myGatewayIp6
         else if calculated.myPublicIp6 != null then net.pub6Gateway else null);
 
       interfaces = mkMerge [
