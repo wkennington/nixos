@@ -47,6 +47,8 @@ rec {
   myPublicIp6 = publicIp6 host;
   myGatewaysIp4 = map (gatewayIp4 host) myNetData.vlans;
   myGatewayIp4 = head myGatewaysIp4;
+  myGatewaysIp6 = map (gatewayIp6 host) myNetData.vlans;
+  myGatewayIp6 = head myGatewaysIp6;
   myNasIp4s = flip map myNetMap.nasIds
     (n: "${myNetMap.priv4}${toString vars.internalVlanMap."dlan"}.${toString n}");
   myInternalIp4Net = internalIp4Net host (head myNetData.vlans);
