@@ -1,0 +1,6 @@
+{ ... }:
+{
+  services.etcd = {
+    enable = true;
+  };
+}
