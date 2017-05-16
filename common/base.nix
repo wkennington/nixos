@@ -103,7 +103,6 @@ in
   system.extraDependencies = with pkgs; [
     # We always want to keep small trust roots
     cacert
-    dnssec-root
     root-nameservers
   ];
   users = {
