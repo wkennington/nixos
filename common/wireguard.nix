@@ -33,7 +33,6 @@ let
   in pkgs.writeText "wg.${name}.conf.in" (''
     [Interface]
     PrivateKey = @KEY@
-    PresharedKey = @PSK@
     ListenPort = ${toString (port name)}
   '' + concatStrings (flip mapAttrsToList hosts (host: { publicKey, endpoint ? null }: let
     netMap = vars.netMaps."${elemAt (splitString "." host) 1}";
@@ -58,6 +57,7 @@ let
     
     [Peer]
     PublicKey = ${publicKey}
+    PresharedKey = @PSK@
   '' + optionalString (!isGateway name) ''
     AllowedIPs = ${calculated.vpnIp4 host}/32
     AllowedIPs = ${calculated.vpnIp6 host}/128
