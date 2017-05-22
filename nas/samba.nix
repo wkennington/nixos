@@ -64,11 +64,12 @@ in
       workgroup = ${calculated.myDomain}
       server string = %h
       security = user
+      map to guest = Bad User
       load printers = no
       guest account = nobody
       invalid users = root
-      log level = 1
-      log file = /var/log/samba/log.%m
+      syslog = 1
+      syslog only = yes
       max log size = 5000
       passdb backend = tdbsam
       local master = no
@@ -134,6 +135,13 @@ in
         directory mask = 0750
         force directory mode = 0750
         force group = share
+      [pub]
+        vfs objects = ${vfsObjects}
+        path = /ceph/www-pub
+        guest ok = yes
+        guest only = yes
+        writable = no
+        printable = no
     '';
   };
 
