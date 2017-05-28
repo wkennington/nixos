@@ -16,7 +16,6 @@
     extraConfig = pkgs.lib.mkAfter ''
       AllowAgentForwarding yes
       AllowTcpForwarding no
-      PrintMotd no
       UseDNS no
 
       Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
