@@ -59,7 +59,6 @@ in
 
   services.samba = {
     enable = true;
-    syncPasswordsByPam = true;
     extraConfig = ''
       workgroup = ${calculated.myDomain}
       server string = %h
