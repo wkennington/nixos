@@ -18,11 +18,10 @@
       AllowTcpForwarding no
       PrintMotd no
       UseDNS no
-      LogLevel VERBOSE
 
-      Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr
-      KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-      MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-512
+      Ciphers aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
+      KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org
+      MACs hmac-sha2-512-etm@openssh.com
 
       Match User root
         AllowTcpForwarding yes
