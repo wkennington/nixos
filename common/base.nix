@@ -21,7 +21,7 @@ in
     ./sub/base-keepalived-module.nix
   ];
   boot = {
-    kernelPackages = pkgs.linuxPackages;
+    kernelPackages = pkgs.linuxPackages_latest;
     supportedFilesystems = [ "ext4" "xfs" "btrfs" "zfs" "vfat" "ntfs" ];
     extraModprobeConfig = ''
       options kvm-amd nested=1
