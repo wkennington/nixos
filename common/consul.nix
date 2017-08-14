@@ -92,6 +92,7 @@ in
       cert_file = "/conf/consul/${certName}.crt";
       datacenter = calculated.myDc;
       disable_remote_exec = true;
+      enable_script_checks = true;
       domain = "${domain}";
       key_file = "/conf/consul/${certName}.key";
       retry_join = flip filter calculated.myConsul.serverIps
