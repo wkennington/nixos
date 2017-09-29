@@ -106,6 +106,12 @@ in
     cacert
     root-nameservers
   ];
+  systemd.extraConfig = ''
+    DefaultCPUAccounting=on
+    DefaultMemoryAccounting=on
+    DefaultBlockIOAccounting=on
+    DefaultTasksAccounting=on
+  '';
   users = {
     mutableUsers = false;
     extraUsers = flip mapAttrs vars.userInfo (user:
