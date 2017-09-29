@@ -56,6 +56,7 @@ in
       MemoryMax = "4G";
       MemoryHigh = "3.5G";
       MemoryLow = "2G";
+      CPUQuota = "100%";
     };
   };
 }
