@@ -27,6 +27,9 @@ with lib;
   '';
 
   services = {
+    consul.extraConfig = {
+      ui = true;
+    };
     nginx.config = ''
       server {
         listen *:443 ssl http2;
