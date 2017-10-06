@@ -111,6 +111,7 @@ in
     DefaultMemoryAccounting=on
     DefaultBlockIOAccounting=on
     DefaultTasksAccounting=on
+    DefaultIPAccounting=on
   '';
   users = {
     mutableUsers = false;
