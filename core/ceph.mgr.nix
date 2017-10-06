@@ -54,6 +54,10 @@ in
     ../common/ceph.nix
   ];
 
+  networking.firewall.extraCommands = ''
+    iptables -A INPUT -p tcp --dport 7000 -s ${calculated.myInternalIp4Net} -j ACCEPT
+  '';
+
   systemd.services.ceph-mgr = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
