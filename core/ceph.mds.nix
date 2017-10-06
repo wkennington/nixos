@@ -30,8 +30,6 @@ in
       chown -R ceph-mds:ceph ${stateDir}
       mkdir -p -m 0775 /var/run/ceph
       chown ceph-mon:ceph /var/run/ceph
-      mkdir -p -m 0775 /var/log/ceph
-      chown ceph-mon:ceph /var/log/ceph
     '';
   };
 }

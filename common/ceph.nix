@@ -12,8 +12,18 @@ with lib;
       fsid = ${calculated.myCeph.fsId};
       mon initial members = ${concatStringsSep ", " calculated.myNetMap.ceph.mons}
       mon host = ${concatStringsSep ", " calculated.myCeph.monIps}
-    [mds]
-      keyring = /etc/ceph/ceph.mds.keyring
+      log file = /dev/null
+      log to stderr = false
+      err to stderr = false
+      log to syslog = true
+      err to syslog = true
+      mon cluster log to syslog = true
+      mon cluster log file = /dev/null
+      mgr module path = ${config.cephPackage.lib}/lib/ceph/mgr
+      public network = ${calculated.myInternalIp4Net}
+      auth cluster required = cephx
+      auth service required = cephx
+      auth client required = cephx
   '';
   fileSystems = [
     {
@@ -46,6 +56,10 @@ with lib;
       };
       ceph-mds = {
         uid = 100001;
+        group = "ceph";
+      };
+      ceph-mgr = {
+        uid = 100002;
         group = "ceph";
       };
     } // listToAttrs (flip map (range 0 (numCephUsers - 1)) (n:
