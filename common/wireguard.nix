@@ -141,6 +141,9 @@ let
     before = [
       "wg-config-${name}.vpn.service"
     ];
+    requires = [
+      "time-syncd.target"
+    ];
     after = [
       "time-syncd.target"
     ];
