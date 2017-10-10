@@ -65,6 +65,7 @@ in
     lm-sensors
     mcelog
     mtr
+    ncdu
     nftables
     nmap
     config.programs.ssh.package
