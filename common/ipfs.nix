@@ -5,6 +5,7 @@ let
     flip
     optionals;
 
+  vars = (import ../customization/vars.nix { inherit lib; });
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
 
   addresses = optionals (calculated.myPublicIp4 != null) [
@@ -13,11 +14,13 @@ let
     "/ip6/${calculated.myPublicIp6}"
   ];
 
-  addresses' =
-    if addresses != [] then
+  addresses' = [
+    "/dns4/${config.networking.hostName}.${vars.domain}"
+    "/dns6/${config.networking.hostName}.${vars.domain}"
+  ] ++ (if addresses != [ ] then
       addresses
     else
-      [ "/ip4/0.0.0.0" "/ip6/::" ];
+      [ "/ip4/0.0.0.0" "/ip6/::" ]);
 
   swarm = concatLists (flip map addresses' (n: [
     "${n}/tcp/4001"
