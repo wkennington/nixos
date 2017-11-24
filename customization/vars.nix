@@ -190,7 +190,7 @@ rec {
         elite = {
           id = 31;
           vlans = [ "slan" "dlan" ];
-          bmcMac = "00:15:17:9d:dc:93";
+          bmcMac = "0C:C4:7A:C8:FA:B6";
         };
       };
 
