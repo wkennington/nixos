@@ -70,6 +70,7 @@ in
     nmap
     config.programs.ssh.package
     openssl
+    pciutils
     pinentry
     powertop
     psmisc
@@ -81,6 +82,7 @@ in
     tmux
     vim
     unzip
+    usbutils
   ];
   hardware.cpu = {
     intel.updateMicrocode = true;
