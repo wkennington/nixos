@@ -9,7 +9,6 @@ with lib;
 
   environment.systemPackages = [
     pkgs.flashrom
-    pkgs.slock
   ];
   security.sudo.enable = true;
   services = {
@@ -28,5 +27,4 @@ with lib;
       displayManager.lightdm.enable = true;
     };
   };
-  security.setuidPrograms = [ "slock" ];
 }
