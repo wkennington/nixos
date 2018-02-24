@@ -5,6 +5,9 @@
     mode = "0600";
     source = "/conf/wpa_supplicant.conf";
   };
+  environment.systemPackages = with pkgs; [
+    powertop
+  ];
   networking.wireless = {
     enable = true;
     interfaces = [ "wifi" ];

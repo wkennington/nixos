@@ -71,7 +71,6 @@ in
     openssl
     pciutils
     pinentry
-    powertop
     psmisc
     rsync
     smartmontools
