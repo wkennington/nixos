@@ -46,6 +46,7 @@ in
     edac-utils
     efibootmgr
     efivar
+    elvish
     fish
     git
     gnupg
