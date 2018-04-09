@@ -3,20 +3,25 @@
 let
   inherit (lib)
     concatMapStrings
+    concatStringsSep
     flip
     length
     mkAfter
     mkIf
     mkMerge
     optionalAttrs
-    optionalString;
+    optionalString
+    optionals;
 
   calculated = (import ../common/sub/calculated.nix { inherit config lib; });
   net = calculated.myNasIps;
 
   clustered = length calculated.myNetMap.nases >= 2;
 
-  vfsObjects = optionalString clustered "fileid " + "aio_linux";
+  vfsObjects = optionals clustered "fileid";
+
+  vfsString = optionalString (vfsObjects != [ ])
+    ("vfs objects = " + concatStringsSep " " vfsObjects);
 in
 {
   imports = [
@@ -67,8 +72,8 @@ in
       load printers = no
       guest account = nobody
       invalid users = root
-      syslog = 1
-      syslog only = yes
+      logging = systemd
+      log level = 1
       max log size = 5000
       passdb backend = tdbsam
       local master = no
@@ -100,7 +105,6 @@ in
       aio write size = 16384
 
       [Private]
-        vfs objects = ${vfsObjects}
         path = /ceph/share/private/%u
         guest ok = no
         public = no
@@ -111,8 +115,9 @@ in
         directory mask = 0700
         force directory mode = 0700
         force group = share
+        ${vfsString}
+
       [Public]
-        vfs objects = ${vfsObjects}
         path = /ceph/share/public
         guest ok = no
         writable = yes
@@ -123,8 +128,9 @@ in
         force directory mode = 0770
         force group = share
         force user = nobody
+        ${vfsString}
+
       [Read Only]
-        vfs objects = ${vfsObjects}
         path = /ceph/share/ro
         guest ok = no
         writable = yes
@@ -134,13 +140,15 @@ in
         directory mask = 0750
         force directory mode = 0750
         force group = share
+        ${vfsString}
+
       [pub]
-        vfs objects = ${vfsObjects}
         path = /ceph/www-pub
         guest ok = yes
         guest only = yes
         writable = no
         printable = no
+        ${vfsString}
     '';
   };
 
