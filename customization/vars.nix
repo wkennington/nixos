@@ -127,7 +127,7 @@ rec {
 
   sshHostKeys = {
     "atlas" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDEm1t3sNOBfXF7lupeNvZ50M5hT0DYiOiIAx0f+ZLmN";
-    "atomic" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAzNjosiLHlyPzo8lEc/vpfPITzT53QGpgpNie/dHzB/";
+    "atomic" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGYJVmfOh/DiRlZr3c29QRJY92oBXBRD9H4RLkeEcdQk";
     "elite" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHhgo8hnoGvRJN+kIVBMLc+WheSnRn1MWGXwKVdMnYOn";
     "exodus" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPriEVGsGu7DnUVa/aPFj+BccNP8KUmM9836My9YYemG";
     "ferrari" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5Q2HxW5RGFr9yi+UrrdfFh5oR7b6DdWbkYdoWoERM8";
