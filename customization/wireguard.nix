@@ -3,7 +3,7 @@
 {
   hosts = {
     atomic = {
-      publicKey = "e4LwROzgkji+t+S6PGaKeFY+p9ijbM9+3K0mclzDxwU=";
+      publicKey = "b2g2dvgFgqZHu554r6g0Pzt7LegFC7PnYLsRQKmN/xk=";
     };
     lotus = {
       publicKey = "paUDH9FOPba+bo0EPUZmTphiv5xciRDp0uJtVvvZWj8=";
@@ -42,7 +42,7 @@
       publicKey = "97NWxPo82wuChdJZYEbMsD/nQm4yo5TnOEM3NyfsTSQ=";
     };
     "gw.abe-p" = {
-      publicKey = "uod4K/tjHeQ/im95UtYemNb+W+x1SkOIWTUhxV4+3zs=";
+      publicKey = "IaftkRMWBpV1hb16aZR92FJAmMJ2a4vV/EEB9UiFkS0=";
       endpoint = "gw.abe-p.wak.io:657";
     };
     "gw.fmt-1" = {
