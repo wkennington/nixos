@@ -24,14 +24,15 @@ in
     check = {
       id = "systemd-failed";
       name = "Systemd Failed Units";
-      script = ''
+      args = [ (pkgs.writeScript "consul-check-systemd-failed" ''
+        #! ${pkgs.stdenv.shell} -e
         OUT="$(${config.systemd.package}/bin/systemctl --failed)"
         echo "$OUT"
         if echo "$OUT" | ${pkgs.gnugrep}/bin/grep -q '0 loaded units listed'; then
           exit 0
         fi
         exit 1 # Warning (We don't want services to fail because of this)
-      '';
+      '') ];
       interval = "60s";
     };
   };
@@ -40,7 +41,8 @@ in
     check = {
       id = "systemd-starting";
       name = "Systemd Starting Units";
-      script = ''
+      args = [ (pkgs.writeScript "consul-check-systemd-starting" ''
+        #! ${pkgs.stdenv.shell} -e
         touch /dev/shm/systemd-starting-jobs
         PREVIOUS="$(cat /dev/shm/systemd-starting-jobs)"
 
@@ -52,7 +54,7 @@ in
           exit 0
         fi
         exit 1 # Warning (We don't want services to fail because of this)
-      '';
+      '') ];
       interval = "120s";
     };
   };

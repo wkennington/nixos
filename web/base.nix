@@ -59,13 +59,9 @@ with lib;
     check = {
       id = "web-base";
       name = "Nginx Serving Default";
-      script = ''
-        if ${pkgs.curl}/bin/curl http://localhost; then
-          exit 0
-        fi
-        exit 1 # Warning
-      '';
-      interval = "60s";
+      http = "http://localhost";
+      interval = "10s";
+      timeout = "1s";
     };
   };
 }

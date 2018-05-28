@@ -109,14 +109,10 @@ with lib;
       port = 443;
       checks = [
         {
-          script = ''
-            # TODO: Get a new cert and remove -k
-            if ${pkgs.curl}/bin/curl -k https://${checkDomain}; then
-              exit 0
-            fi
-            exit 2 # Critical
-          '';
-          interval = "60s";
+          http = "https://${checkDomain}:443";
+          tls_skip_verify = true;
+          interval = "10s";
+          timeout = "1s";
         }
       ];
     };

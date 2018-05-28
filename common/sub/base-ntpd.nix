@@ -22,7 +22,7 @@ with lib;
 {
   services = {
     ntp = {
-      servers = map ({ server, weight}: server) calculated.myNtpServers;
+      servers = map ({ server, weight }: server) calculated.myNtpServers;
     };
     chrony = {
       enable = true;
@@ -80,9 +80,10 @@ with lib;
     check = {
       id = "chronyd";
       name = "Chrony Clock Sync";
-      script = ''
+      args = [ (pkgs.writeScript "consul-check-time-syncd" ''
+        #! ${pkgs.stdenv.shell} -e
         ${timeSyncdScript} || exit 2 # Exit 2 means critical
-      '';
+      '') ];
       interval = "10s";
     };
   };
