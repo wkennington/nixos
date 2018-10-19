@@ -68,6 +68,7 @@ in
     ncdu
     nftables
     nmap
+    nvme-cli
     config.programs.ssh.package
     openssl
     pciutils
