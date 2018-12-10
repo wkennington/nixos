@@ -40,7 +40,7 @@ rec {
       page = 9;
       quest = 10;
       elite = 11;
-      lotus = 12;
+      #lotus = 12;
       exodus = 13;
       delta = 14;
     };
@@ -110,7 +110,6 @@ rec {
   remotes = [
     "nixos"
     "prodigy"
-    "lotus"
   ];
 
   pubDnsServers = [
@@ -131,7 +130,6 @@ rec {
     "elite" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHhgo8hnoGvRJN+kIVBMLc+WheSnRn1MWGXwKVdMnYOn";
     "exodus" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPriEVGsGu7DnUVa/aPFj+BccNP8KUmM9836My9YYemG";
     "ferrari" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5Q2HxW5RGFr9yi+UrrdfFh5oR7b6DdWbkYdoWoERM8";
-    "lotus" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2O9Sxkqo36cJJn+qn1I+0z3OayNC5M41ZFpuPfLsr2";
     "nevada" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDG8rNK9ZRJl8brPEytBF7sCh2FBejt+V5u3TB3BwiG4";
     "newton" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALFIS2Hu2bLEHzxcXpNa9JTRBwt/h1S7yjMdHK1FE4f";
     "page" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBv3UkLvr3OcB4fNXJlpNVDnAFgK1Sfgn8wyXoL+EiiS";

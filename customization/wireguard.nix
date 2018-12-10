@@ -5,9 +5,6 @@
     atomic = {
       publicKey = "b2g2dvgFgqZHu554r6g0Pzt7LegFC7PnYLsRQKmN/xk=";
     };
-    lotus = {
-      publicKey = "paUDH9FOPba+bo0EPUZmTphiv5xciRDp0uJtVvvZWj8=";
-    };
     newton = {
       publicKey = "cBrmihVXtv8HeqUwXZ77q1ciXJkSSPXBeJ8ih14OpD0=";
       endpoint = "newton.wak.io:656";
