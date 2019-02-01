@@ -36,7 +36,7 @@ in
   };
   environment.etc."ssl/openssl.cnf".source = "${pkgs.openssl}/etc/ssl/openssl.cnf";
   environment.systemPackages = with pkgs; [
-    acme-client
+    acme-sh
     acpi
     aria2
     bind_tools
