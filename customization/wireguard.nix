@@ -38,6 +38,9 @@
     legend = {
       publicKey = "97NWxPo82wuChdJZYEbMsD/nQm4yo5TnOEM3NyfsTSQ=";
     };
+    lake = {
+      publicKey = "oKtsZpQBgL5ZGkYImWQJqQUDGTZdyVLSHOF1Z9YiBnk=";
+    };
     "gw.abe-p" = {
       publicKey = "IaftkRMWBpV1hb16aZR92FJAmMJ2a4vV/EEB9UiFkS0=";
       endpoint = "gw.abe-p.wak.io:657";

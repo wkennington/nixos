@@ -30,7 +30,7 @@ rec {
     remote6 = "fdd8:ce9d:52a5::";
 
     idMap = {
-      prodigy = 2;
+      #prodigy = 2;
       atomic = 3;
       legend = 4;
       nevada = 5;
@@ -43,6 +43,7 @@ rec {
       #lotus = 12;
       exodus = 13;
       delta = 14;
+      lake = 15;
     };
   };
 
@@ -67,7 +68,7 @@ rec {
       uid = 1000;
       description = "William A. Kennington III";
       canRoot = true;
-      loginMachines = [ "legend" "prodigy" "lotus" ];
+      loginMachines = [ "legend" "lake" ];
       canShareData = true;
       inherit (userInfo.root) sshKeys;
     };
@@ -107,7 +108,7 @@ rec {
 
   remotes = [
     "nixos"
-    "prodigy"
+    "lake"
   ];
 
   pubDnsServers = [
