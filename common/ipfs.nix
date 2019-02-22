@@ -21,8 +21,8 @@ let
 
   swarm = concatLists (flip map addresses' (n: [
     "${n}/tcp/4001"
-  ] ++ optionals (config.services.ipfs.utp) [
-    "${n}/udp/4001/utp"
+  ] ++ optionals (config.services.ipfs.quic) [
+    "${n}/udp/4001/quic"
   ]));
 in
 {
