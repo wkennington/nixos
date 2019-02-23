@@ -29,6 +29,7 @@ mkIf (length calculated.myNetMap.gateways >= 2) {
     notifyMaster = "${pkgs.conntrack-tools}/libexec/primary-backup.sh primary";
     notifyBackup = "${pkgs.conntrack-tools}/libexec/primary-backup.sh backup";
     notifyFault = "${pkgs.conntrack-tools}/libexec/primary-backup.sh fault";
+    notifyStop = "${pkgs.conntrack-tools}/libexec/primary-backup.sh fault";
   };
 
   systemd.services.keepalived = {

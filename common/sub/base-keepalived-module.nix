@@ -54,12 +54,15 @@ let
       ${optionalString (config.notifyMaster != null) "notify_master \"${notifyScript config.notifyMaster}\""}
       ${optionalString (config.notifyBackup != null) "notify_backup \"${notifyScript config.notifyBackup}\""}
       ${optionalString (config.notifyFault != null) "notify_fault \"${notifyScript config.notifyFault}\""}
+      ${optionalString (config.notifyStop != null) "notify_stop \"${notifyScript config.notifyStop}\""}
     }
   '';
 
   configFile = pkgs.writeText "keepalived.conf" ''
     global_defs {
       router_id ${cfg.routerId}
+      script_user root
+      enable_script_security
     }
     ${concatStrings (mapAttrsToList vrrpSyncGroup cfg.syncGroups)}
     ${concatStrings (mapAttrsToList vrrpInstance cfg.instances)}
@@ -128,6 +131,14 @@ in
             default = null;
             description = ''
               Add a notify_fault script to run when a node faults.
+            '';
+          };
+
+          notifyStop = mkOption {
+            type = types.nullOr types.lines;
+            default = null;
+            description = ''
+              Add a notify_stop script to run when a node faults.
             '';
           };
 
@@ -315,6 +326,10 @@ in
       after = [ "network.target" ];
 
       path = [ pkgs.iproute ];
+
+      preStart = concatStrings (flip mapAttrsToList cfg.syncGroups (_: config: ''
+        ${optionalString (config.notifyBackup != null) (notifyScript config.notifyBackup)}
+      ''));
 
       postStop = flip concatMapStrings ips ({ ip, device }: ''
         if ip addr show dev "${device}" | grep -q "${ip}"; then

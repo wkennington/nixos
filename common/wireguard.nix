@@ -236,6 +236,14 @@ in
       ip route add "${vars.vpn.remote4}0/24" via "${calculated.myGatewayIp4}" \
         src "${calculated.myInternalIp4}"
     '';
+    notifyStop = flip concatMapStrings extraRoutes (n: ''
+      ip route del "${n}" || true
+      ip route add "${n}" via "${calculated.myGatewayIp4}"
+    '') + ''
+      ip route del "${vars.vpn.remote4}0/24" || true
+      ip route add "${vars.vpn.remote4}0/24" via "${calculated.myGatewayIp4}" \
+        src "${calculated.myInternalIp4}"
+    '';
   };
 
   systemd.services = mkMerge [
