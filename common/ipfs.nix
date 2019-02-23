@@ -43,11 +43,7 @@ in
   services.ipfs = {
     enable = true;
     extraAttrs =  {
-      Addresses = {
-        Swarm = swarm;
-        API = "/ip4/127.0.0.1/tcp/5001";
-        Gateway = "/ip4/127.0.0.1/tcp/8001";
-      };
+      Addresses.Swarm = swarm;
     };
   };
 
