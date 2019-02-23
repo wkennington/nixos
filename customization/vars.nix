@@ -44,6 +44,7 @@ rec {
       exodus = 13;
       delta = 14;
       lake = 15;
+      jupiter = 16;
     };
   };
 
@@ -359,6 +360,66 @@ rec {
       };
     };
 
+    "nyc-1" = {
+      pub4 = "192.81.218.";
+      pub4Gateway = "192.81.218.1";
+      pub4PrefixLength = 24;
+
+      pub6 = "2604:a880:400:d0::";
+      pub6Gateway = "2604:a880:400:d0::1";
+      pub6PrefixLength = 64;
+
+      priv4 = "10.100.";
+      priv6 = "fd32:d318:c6fa:e153";
+
+      pubDnsServers = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
+
+      pubNtpServers = [
+        { server = "clock.nyc.he.net"; weight = "5"; }
+        { server = "clock.fmt.he.net"; weight = "2"; }
+        { server = "clock.sjc.he.net"; weight = "2"; }
+        { server = "0.us.pool.ntp.org"; weight = "1"; }
+        { server = "1.us.pool.ntp.org"; weight = "1"; }
+        { server = "2.us.pool.ntp.org"; weight = "1"; }
+      ];
+
+      timeZone = "America/New_York";
+
+      gateways = [
+        "jupiter"
+      ];
+
+      dhcpServers = [
+        "jupiter"
+      ];
+
+      dnsServers = [
+        "jupiter"
+      ];
+
+      ntpServers = [
+        { server = "jupiter"; weight = "1"; }
+      ];
+
+      pub6MachineMap = {
+        jupiter = "828:6001";
+      };
+
+      pub4MachineMap = {
+        jupiter = 29;
+      };
+
+      internalMachineMap = {
+        jupiter = {
+          id = 31;
+          vlans = [ "slan" "mlan" "tlan" ];
+        };
+      };
+    };
+
     "mtv-w" = {
       priv4 = "10.1.";
       priv6 = "fda4:941a:81b5:100";
@@ -425,7 +486,7 @@ rec {
           bmcMac = "0c:c4:7a:dd:6e:be";
         };
       };
-
     };
+
   };
 }

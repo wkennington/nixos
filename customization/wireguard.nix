@@ -41,6 +41,9 @@
     lake = {
       publicKey = "oKtsZpQBgL5ZGkYImWQJqQUDGTZdyVLSHOF1Z9YiBnk=";
     };
+    jupiter = {
+      publicKey = "pkEAsNK4eFQiAIPeFSNm8YzQUATj+UZOzxegdA6tgHo=";
+    };
     "gw.abe-p" = {
       publicKey = "IaftkRMWBpV1hb16aZR92FJAmMJ2a4vV/EEB9UiFkS0=";
       endpoint = "gw.abe-p.wak.io:657";
@@ -52,6 +55,10 @@
     "gw.mtv-w" = {
       publicKey = "OzHYvVZ1giTFZ4wfONtRjNVhXe5JvDR7EmdMkeWc4H4=";
       endpoint = "gw.mtv-w.wak.io:657";
+    };
+    "gw.nyc-1" = {
+      publicKey = "IvLzaIsx9V7zUQUQN4MIvOCp9Ht8MBr1aUxj5LNABzc=";
+      endpoint = "gw.nyc-1.wak.io:657";
     };
   };
 }
