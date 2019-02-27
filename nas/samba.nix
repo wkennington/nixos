@@ -88,6 +88,7 @@ in
       map acl inherit = yes
       encrypt passwords = yes
       client plaintext auth = no
+      idmap config * : range = 100000-100100
 
       # Clustered storage setup
       netbios name = ${calculated.myDomain}
