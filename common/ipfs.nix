@@ -44,6 +44,7 @@ in
     enable = true;
     extraAttrs =  {
       Addresses.Swarm = swarm;
+      Gateway.NoFetch = true;
     };
   };
 
