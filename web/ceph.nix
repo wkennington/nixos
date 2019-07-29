@@ -52,12 +52,6 @@ with lib;
           proxy_redirect off;
         }
 
-        location /.well-known/acme-challenge {
-          alias /var/lib/acme;
-          expires -1;
-          autoindex on;
-        }
-
         ${import sub/ssl-settings.nix { inherit domain; }}
       }
 
@@ -71,11 +65,8 @@ with lib;
         }
 
         location /.well-known/acme-challenge {
-          alias /var/lib/acme;
-          expires -1;
-          autoindex on;
+          proxy_pass http://acme;
         }
-
       }
 
       server {
@@ -88,11 +79,8 @@ with lib;
         }
 
         location /.well-known/acme-challenge {
-          alias /var/lib/acme;
-          expires -1;
-          autoindex on;
+          proxy_pass http://acme;
         }
-
       }
 
       server {
@@ -105,11 +93,8 @@ with lib;
         }
 
         location /.well-known/acme-challenge {
-          alias /var/lib/acme;
-          expires -1;
-          autoindex on;
+          proxy_pass http://acme;
         }
-
       }
     '';
   };

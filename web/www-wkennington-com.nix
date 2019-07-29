@@ -41,12 +41,6 @@ in
         autoindex on;
       }
 
-      location /.well-known/acme-challenge {
-        alias /var/lib/acme;
-        expires -1;
-        autoindex on;
-      }
-
       error_page 500 502 503 504 /50x.html;
 
       ${import sub/ssl-settings.nix { domain = head domains; }}
@@ -63,9 +57,7 @@ in
       }
 
       location /.well-known/acme-challenge {
-        alias /var/lib/acme;
-        expires -1;
-        autoindex on;
+        proxy_pass http://acme;
       }
     }
   '');
