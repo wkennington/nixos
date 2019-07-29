@@ -29,7 +29,7 @@ with lib;
 
           upstream acme {
       '' + flip concatMapStrings config.acmeServers (n: ''
-            server ${n};
+            server ${n} max_fails=0;
       '') + ''
           }
 
