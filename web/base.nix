@@ -2,13 +2,17 @@
 
 with lib;
 {
+  require = [
+    ./sub/acme-settings.nix
+  ];
+
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   services.nginx = {
     enable = true;
     package = pkgs.nginx;
     config = mkMerge [
-      (mkBefore ''
+      (mkBefore (''
         worker_processes 4;
         events {
           worker_connections 1024;
@@ -22,6 +26,13 @@ with lib;
           directio 4m;
           output_buffers 1 64k;
           keepalive_timeout 60;
+
+          upstream acme {
+      '' + flip concatMapStrings config.acmeServers (n: ''
+            server ${n};
+      '') + ''
+          }
+
           server {
             listen *:80;
             listen [::]:80;
@@ -29,6 +40,9 @@ with lib;
             location / {
               root ${config.services.nginx.package}/share/nginx/html;
               index index.html;
+            }
+            location /.well-known/acme-challenge {
+              proxy_pass http://acme;
             }
             error_page 500 502 503 504 /50x.html;
           }
@@ -44,7 +58,7 @@ with lib;
 
             ${import sub/ssl-settings.nix { domain = "nginx/default"; }}
           }
-      '')
+      ''))
       (mkAfter ''
         }
       '')
