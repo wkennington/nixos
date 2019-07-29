@@ -17,9 +17,11 @@ with lib;
         events {
           worker_connections 1024;
         }
+        error_log syslog:server=unix:/dev/log crit;
         http {
           include ${config.services.nginx.package}/etc/nginx/mime.types;
           default_type application/octet-stream;
+          access_log off;
           sendfile on;
           tcp_nopush on;
           aio threads;
