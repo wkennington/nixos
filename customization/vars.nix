@@ -137,6 +137,7 @@ rec {
     "legend" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmQ0vQjgxQ2Id4H6pTPyTbe6HvOfAP7NOabwgv8k0nh";
     "delta" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMXpH6rNL18r6ZRMrCogCTDPr7rsOH4FtK4lzzSs+wPv";
     "jupiter" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINUBBh+gm8di5eJX/vEB6bqa2itoAs4Z+ubyYLFuEHPm";
+    "lake" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQdyqGMXwjnUJEwdeh9Qf1np/T3sjNmcxY7mgXEUvEH";
   };
 
   # netMaps currently assumes /16 ipv4 and /60 ipv6 allocations
