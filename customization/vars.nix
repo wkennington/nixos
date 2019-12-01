@@ -185,7 +185,7 @@ rec {
         atomic = {
           id = 30;
           vlans = [ "slan" "mlan" "dlan" "ulan" "tlan" ];
-          bmcMac = "00:12:83:36:DC:00";
+          bmcMac = "00:25:90:bd:e4:83";
         };
         elite = {
           id = 31;
