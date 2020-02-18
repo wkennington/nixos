@@ -23,7 +23,7 @@ in
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     zfs.useDev = true;  # We want encryption
-    supportedFilesystems = [ "ext4" "xfs" "btrfs" "zfs" "vfat" "ntfs" ];
+    supportedFilesystems = [ "ext4" "xfs" "btrfs" "vfat" "ntfs" ];
     extraModprobeConfig = ''
       options kvm-amd nested=1
       options kvm-intel nested=1
