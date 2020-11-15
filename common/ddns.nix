@@ -55,17 +55,21 @@ in
       echo "Request got: $ip4" >&2
       echo "$ip4" | grep -q '^[0-9]\{1,3\}\(\.[0-9]\{1,3\}\)\{3\}''$'
 
-      nameserver="$(dig NS wak.io | grep 'IN\s\+NS\s\+' | awk '{print $5}' | head -n 1)"
-      echo "Using nameserver: $nameserver" >&2
+      rc=0
+      nameservers=()
+      for nameserver in $(dig NS wak.io | grep 'IN\s\+NS\s\+.*wak.io' | awk '{print $5}'); do
+        echo "Using nameservers: $nameserver" >&2
 
-      commands="server $nameserver\n"
-      commands+="ttl 300\n"
-      commands+="zone ${host}.\n"
-      commands+="origin ${host}.\n"
-      commands+="del ${host}.\n"
-      commands+="add ${host}. A $ip4\n"
-      commands+="send\n"
-      echo -n -e "$commands" | knsupdate -t 10 -r 3 -k "/conf/ddns/${host}.key"
+        commands="server $nameserver\n"
+        commands+="ttl 300\n"
+        commands+="zone ${host}.\n"
+        commands+="origin ${host}.\n"
+        commands+="del ${host}.\n"
+        commands+="add ${host}. A $ip4\n"
+        commands+="send\n"
+        echo -n -e "$commands" | knsupdate -t 10 -r 3 -k "/conf/ddns/${host}.key" || rc=$?
+      done
+      exit $rc
     '';
   };
 
